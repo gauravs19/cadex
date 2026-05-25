@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CADEX — Deal Intelligence for Consulting Presales</title>
+<meta name="description" content="Score risk. Match strategy. Shape the deal. Run the quality gate. CADEX is the structured deal qualification framework for consulting presales teams.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;0,800;1,700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#0C0A09;
+  --ink-2:#1C1917;
+  --amber:#D97706;
+  --amber-light:#F59E0B;
+  --amber-pale:#FFFBEB;
+  --amber-border:#FDE68A;
+  --green:#15803D;
+  --green-pale:#F0FDF4;
+  --red:#B91C1C;
+  --red-pale:#FEF2F2;
+  --slate:#57534E;
+  --slate-light:#A8A29E;
+  --border:#E7E5E4;
+  --bg:#FAFAF9;
+  --white:#FFFFFF;
+  --radius:6px;
+  --radius-lg:14px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:var(--white);-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+
+/* ── NAV ── */
+nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.nav-wrap{max-width:1160px;margin:0 auto;padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+.logo{font-size:1.05rem;font-weight:900;letter-spacing:.04em;color:var(--ink)}
+.logo span{color:var(--amber)}
+.nav-links{display:flex;align-items:center;gap:32px}
+.nav-links a{font-size:.82rem;font-weight:500;color:var(--slate);transition:color .12s;letter-spacing:.02em}
+.nav-links a:hover{color:var(--ink)}
+.nav-btn{background:var(--ink);color:#fff;font-size:.82rem;font-weight:700;padding:8px 20px;border-radius:var(--radius);letter-spacing:.02em;transition:opacity .15s}
+.nav-btn:hover{opacity:.85}
+@media(max-width:680px){.nav-links{display:none}}
+
+/* ── HERO ── */
+.hero{background:var(--ink-2);color:#fff;padding:96px 0 80px;overflow:hidden;position:relative}
+.hero::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 70% 50%,rgba(217,119,6,.12),transparent 70%);pointer-events:none}
+.hero-wrap{max-width:1160px;margin:0 auto;padding:0 32px;position:relative;z-index:1}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.7rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--amber-light);margin-bottom:28px}
+.hero-eyebrow::before{content:'';width:24px;height:1px;background:var(--amber-light)}
+.hero-title{font-family:'Playfair Display',Georgia,serif;font-size:clamp(2.8rem,6vw,5rem);font-weight:800;line-height:1.07;color:#fff;max-width:800px;margin-bottom:28px}
+.hero-title em{font-style:italic;color:var(--amber-light)}
+.hero-body{font-size:1.05rem;color:rgba(255,255,255,.55);max-width:540px;line-height:1.75;margin-bottom:40px}
+.hero-cta{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.btn-amber{background:var(--amber);color:#fff;font-size:.9rem;font-weight:700;padding:13px 30px;border-radius:var(--radius);transition:background .15s;letter-spacing:.01em}
+.btn-amber:hover{background:var(--amber-light)}
+.btn-ghost-white{font-size:.9rem;font-weight:600;color:rgba(255,255,255,.55);padding:13px 0;border-bottom:1px solid rgba(255,255,255,.2);transition:color .15s}
+.btn-ghost-white:hover{color:#fff}
+.hero-scorestrip{margin-top:64px;display:flex;align-items:stretch;gap:0;border:1px solid rgba(255,255,255,.1);border-radius:var(--radius-lg);overflow:hidden;max-width:760px}
+.score-band{flex:1;padding:18px 20px;border-right:1px solid rgba(255,255,255,.1);text-align:center}
+.score-band:last-child{border-right:none}
+.score-band-val{font-size:1.8rem;font-weight:900;line-height:1}
+.score-band-val.g{color:#4ADE80}
+.score-band-val.a{color:var(--amber-light)}
+.score-band-val.r{color:#F87171}
+.score-band-val.k{color:rgba(255,255,255,.25)}
+.score-band-label{font-size:.68rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-top:5px}
+.score-band-range{font-size:.72rem;color:rgba(255,255,255,.25);margin-top:2px}
+
+/* ── FIVE STEPS ── */
+.steps-section{padding:100px 0;background:var(--bg)}
+.wrap{max-width:1160px;margin:0 auto;padding:0 32px}
+.overline{font-size:.68rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--amber);margin-bottom:14px}
+.heading{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:800;color:var(--ink);line-height:1.2;margin-bottom:16px}
+.subtext{font-size:1rem;color:var(--slate);line-height:1.75;max-width:540px}
+.steps-list{margin-top:64px;display:flex;flex-direction:column;gap:0;border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;background:var(--white)}
+.step-row{display:grid;grid-template-columns:64px 1fr auto;align-items:center;gap:0;border-bottom:1px solid var(--border);transition:background .15s}
+.step-row:last-child{border-bottom:none}
+.step-row:hover{background:#FAFAF9}
+.step-num{width:64px;height:64px;display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);border-right:1px solid var(--border);font-family:'Inter',monospace}
+.step-content{padding:20px 28px}
+.step-title{font-size:.95rem;font-weight:700;color:var(--ink);margin-bottom:4px}
+.step-desc{font-size:.82rem;color:var(--slate);line-height:1.55}
+.step-tag{padding:16px 24px;font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--slate-light);white-space:nowrap}
+@media(max-width:600px){.step-row{grid-template-columns:48px 1fr}.step-tag{display:none}}
+
+/* ── AXES ── */
+.axes-section{padding:100px 0;background:var(--ink);color:#fff}
+.axes-header{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:end;margin-bottom:56px}
+.axes-header .subtext{color:rgba(255,255,255,.45)}
+.axes-note{font-size:.8rem;color:rgba(255,255,255,.3);line-height:1.6;border-left:2px solid rgba(255,255,255,.1);padding-left:16px}
+.axes-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);border-radius:var(--radius-lg);overflow:hidden}
+.axis-tile{background:var(--ink-2);padding:24px 22px;position:relative;transition:background .15s}
+.axis-tile:hover{background:#292524}
+.axis-tile.internal{opacity:.55}
+.axis-code{font-size:1.4rem;font-weight:900;color:var(--amber-light);margin-bottom:10px;font-family:'Inter',monospace;letter-spacing:-.01em}
+.axis-name{font-size:.88rem;font-weight:700;color:#fff;margin-bottom:8px}
+.axis-desc{font-size:.75rem;color:rgba(255,255,255,.4);line-height:1.5}
+.axis-note{margin-top:10px;font-size:.7rem;font-weight:600;color:var(--amber);opacity:.8}
+.internal-badge{position:absolute;top:14px;right:14px;font-size:.58rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.07);color:rgba(255,255,255,.3);padding:2px 7px;border-radius:3px}
+@media(max-width:900px){.axes-grid{grid-template-columns:repeat(2,1fr)}.axes-header{grid-template-columns:1fr}}
+@media(max-width:500px){.axes-grid{grid-template-columns:1fr}}
+
+/* ── STRATEGIES ── */
+.strat-section{padding:100px 0;background:var(--white)}
+.strat-intro{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:end;margin-bottom:56px}
+@media(max-width:800px){.strat-intro{grid-template-columns:1fr}}
+.strat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
+.strat-card{padding:28px 26px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);position:relative;background:var(--white);transition:background .15s}
+.strat-card:hover{background:var(--bg)}
+.strat-card:nth-child(3n){border-right:none}
+.strat-card:nth-last-child(-n+3){border-bottom:none}
+.strat-letter{font-size:2.5rem;font-weight:900;color:var(--border);position:absolute;top:18px;right:22px;line-height:1}
+.strat-id{font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);margin-bottom:10px}
+.strat-name{font-size:1rem;font-weight:800;color:var(--ink);margin-bottom:8px;line-height:1.25}
+.strat-tagline{font-size:.8rem;color:var(--slate);line-height:1.55}
+.strat-when{margin-top:14px;font-size:.72rem;font-weight:600;color:var(--slate-light)}
+@media(max-width:800px){.strat-grid{grid-template-columns:1fr 1fr}.strat-card:nth-child(2n){border-right:none}.strat-card:nth-last-child(-n+2){border-bottom:none}}
+@media(max-width:500px){.strat-grid{grid-template-columns:1fr}.strat-card{border-right:none}.strat-card:not(:last-child){border-bottom:1px solid var(--border)}}
+
+/* ── CHECKER ── */
+.checker-section{padding:100px 0;background:var(--bg)}
+.checker-wrap{display:grid;grid-template-columns:5fr 4fr;gap:64px;align-items:start}
+.checker-doc{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.06)}
+.checker-doc-header{padding:14px 20px;background:var(--ink);display:flex;align-items:center;justify-content:space-between}
+.checker-doc-title{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.5)}
+.verdict-chip{font-size:.68rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:4px}
+.verdict-chip.cond{background:var(--amber-border);color:#78350F}
+.checker-section-head{padding:10px 20px 6px;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--slate-light);border-bottom:1px solid var(--border);background:var(--bg)}
+.check-row{display:flex;align-items:center;gap:12px;padding:10px 20px;border-bottom:1px solid var(--border)}
+.check-row:last-child{border-bottom:none}
+.state-dot{width:22px;height:22px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:800}
+.sd-pass{background:var(--green-pale);color:var(--green)}
+.sd-fail{background:var(--red-pale);color:var(--red)}
+.sd-warn{background:var(--amber-pale);color:#92400E}
+.sd-na{background:#F5F5F4;color:var(--slate-light)}
+.check-label{font-size:.8rem;color:var(--ink);flex:1;line-height:1.35}
+.blocker-pill{font-size:.58rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;background:var(--red-pale);color:var(--red);padding:2px 7px;border-radius:3px;white-space:nowrap}
+.score-footer{padding:14px 20px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--white)}
+.overall-score{font-size:1.6rem;font-weight:900;color:var(--amber);font-family:'Inter',monospace}
+.score-desc{font-size:.72rem;color:var(--slate-light);line-height:1.4}
+.checker-copy .subtext{margin-bottom:24px}
+.feature-row{display:flex;gap:14px;margin-bottom:18px;align-items:flex-start}
+.feature-icon{width:32px;height:32px;border-radius:var(--radius);background:var(--amber-pale);border:1px solid var(--amber-border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.85rem}
+.feature-title{font-size:.88rem;font-weight:700;color:var(--ink);margin-bottom:2px}
+.feature-body{font-size:.78rem;color:var(--slate);line-height:1.5}
+@media(max-width:880px){.checker-wrap{grid-template-columns:1fr}}
+
+/* ── PROOF ── */
+.proof-section{padding:80px 0;background:var(--ink-2);color:#fff}
+.proof-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid rgba(255,255,255,.08);border-radius:var(--radius-lg);overflow:hidden;margin-top:48px}
+.proof-item{padding:32px 28px;border-right:1px solid rgba(255,255,255,.08)}
+.proof-item:last-child{border-right:none}
+.proof-num{font-size:2.5rem;font-weight:900;color:var(--amber-light);line-height:1;margin-bottom:8px;font-family:'Playfair Display',serif}
+.proof-label{font-size:.82rem;font-weight:600;color:#fff;margin-bottom:6px}
+.proof-note{font-size:.75rem;color:rgba(255,255,255,.35);line-height:1.5}
+@media(max-width:800px){.proof-grid{grid-template-columns:repeat(2,1fr)}.proof-item:nth-child(2){border-right:none}.proof-item:nth-child(n+3){border-top:1px solid rgba(255,255,255,.08)}}
+@media(max-width:480px){.proof-grid{grid-template-columns:1fr}.proof-item{border-right:none;border-bottom:1px solid rgba(255,255,255,.08)}}
+
+/* ── CTA ── */
+.cta-section{padding:120px 0;background:var(--white);text-align:center}
+.cta-eyebrow{font-size:.68rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--amber);margin-bottom:20px}
+.cta-title{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,5vw,3.8rem);font-weight:800;color:var(--ink);line-height:1.1;max-width:640px;margin:0 auto 20px}
+.cta-title em{font-style:italic;color:var(--amber)}
+.cta-sub{font-size:.95rem;color:var(--slate);max-width:420px;margin:0 auto 40px;line-height:1.7}
+.cta-meta{margin-top:24px;font-size:.75rem;color:var(--slate-light);display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap}
+.cta-meta span{display:flex;align-items:center;gap:5px}
+.cta-meta span::before{content:'·';color:var(--border);display:none}
+.cta-meta span+span::before{display:inline}
+
+/* ── FOOTER ── */
+footer{padding:40px 0;border-top:1px solid var(--border);background:var(--bg)}
+.foot-wrap{max-width:1160px;margin:0 auto;padding:0 32px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.foot-brand{font-size:.82rem;font-weight:800;color:var(--ink);letter-spacing:.04em}
+.foot-brand span{font-weight:400;color:var(--slate-light);margin-left:8px;font-size:.75rem}
+.foot-links{display:flex;gap:24px;flex-wrap:wrap}
+.foot-links a{font-size:.78rem;color:var(--slate-light);transition:color .12s}
+.foot-links a:hover{color:var(--ink)}
+.foot-note{font-size:.72rem;color:var(--slate-light)}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-wrap">
+    <div class="logo">CA<span>DEX</span></div>
+    <div class="nav-links">
+      <a href="#steps">The Framework</a>
+      <a href="#axes">Risk Axes</a>
+      <a href="#strategies">Strategies</a>
+      <a href="#checker">Deal Checker</a>
+    </div>
+    <a href="http://localhost:5173" target="_blank" rel="noopener" class="nav-btn">Open App →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-wrap">
+    <div class="hero-eyebrow">Deal Qualification Framework · v0.4</div>
+    <h1 class="hero-title">The deal you accept<br>is as important as<br><em>how you win it.</em></h1>
+    <p class="hero-body">Most fixed-price engagements fail in presales — not delivery. CADEX is a structured qualification framework that surfaces risk, recommends engagement strategy, and runs a 42-point gate before you submit.</p>
+    <div class="hero-cta">
+      <a href="http://localhost:5173" target="_blank" rel="noopener" class="btn-amber">Launch CADEX — it's free</a>
+      <a href="#steps" class="btn-ghost-white">See the framework →</a>
+    </div>
+
+    <div class="hero-scorestrip">
+      <div class="score-band">
+        <div class="score-band-val g">Green</div>
+        <div class="score-band-label">Proceed</div>
+        <div class="score-band-range">≥ 75%</div>
+      </div>
+      <div class="score-band">
+        <div class="score-band-val a">Amber</div>
+        <div class="score-band-label">Shape First</div>
+        <div class="score-band-range">50 – 74%</div>
+      </div>
+      <div class="score-band">
+        <div class="score-band-val r">Red</div>
+        <div class="score-band-label">High Risk</div>
+        <div class="score-band-range">25 – 49%</div>
+      </div>
+      <div class="score-band">
+        <div class="score-band-val k">Black</div>
+        <div class="score-band-label">No-Bid</div>
+        <div class="score-band-range">&lt; 25%</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FIVE STEPS -->
+<section class="steps-section" id="steps">
+  <div class="wrap">
+    <div class="overline">Five Steps</div>
+    <h2 class="heading">From first signal to submission-ready.</h2>
+    <p class="subtext">Each step builds on the last. Complete all five and you have a fully qualified deal with documented risks, a matched strategy, and a quality verdict.</p>
+
+    <div class="steps-list">
+      <div class="step-row">
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <div class="step-title">Deal Intake</div>
+          <div class="step-desc">Capture deal basics, work type (L1 → L2 → L3), competitive situation, compliance requirements, partner ecosystem, and delivery geography. Auto-signals fire when risk patterns are detected.</div>
+        </div>
+        <div class="step-tag">~5 min</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <div class="step-title">Risk Assessment</div>
+          <div class="step-desc">55+ calibrated questions across 9 sections. Answers score 8 risk axes weighted by your engagement type, pricing model, and work type. Live radar chart updates as you go.</div>
+        </div>
+        <div class="step-tag">~15 min</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <div class="step-title">Strategy Recommendation</div>
+          <div class="step-desc">One of six engagement models is matched algorithmically to your risk profile. You get the full card: pitch language, key moves, contract non-negotiables, objection handlers, and a close script.</div>
+        </div>
+        <div class="step-tag">~2 min</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">04</div>
+        <div class="step-content">
+          <div class="step-title">Deal Shaper</div>
+          <div class="step-desc">Ranked levers to reshape the deal before you bid. Scope, commercial, governance, risk, and relationship levers — each with a specific action and suggested contract language.</div>
+        </div>
+        <div class="step-tag">~5 min</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">05</div>
+        <div class="step-content">
+          <div class="step-title">Deal Checker</div>
+          <div class="step-desc">42-point quality gate across 9 sections. Hard blockers halt the deal. Each section scores independently. Verdict: Go, Conditional Go, or No-Go. Export to JSON for the delivery handoff.</div>
+        </div>
+        <div class="step-tag">~10 min</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RISK AXES -->
+<section class="axes-section" id="axes">
+  <div class="wrap">
+    <div class="axes-header">
+      <div>
+        <div class="overline" style="color:var(--amber-light)">8 Risk Axes</div>
+        <h2 class="heading" style="color:#fff">Every angle of a deal, scored.</h2>
+        <p class="subtext">Axis weights shift automatically based on your engagement type, pricing model, and work type. A fixed-price deal weights scope heavily. A T&M deal weights commercial risk less.</p>
+      </div>
+      <div class="axes-note">
+        Scores run 1–5. The weighted total produces the band colour. Critical flags fire when any axis drops below a configurable threshold — they surface in the strategy card and block the checker verdict.
+      </div>
+    </div>
+    <div class="axes-grid">
+      <div class="axis-tile">
+        <div class="axis-code">SC</div>
+        <div class="axis-name">Scope Clarity</div>
+        <div class="axis-desc">How well-defined and stable is the scope? Is there an agreed MVP boundary? Has the client aligned on what's in and what's out?</div>
+        <div class="axis-note">Heaviest weight on fixed-price</div>
+      </div>
+      <div class="axis-tile">
+        <div class="axis-code">CM</div>
+        <div class="axis-name">Client Maturity</div>
+        <div class="axis-desc">How agile-ready is the client? Stakeholder alignment, prior vendor experience, decision-making speed, and change appetite.</div>
+      </div>
+      <div class="axis-tile">
+        <div class="axis-code">CR</div>
+        <div class="axis-name">Commercial Risk</div>
+        <div class="axis-desc">Margin health, contingency documentation, payment structure, and whether a Phase 2 path is visible in the commercial narrative.</div>
+      </div>
+      <div class="axis-tile">
+        <div class="axis-code">TC</div>
+        <div class="axis-name">Technical Complexity</div>
+        <div class="axis-desc">Integration depth, legacy system exposure, data quality risk, third-party dependencies, and cloud/infrastructure unknowns.</div>
+      </div>
+      <div class="axis-tile">
+        <div class="axis-code">GR</div>
+        <div class="axis-name">Governance Readiness</div>
+        <div class="axis-desc">Named PO availability, decision cycle speed, sprint review commitment, and change request process with SLA.</div>
+        <div class="axis-note">No named PO = hard blocker</div>
+      </div>
+      <div class="axis-tile">
+        <div class="axis-code">SV</div>
+        <div class="axis-name">Strategic Value</div>
+        <div class="axis-desc">Logo value, renewal potential, platform expansion story, and whether this deal fits the capability and portfolio strategy.</div>
+      </div>
+      <div class="axis-tile">
+        <div class="axis-code">CP</div>
+        <div class="axis-name">Competitive Position</div>
+        <div class="axis-desc">Win probability, differentiation quality, competitive posture choice, and availability of a comparable reference in this domain.</div>
+      </div>
+      <div class="axis-tile internal">
+        <div class="internal-badge">Internal only</div>
+        <div class="axis-code">VF</div>
+        <div class="axis-name">Vendor Capability Fit</div>
+        <div class="axis-desc">Our delivery readiness, comparable project history, staffing confidence, and subcontractor reliability. Hidden from client exports.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STRATEGIES -->
+<section class="strat-section" id="strategies">
+  <div class="wrap">
+    <div class="strat-intro">
+      <div>
+        <div class="overline">Six Engagement Models</div>
+        <h2 class="heading">One is matched to your risk profile.</h2>
+      </div>
+      <p class="subtext">The algorithm weighs your axis scores, pricing model, competitive situation, and work type to select the primary strategy — with an alternative if you disagree. Each card includes the full pitch, moves, and close.</p>
+    </div>
+    <div class="strat-grid">
+      <div class="strat-card">
+        <div class="strat-letter">A</div>
+        <div class="strat-id">Strategy A</div>
+        <div class="strat-name">Foundation First</div>
+        <div class="strat-tagline">Paid discovery phase before any fixed-price commitment. Validates scope, surfaces assumptions, and de-risks the main engagement.</div>
+        <div class="strat-when">When: scope clarity is low or scope is unvalidated</div>
+      </div>
+      <div class="strat-card">
+        <div class="strat-letter">B</div>
+        <div class="strat-id">Strategy B</div>
+        <div class="strat-name">Phased Commitment</div>
+        <div class="strat-tagline">Multi-phase structure with explicit go/no-go gates between phases. Commits budget phase by phase, not end-to-end.</div>
+        <div class="strat-when">When: large programme, high complexity, uncertain timeline</div>
+      </div>
+      <div class="strat-card">
+        <div class="strat-letter">C</div>
+        <div class="strat-id">Strategy C</div>
+        <div class="strat-name">Outcome Contract</div>
+        <div class="strat-tagline">Price anchored on a measurable business outcome, not a feature list. Long-term relationship play with strong renewal language.</div>
+        <div class="strat-when">When: strategic logo, high SV, strong partnership signal</div>
+      </div>
+      <div class="strat-card">
+        <div class="strat-letter">D</div>
+        <div class="strat-id">Strategy D</div>
+        <div class="strat-name">Scope-Locked MVP</div>
+        <div class="strat-tagline">Hard MVP boundary with a scope bank for swaps. Fixes the price on what matters; everything else is Phase 2. Classic fixed-agile model.</div>
+        <div class="strat-when">When: client is agile-ready, scope is reasonably defined</div>
+      </div>
+      <div class="strat-card">
+        <div class="strat-letter">E</div>
+        <div class="strat-id">Strategy E</div>
+        <div class="strat-name">Hybrid T&amp;M Cap</div>
+        <div class="strat-tagline">Time &amp; Materials with a hard spend cap and regular checkpoint reviews. Flexibility without open-ended financial exposure.</div>
+        <div class="strat-when">When: scope is evolving, budget is fixed but requirements aren't</div>
+      </div>
+      <div class="strat-card">
+        <div class="strat-letter">F</div>
+        <div class="strat-id">Strategy F</div>
+        <div class="strat-name">No-Bid / Counter</div>
+        <div class="strat-tagline">Walk away with a counter-proposal, or decline. Triggered when hard blockers remain, risk is unacceptable, or win probability is too low to justify pursuit cost.</div>
+        <div class="strat-when">When: Black band, unresolved hard blockers, or &lt;20% win probability</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHECKER -->
+<section class="checker-section" id="checker">
+  <div class="wrap">
+    <div class="checker-wrap">
+      <div>
+        <div class="overline">42-Point Quality Gate</div>
+        <h2 class="heading">The last line of defence before you submit.</h2>
+        <p class="subtext" style="margin-bottom:32px">Nine sections. Hard blockers that stop the deal. Section-level scores that expose your weakest area. A final verdict you can defend in the review room.</p>
+
+        <div class="feature-row">
+          <div class="feature-icon">🛑</div>
+          <div>
+            <div class="feature-title">5 Hard Blockers</div>
+            <div class="feature-body">Margin health, named PO confirmed, discovery included or scope validated, delivery lead sign-off, comparable delivery history. Any fail = no-go until resolved.</div>
+          </div>
+        </div>
+        <div class="feature-row">
+          <div class="feature-icon">📐</div>
+          <div>
+            <div class="feature-title">Section-Level Scoring</div>
+            <div class="feature-body">Each of the 9 sections scores independently. A 92% overall with a 41% Governance section tells a very different story than a flat 75%.</div>
+          </div>
+        </div>
+        <div class="feature-row">
+          <div class="feature-icon">🔒</div>
+          <div>
+            <div class="feature-title">Internal-Only Section</div>
+            <div class="feature-body">The Vendor Capability section is hidden by default. Toggle it on for internal reviews. It's excluded from any JSON export you share with the client side.</div>
+          </div>
+        </div>
+        <div class="feature-row">
+          <div class="feature-icon">📤</div>
+          <div>
+            <div class="feature-title">JSON Export for Handoff</div>
+            <div class="feature-body">Export the entire deal — intake, scores, strategy, levers, and checker results — as a single JSON file. The memory of the deal travels with the delivery team.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="checker-doc">
+        <div class="checker-doc-header">
+          <div class="checker-doc-title">Deal Checker · Live Preview</div>
+          <div class="verdict-chip cond">Conditional Go</div>
+        </div>
+        <div class="checker-section-head">Commercial Health</div>
+        <div class="check-row">
+          <div class="state-dot sd-pass">✓</div>
+          <div class="check-label">Margin is healthy at the quoted price</div>
+          <span class="blocker-pill">Blocker</span>
+        </div>
+        <div class="check-row">
+          <div class="state-dot sd-pass">✓</div>
+          <div class="check-label">Contingency is built in and documented</div>
+        </div>
+        <div class="check-row">
+          <div class="state-dot sd-warn">!</div>
+          <div class="check-label">Payment is milestone/phase-based, not feature-based</div>
+        </div>
+        <div class="checker-section-head">Governance Health</div>
+        <div class="check-row">
+          <div class="state-dot sd-fail">✗</div>
+          <div class="check-label">A named, empowered Product Owner is confirmed</div>
+          <span class="blocker-pill">Blocker</span>
+        </div>
+        <div class="check-row">
+          <div class="state-dot sd-warn">!</div>
+          <div class="check-label">Decision-making cycle is acceptable for sprint cadence</div>
+        </div>
+        <div class="check-row">
+          <div class="state-dot sd-na">–</div>
+          <div class="check-label">Client sprint review attendance committed in writing</div>
+        </div>
+        <div class="checker-section-head">Risk Health</div>
+        <div class="check-row">
+          <div class="state-dot sd-pass">✓</div>
+          <div class="check-label">Discovery phase included or scope independently validated</div>
+          <span class="blocker-pill">Blocker</span>
+        </div>
+        <div class="check-row">
+          <div class="state-dot sd-pass">✓</div>
+          <div class="check-label">Timeline stress-tested with the delivery lead</div>
+        </div>
+        <div class="score-footer">
+          <div>
+            <div class="score-desc">Overall score</div>
+            <div class="overall-score">74%</div>
+          </div>
+          <div style="text-align:right">
+            <div class="score-desc">Governance</div>
+            <div style="font-size:1.1rem;font-weight:800;color:var(--red);font-family:'Inter',monospace">48%</div>
+          </div>
+          <div style="text-align:right">
+            <div class="score-desc">Commercial</div>
+            <div style="font-size:1.1rem;font-weight:800;color:var(--green);font-family:'Inter',monospace">87%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF NUMBERS -->
+<section class="proof-section">
+  <div class="wrap">
+    <div class="overline" style="color:var(--amber-light)">By the Numbers</div>
+    <h2 class="heading" style="color:#fff;max-width:500px">Everything that goes into a qualified deal.</h2>
+    <div class="proof-grid">
+      <div class="proof-item">
+        <div class="proof-num">8</div>
+        <div class="proof-label">Risk Axes</div>
+        <div class="proof-note">Weighted by engagement type, pricing model, and work type. Scores shift when context changes.</div>
+      </div>
+      <div class="proof-item">
+        <div class="proof-num">55+</div>
+        <div class="proof-label">Calibrated Questions</div>
+        <div class="proof-note">Across 9 sections. Work-type-specific extras load automatically for AI, AMS, migration, and other specialised engagements.</div>
+      </div>
+      <div class="proof-item">
+        <div class="proof-num">42</div>
+        <div class="proof-label">Checker Points</div>
+        <div class="proof-note">Across 9 sections with 5 hard blockers, per-section scoring, notes, and a three-level verdict.</div>
+      </div>
+      <div class="proof-item">
+        <div class="proof-num">25+</div>
+        <div class="proof-label">Work Type Profiles</div>
+        <div class="proof-note">L1 → L2 → L3 taxonomy. Each profile carries its own risk weighting and surfaces relevant checker guidance.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="wrap">
+    <div class="cta-eyebrow">No login. No database. Free.</div>
+    <h2 class="cta-title">Qualify your next deal in <em>25 minutes.</em></h2>
+    <p class="cta-sub">State lives in your browser. Export as JSON. Load it back any time. Share with the delivery lead before kickoff.</p>
+    <a href="http://localhost:5173" target="_blank" rel="noopener" class="btn-amber" style="font-size:1rem;padding:15px 36px;border-radius:var(--radius-lg)">Launch CADEX →</a>
+    <div class="cta-meta">
+      <span>Browser-only</span>
+      <span>localStorage persistence</span>
+      <span>JSON export / import</span>
+      <span>No data leaves your device</span>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-wrap">
+    <div class="foot-brand">CADEX <span>Consulting Advisor &amp; Deal EXecution Framework · v0.4</span></div>
+    <div class="foot-links">
+      <a href="#steps">Framework</a>
+      <a href="#axes">Risk Axes</a>
+      <a href="#strategies">Strategies</a>
+      <a href="#checker">Deal Checker</a>
+      <a href="http://localhost:5173" target="_blank">Open App</a>
+    </div>
+    <div class="foot-note">No data leaves your device.</div>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const el = document.getElementById(a.getAttribute('href').slice(1))
+    if (el) { e.preventDefault(); el.scrollIntoView({ behavior: 'smooth', block: 'start' }) }
+  })
+})
+</script>
+</body>
+</html>
