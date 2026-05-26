@@ -1,4 +1,4 @@
-import { CheckCircle, Circle, Loader, AlertCircle } from 'lucide-react'
+import { CheckCircle, Circle, Loader, AlertCircle, HelpCircle } from 'lucide-react'
 import { useDealStore } from '../../store/dealStore'
 import { getAllQuestionsForDeal } from '../../data/questions'
 
@@ -15,9 +15,10 @@ interface Props {
   onNewDeal: () => void
   onLoadDeal: () => void
   onExport: () => void
+  onHelp: () => void
 }
 
-export default function Sidebar({ onNewDeal, onLoadDeal, onExport }: Props) {
+export default function Sidebar({ onNewDeal, onLoadDeal, onExport, onHelp }: Props) {
   const { getActiveDeal, setDisplayStep, displayStep } = useDealStore()
   const activeDeal = getActiveDeal()
   const current = displayStep                     // highlights the step currently visible
@@ -130,6 +131,13 @@ export default function Sidebar({ onNewDeal, onLoadDeal, onExport }: Props) {
             Export JSON
           </button>
         )}
+        <button
+          onClick={onHelp}
+          className="w-full flex items-center gap-2 px-3 py-2 text-sm text-slate-400 hover:bg-slate-800 hover:text-white rounded-lg transition-colors mt-1"
+        >
+          <HelpCircle size={14} />
+          Help &amp; reference
+        </button>
       </div>
     </aside>
   )
