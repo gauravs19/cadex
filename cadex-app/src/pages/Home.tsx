@@ -1,6 +1,59 @@
 import { useDealStore } from '../store/dealStore'
-import { Zap, ClipboardList, BarChart3, FolderOpen } from 'lucide-react'
+import { Zap, ClipboardList, BarChart3, FolderOpen, ArrowRight } from 'lucide-react'
 import type { Deal } from '../types'
+
+const PROCESS_STEPS = [
+  {
+    num: '01',
+    title: 'Deal Intake',
+    desc: 'Work type, pricing model, competitive situation, compliance, delivery geography.',
+    output: 'Deal context + auto-risk signals',
+    time: '5 min',
+    color: 'text-indigo-500',
+    bg: 'bg-indigo-50',
+    border: 'border-indigo-100',
+  },
+  {
+    num: '02',
+    title: 'Risk Assessment',
+    desc: '60+ calibrated questions scored across 8 weighted axes. Live radar chart.',
+    output: 'Risk band: Green / Amber / Red / Black',
+    time: '15 min',
+    color: 'text-violet-500',
+    bg: 'bg-violet-50',
+    border: 'border-violet-100',
+  },
+  {
+    num: '03',
+    title: 'Strategy',
+    desc: 'Algorithmic match to one of 6 engagement models. Full pitch, moves, objection handlers.',
+    output: 'Strategy card + win themes',
+    time: '2 min',
+    color: 'text-amber-500',
+    bg: 'bg-amber-50',
+    border: 'border-amber-100',
+  },
+  {
+    num: '04',
+    title: 'Deal Shaper',
+    desc: 'Ranked levers to reshape before you bid — with specific contract language.',
+    output: 'Prioritised action list',
+    time: '5 min',
+    color: 'text-orange-500',
+    bg: 'bg-orange-50',
+    border: 'border-orange-100',
+  },
+  {
+    num: '05',
+    title: 'Gate + Export',
+    desc: '42-point quality gate. Hard blockers. Go / Conditional / No-Go verdict.',
+    output: 'Deal brief · Proposal deck · JSON',
+    time: '10 min',
+    color: 'text-green-600',
+    bg: 'bg-green-50',
+    border: 'border-green-100',
+  },
+]
 
 export default function Home() {
   const { deals, createDeal, importDeal } = useDealStore()
@@ -11,14 +64,42 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-8">
-      <div className="w-full max-w-2xl space-y-8">
+      <div className="w-full max-w-4xl space-y-8">
         {/* Header */}
         <div className="text-center">
           <div className="text-4xl font-black text-slate-900 tracking-tight">CADEX</div>
-          <div className="text-slate-500 mt-1 text-sm">Consulting Advisor & Deal EXecution Framework</div>
+          <div className="text-slate-500 mt-1 text-sm">Consulting Advisor &amp; Deal EXecution Framework</div>
         </div>
 
-        {/* Start options */}
+        {/* Process overview */}
+        <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden">
+          <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+            <div>
+              <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-0.5">How it works</div>
+              <div className="text-sm font-semibold text-slate-800">Five steps from first signal to submission-ready — ~25–35 minutes total</div>
+            </div>
+            <span className="text-xs text-slate-400 font-medium hidden sm:block">Each step builds on the last</span>
+          </div>
+          <div className="grid grid-cols-5 divide-x divide-slate-100">
+            {PROCESS_STEPS.map((step, i) => (
+              <div key={step.num} className="relative p-4 flex flex-col gap-2 hover:bg-slate-50 transition-colors">
+                <div className={`inline-flex items-center justify-center w-7 h-7 rounded-lg ${step.bg} border ${step.border} self-start`}>
+                  <span className={`text-xs font-black ${step.color}`}>{step.num}</span>
+                </div>
+                <div className="text-xs font-bold text-slate-800 leading-tight">{step.title}</div>
+                <div className="text-xs text-slate-400 leading-relaxed flex-1">{step.desc}</div>
+                <div className={`text-xs font-semibold ${step.color} mt-1 leading-tight`}>{step.output}</div>
+                <div className="text-xs text-slate-300 font-medium">{step.time}</div>
+                {i < PROCESS_STEPS.length - 1 && (
+                  <ArrowRight size={12} className="absolute -right-1.5 top-1/2 -translate-y-1/2 text-slate-300 z-10 bg-white" />
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Start options — constrained to 2xl so cards don't stretch too wide */}
+        <div className="max-w-2xl mx-auto w-full space-y-8">
         <div className="grid grid-cols-3 gap-4">
           <button
             onClick={() => createDeal()}
@@ -108,6 +189,7 @@ export default function Home() {
             </ul>
           </div>
         )}
+        </div>{/* /max-w-2xl inner */}
       </div>
     </div>
   )
