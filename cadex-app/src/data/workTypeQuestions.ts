@@ -3,7 +3,7 @@
 // Domain-specific questions that augment the base questionnaire
 // ============================================================
 
-import { AxisCode, Question } from '../types'
+import type { Question } from '../types'
 
 export const WORK_TYPE_QUESTIONS: Question[] = [
 

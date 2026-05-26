@@ -1,4 +1,4 @@
-import { Duration, DealSize } from '../types';
+import type { Duration, DealSize } from '../types';
 
 export interface RoleEstimate {
   role: string;

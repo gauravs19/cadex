@@ -1,6 +1,7 @@
 import React from 'react';
-import { EFFORT_PROFILES, EffortProfile } from '../../data/effortHeuristics';
-import { Duration, DealSize } from '../../types';
+import { EFFORT_PROFILES } from '../../data/effortHeuristics';
+import type { EffortProfile } from '../../data/effortHeuristics';
+import type { Duration, DealSize } from '../../types';
 
 interface Props {
   workCategory: string;
