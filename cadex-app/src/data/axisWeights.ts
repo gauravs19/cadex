@@ -5,7 +5,7 @@
 // All weights as decimals summing to 1.0 per engagement type.
 // ============================================================
 
-import type { AxisCode, EngagementType, PricingModel, WeightTable } from '../types'
+import type { AxisCode, EngagementType, Industry, PricingModel, WeightTable } from '../types'
 
 // ── Base Weights by Engagement Type ──────────────────────────
 // From spec §5.2 — converted to decimals (e.g. 22% → 0.22)
@@ -327,5 +327,41 @@ export const GEOGRAPHY_MODIFIERS: Record<string, Partial<Record<AxisCode, number
   'in-country-contractual': {
     CR: 1.2,   // Cost of in-country elevated
     TC: 1.1,
+  },
+} as const
+
+// ── Industry Modifiers ────────────────────────────────────────
+// Multiplicative modifiers applied after geography modifiers.
+// Elevate weights for axes most affected by industry-specific risk.
+
+export const INDUSTRY_MODIFIERS: Record<Industry, Partial<Record<AxisCode, number>>> = {
+  'bfsi': {
+    GR: 1.3,   // Regulatory governance (Basel, FCA, RBI, etc.)
+    CR: 1.3,   // Financial liability and compliance scope
+    SC: 1.2,   // Regulatory-driven scope complexity
+  },
+  'healthcare': {
+    GR: 1.3,   // Clinical governance and MDR/FDA oversight
+    TC: 1.3,   // PHI, HIPAA, MDR technical complexity
+    CR: 1.2,   // Compliance risk exposure
+  },
+  'manufacturing': {
+    TC: 1.2,   // OT/IT integration, industrial process complexity
+    GR: 1.1,   // Industrial process governance
+  },
+  'retail': {
+    SC: 1.2,   // Omnichannel scope complexity
+    TC: 1.1,   // Payment and inventory integrations
+  },
+  'tech': {
+    CM: 1.2,   // Sophisticated buyers, higher client maturity expectation
+  },
+  'public-sector': {
+    GR: 1.4,   // Procurement governance and political risk
+    CR: 1.2,   // Compliance scope and contractual obligations
+    SC: 1.2,   // Compliance-driven scope
+  },
+  'other': {
+    // No modifier
   },
 } as const

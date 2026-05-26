@@ -16,10 +16,12 @@ import type {
 import { QUESTIONS } from '../data/questions'
 import {
   computeAxisScores,
+  applyScopeAnswerImpacts,
   computeWeightedTotal,
   getScoreBand,
   getCriticalFlags,
 } from '../lib/scorer'
+import { WORK_TYPE_SCOPE_BLOCKS } from '../data/workTypeScopeQuestions'
 import { selectStrategy } from '../lib/strategySelector'
 import { getPrioritisedLevers } from '../lib/shaperEngine'
 import { calcOverlapHours } from '../lib/timezoneCalc'
@@ -126,7 +128,8 @@ function recomputeAssessment(deal: Deal): Deal {
   const { assessment, meta } = deal
   if (!assessment) return deal
 
-  const axisScores = computeAxisScores(assessment.responses, QUESTIONS, meta)
+  const rawAxisScores = computeAxisScores(assessment.responses, QUESTIONS, meta)
+  const axisScores = applyScopeAnswerImpacts(rawAxisScores, meta, WORK_TYPE_SCOPE_BLOCKS)
   const weightedTotal = computeWeightedTotal(axisScores, meta)
   const scoreBand = getScoreBand(weightedTotal)
   const criticalFlags = getCriticalFlags(axisScores)

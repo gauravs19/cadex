@@ -11,6 +11,7 @@ export interface ScopeOption {
   value: string
   label: string
   risk?: string  // shown as a warning hint if this option is selected
+  axisImpact?: Partial<Record<'SC'|'CM'|'CR'|'TC'|'GR'|'SV'|'CP'|'VF', number>>
 }
 
 export interface ScopeQuestion {
@@ -826,7 +827,11 @@ export const WORK_TYPE_SCOPE_BLOCKS: WorkTypeScopeBlock[] = [
         id: 'mig-erp-bpr',
         label: 'Business process redesign in scope?',
         type: 'select',
-        options: yn(undefined, 'Business process redesign is a significant workstream requiring business analysts, process workshops, and sign-off from multiple business units.'),
+        options: [
+          { value: 'yes', label: 'Yes', risk: 'Business process redesign is a significant workstream requiring business analysts, process workshops, and sign-off from multiple business units.', axisImpact: { SC: -0.5, GR: -0.4 } },
+          { value: 'no', label: 'No' },
+          { value: 'tbd', label: 'TBD / Unknown' },
+        ],
       },
     ],
   },
@@ -861,7 +866,11 @@ export const WORK_TYPE_SCOPE_BLOCKS: WorkTypeScopeBlock[] = [
         id: 'mig-data-quality',
         label: 'Data quality audit completed?',
         type: 'select',
-        options: yn('Data quality audit not done — price it as a pre-migration task. Unknown data quality is the top migration scope risk.', undefined),
+        options: [
+          { value: 'yes', label: 'Yes' },
+          { value: 'no', label: 'No', risk: 'Data quality audit not done — price it as a pre-migration task. Unknown data quality is the top migration scope risk.', axisImpact: { TC: -0.6, SC: -0.4 } },
+          { value: 'tbd', label: 'TBD / Unknown' },
+        ],
       },
       {
         id: 'mig-data-rollback',
@@ -896,7 +905,7 @@ export const WORK_TYPE_SCOPE_BLOCKS: WorkTypeScopeBlock[] = [
         options: [
           { value: 'full', label: 'Full feature parity required' },
           { value: 'agreed-subset', label: 'Agreed subset — excluded features documented' },
-          { value: 'tbd', label: 'TBD — parity scope not yet agreed', risk: 'Undefined feature parity scope is the #1 cause of re-platforming overruns — negotiate this before pricing.' },
+          { value: 'tbd', label: 'TBD — parity scope not yet agreed', risk: 'Undefined feature parity scope is the #1 cause of re-platforming overruns — negotiate this before pricing.', axisImpact: { SC: -0.7 } },
         ],
       },
       {
@@ -927,7 +936,7 @@ export const WORK_TYPE_SCOPE_BLOCKS: WorkTypeScopeBlock[] = [
         type: 'select',
         options: [
           { value: 'strangler', label: 'Strangler fig (incremental, side-by-side)' },
-          { value: 'big-bang', label: 'Big bang (full rewrite)', risk: 'Big-bang rewrites have a high failure rate — consider strangler-fig pattern unless the codebase is small and well-tested.' },
+          { value: 'big-bang', label: 'Big bang (full rewrite)', risk: 'Big-bang rewrites have a high failure rate — consider strangler-fig pattern unless the codebase is small and well-tested.', axisImpact: { TC: -0.7, SC: -0.4 } },
           { value: 'modular-monolith', label: 'Modular monolith (refactor in place first)' },
           { value: 'tbd', label: 'TBD' },
         ],
@@ -949,8 +958,8 @@ export const WORK_TYPE_SCOPE_BLOCKS: WorkTypeScopeBlock[] = [
         options: [
           { value: 'high', label: 'High (>60% coverage)' },
           { value: 'moderate', label: 'Moderate (20–60%)' },
-          { value: 'low', label: 'Low (<20%)', risk: 'Low test coverage means re-architecture carries high regression risk. Price a test-uplift track alongside refactoring.' },
-          { value: 'none', label: 'No automated tests', risk: 'No test coverage is a critical risk for re-architecture — price a testing foundation sprint before beginning structural changes.' },
+          { value: 'low', label: 'Low (<20%)', risk: 'Low test coverage means re-architecture carries high regression risk. Price a test-uplift track alongside refactoring.', axisImpact: { TC: -0.4 } },
+          { value: 'none', label: 'No automated tests', risk: 'No test coverage is a critical risk for re-architecture — price a testing foundation sprint before beginning structural changes.', axisImpact: { TC: -0.8 } },
         ],
       },
     ],
@@ -1049,7 +1058,7 @@ export const WORK_TYPE_SCOPE_BLOCKS: WorkTypeScopeBlock[] = [
         options: [
           { value: 'business-hours', label: 'Business hours only' },
           { value: '24x5', label: '24x5 with maintenance windows' },
-          { value: '24x7', label: '24x7 / 99.9%+ availability', risk: '24x7 high-availability integration platform requires redundant infrastructure, on-call process, and disaster recovery — price separately.' },
+          { value: '24x7', label: '24x7 / 99.9%+ availability', risk: '24x7 high-availability integration platform requires redundant infrastructure, on-call process, and disaster recovery — price separately.', axisImpact: { CR: -0.3, TC: -0.3 } },
         ],
       },
     ],
@@ -1168,7 +1177,7 @@ export const WORK_TYPE_SCOPE_BLOCKS: WorkTypeScopeBlock[] = [
         options: [
           { value: 'clean', label: 'Clean and well-structured' },
           { value: 'partial', label: 'Partial — some cleanup needed' },
-          { value: 'poor', label: 'Poor quality / fragmented', risk: 'Poor data quality is typically 40–60% of AI project effort — price a data preparation track before modelling.' },
+          { value: 'poor', label: 'Poor quality / fragmented', risk: 'Poor data quality is typically 40–60% of AI project effort — price a data preparation track before modelling.', axisImpact: { TC: -0.6, SC: -0.3 } },
         ],
       },
       {
@@ -1344,7 +1353,11 @@ export const WORK_TYPE_SCOPE_BLOCKS: WorkTypeScopeBlock[] = [
         id: 'adv-arch-success',
         label: 'PoC / pilot success criteria defined?',
         type: 'select',
-        options: yn('Undefined success criteria means the PoC has no agreed endpoint — define BEFORE starting.', undefined),
+        options: [
+          { value: 'yes', label: 'Yes' },
+          { value: 'no', label: 'No', risk: 'Undefined success criteria means the PoC has no agreed endpoint — define BEFORE starting.', axisImpact: { SC: -0.6 } },
+          { value: 'tbd', label: 'TBD / Unknown' },
+        ],
       },
       {
         id: 'adv-arch-stack',
@@ -1430,7 +1443,11 @@ export const WORK_TYPE_SCOPE_BLOCKS: WorkTypeScopeBlock[] = [
         id: 'erp-sap-change-mgmt',
         label: 'Change management / training in scope?',
         type: 'select',
-        options: yn('Change management not in scope — risk of low adoption. Consider at least a Super User programme even if full OCM is out of scope.', undefined),
+        options: [
+          { value: 'yes', label: 'Yes' },
+          { value: 'no', label: 'No', risk: 'Change management not in scope — risk of low adoption. Consider at least a Super User programme even if full OCM is out of scope.', axisImpact: { CM: -0.5, GR: -0.4 } },
+          { value: 'tbd', label: 'TBD / Unknown' },
+        ],
       },
     ],
   },
@@ -1470,7 +1487,11 @@ export const WORK_TYPE_SCOPE_BLOCKS: WorkTypeScopeBlock[] = [
         id: 'erp-sfdc-custom',
         label: 'Custom development expected (Apex, LWC)?',
         type: 'select',
-        options: yn(undefined, 'Custom code in Salesforce increases maintenance burden and upgrade risk — minimise with configuration-first approach.'),
+        options: [
+          { value: 'yes', label: 'Yes', risk: 'Custom code in Salesforce increases maintenance burden and upgrade risk — minimise with configuration-first approach.', axisImpact: { TC: -0.4, CR: -0.3 } },
+          { value: 'no', label: 'No' },
+          { value: 'tbd', label: 'TBD / Unknown' },
+        ],
       },
     ],
   },
@@ -1597,7 +1618,11 @@ export const WORK_TYPE_SCOPE_BLOCKS: WorkTypeScopeBlock[] = [
         id: 'qe-perf-nfr',
         label: 'NFRs (performance targets) defined?',
         type: 'select',
-        options: yn('NFRs not defined — we cannot determine pass/fail criteria. Define response time, throughput, and concurrency targets before engagement start.', undefined),
+        options: [
+          { value: 'yes', label: 'Yes' },
+          { value: 'no', label: 'No', risk: 'NFRs not defined — we cannot determine pass/fail criteria. Define response time, throughput, and concurrency targets before engagement start.', axisImpact: { SC: -0.6 } },
+          { value: 'tbd', label: 'TBD / Unknown' },
+        ],
       },
       {
         id: 'qe-perf-env',
@@ -1779,7 +1804,11 @@ export const WORK_TYPE_SCOPE_BLOCKS: WorkTypeScopeBlock[] = [
         id: 'mdm-stewardship',
         label: 'Data stewardship ownership defined?',
         type: 'select',
-        options: yn('No data stewards identified — MDM without stewardship decays within 12 months. Must be a pre-condition for project start.', undefined),
+        options: [
+          { value: 'yes', label: 'Yes' },
+          { value: 'no', label: 'No', risk: 'No data stewards identified — MDM without stewardship decays within 12 months. Must be a pre-condition for project start.', axisImpact: { GR: -0.6, CM: -0.3 } },
+          { value: 'tbd', label: 'TBD / Unknown' },
+        ],
       },
       {
         id: 'mdm-source-systems',
@@ -1824,7 +1853,11 @@ export const WORK_TYPE_SCOPE_BLOCKS: WorkTypeScopeBlock[] = [
         id: 'sec-vapt-legal',
         label: 'Engagement letter / scope authorisation signed?',
         type: 'select',
-        options: yn('Testing without signed authorisation creates legal liability — this is a hard requirement before any testing activity begins.', undefined),
+        options: [
+          { value: 'yes', label: 'Yes' },
+          { value: 'no', label: 'No', risk: 'Testing without signed authorisation creates legal liability — this is a hard requirement before any testing activity begins.', axisImpact: { CR: -1.0 } },
+          { value: 'tbd', label: 'TBD / Unknown' },
+        ],
       },
       {
         id: 'sec-vapt-frequency',
@@ -1974,7 +2007,7 @@ export const WORK_TYPE_SCOPE_BLOCKS: WorkTypeScopeBlock[] = [
         label: 'Current automated test coverage',
         type: 'select',
         options: [
-          { value: 'none', label: 'None — starting from scratch', risk: 'No existing tests means testability of the system is unknown. Price a testability assessment sprint before automation begins.' },
+          { value: 'none', label: 'None — starting from scratch', risk: 'No existing tests means testability of the system is unknown. Price a testability assessment sprint before automation begins.', axisImpact: { TC: -0.5 } },
           { value: 'lt20', label: 'Under 20% coverage' },
           { value: '20-50', label: '20 – 50% coverage' },
           { value: 'gt50', label: 'Over 50% — uplift targeted areas' },

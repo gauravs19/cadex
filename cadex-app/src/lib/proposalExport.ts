@@ -7,6 +7,8 @@ import type { AxisCode, AxisScores, Deal } from '../types'
 import { STRATEGIES } from '../data/strategies'
 import { WORK_TYPES } from '../data/workTypes'
 import { DISCOVERY_GAPS, DISCOVERY_GAP_CATEGORIES } from '../data/discoveryGaps'
+import { generateWinThemes } from './winThemeEngine'
+import { WORK_TYPE_SCOPE_BLOCKS } from '../data/workTypeScopeQuestions'
 
 // ── Label maps ────────────────────────────────────────────────
 
@@ -728,23 +730,124 @@ function slideCompliance(deal: Deal, o: SlideOpts): string {
   </div>`
 }
 
-function slideWhyUs(company: string, deal: Deal, o: SlideOpts): string {
+function slideScopeContext(deal: Deal, o: SlideOpts): string {
   const { meta } = deal
+  const answers = meta.workTypeScopeAnswers ?? {}
+  const block = WORK_TYPE_SCOPE_BLOCKS.find(b => b.workTypeId === meta.workType)
+
+  if (!block || Object.keys(answers).length === 0) {
+    return `<div class="slide slide-white">
+      <div class="slide-header-bar indigo-bar"></div>
+      <div class="slide-content" style="padding-top:40px">
+        <div class="slide-eyebrow">Understanding</div>
+        <h2 class="slide-title">Scope Context</h2>
+        <p class="dim-text" style="margin-top:40px">Complete the scope questions in the Intake step to populate this slide.</p>
+      </div>
+      ${footer(o.company, o.num, o.total, 'Understanding')}
+    </div>`
+  }
+
+  const answered = block.questions
+    .filter(q => answers[q.id] && answers[q.id] !== '')
+    .map(q => {
+      const val = answers[q.id]
+      const optLabel = q.options?.find(opt => opt.value === val)?.label ?? val
+      const risk = q.options?.find(opt => opt.value === val)?.risk
+      return { label: q.label, value: optLabel, risk }
+    })
+
+  return `<div class="slide slide-white">
+    <div class="slide-header-bar indigo-bar"></div>
+    <div class="slide-content" style="padding-top:40px">
+      <div class="slide-eyebrow">Understanding</div>
+      <h2 class="slide-title">${e(block.heading)}</h2>
+      <p class="scope-blurb">${e(block.intro)}</p>
+      <div class="scope-qa-grid">
+        ${answered.map(({ label, value, risk }) => `<div class="sqa-item${risk ? ' sqa-risk' : ''}">
+          <div class="sqa-label">${e(label)}</div>
+          <div class="sqa-value">${e(value)}</div>
+          ${risk ? `<div class="sqa-risk-note">⚠ ${e(risk)}</div>` : ''}
+        </div>`).join('')}
+      </div>
+    </div>
+    ${footer(o.company, o.num, o.total, 'Understanding')}
+  </div>`
+}
+
+function slideWinThemes(deal: Deal, o: SlideOpts): string {
+  const { assessment, strategy } = deal
+  if (!assessment || !strategy?.primary) {
+    return `<div class="slide slide-white">
+      <div class="slide-header-bar indigo-bar"></div>
+      <div class="slide-content" style="padding-top:40px">
+        <div class="slide-eyebrow">Strategy</div>
+        <h2 class="slide-title">Win Themes</h2>
+        <p class="dim-text" style="margin-top:40px">Complete the Risk Assessment to generate deal-specific win themes.</p>
+      </div>
+      ${footer(o.company, o.num, o.total, 'Strategy')}
+    </div>`
+  }
+
+  const themes = generateWinThemes({ primary: strategy.primary, alternative: strategy.alternative }, deal.meta, assessment.axisScores)
+
+  const angleColors: Record<string, { bg: string; border: string; label: string }> = {
+    risk:        { bg: '#fef2f2', border: '#fca5a5', label: '#dc2626' },
+    expertise:   { bg: '#eef2ff', border: '#c7d2fe', label: '#4f46e5' },
+    commercial:  { bg: '#f0fdf4', border: '#bbf7d0', label: '#16a34a' },
+    speed:       { bg: '#fff7ed', border: '#fed7aa', label: '#ea580c' },
+    partnership: { bg: '#f0f9ff', border: '#bae6fd', label: '#0369a1' },
+  }
+
+  return `<div class="slide slide-white">
+    <div class="slide-header-bar indigo-bar"></div>
+    <div class="slide-content" style="padding-top:40px">
+      <div class="slide-eyebrow">Strategy</div>
+      <h2 class="slide-title">Win Themes for This Deal</h2>
+      <p class="slide-sub-text">Tailored to ${e(deal.meta.workType ? wtLabel(deal.meta.workType) : deal.meta.workCategory ?? 'this engagement')} · ${e(deal.meta.industry)} · Strategy ${e(strategy.primary)}</p>
+      <div class="win-themes-stack">
+        ${themes.map(t => {
+          const c = angleColors[t.angle] ?? angleColors.expertise
+          return `<div class="wt-card" style="background:${c.bg};border:1px solid ${c.border}">
+            <div class="wt-angle" style="color:${c.label}">${t.angle.charAt(0).toUpperCase() + t.angle.slice(1)}</div>
+            <div class="wt-headline">${e(t.headline)}</div>
+            <div class="wt-body">${e(t.body)}</div>
+          </div>`
+        }).join('')}
+      </div>
+    </div>
+    ${footer(o.company, o.num, o.total, 'Strategy')}
+  </div>`
+}
+
+function slideWhyUs(company: string, deal: Deal, o: SlideOpts): string {
+  const { meta, assessment, strategy } = deal
   const partners = meta.technologyPartners.filter(p => p !== 'none' && p !== 'other')
+
+  let winPoints: [string, string][] = []
+  if (assessment && strategy?.primary) {
+    const themes = generateWinThemes({ primary: strategy.primary, alternative: strategy.alternative }, meta, assessment.axisScores)
+    winPoints = themes.slice(0, 2).map(t => [t.headline, t.body])
+  }
+
+  const basePoints: [string, string][] = [
+    ['Risk-intelligent presales', 'CADEX-driven qualification — we only bid what we can deliver'],
+    ['Agile-at-scale delivery', 'Structured sprints, robust governance, transparent reporting'],
+    ['Transparent commercial model', 'Fixed scope, scope bank, no hidden cost transfers'],
+    ...(partners.length ? [[`${partners.map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(', ')} partnership`, 'Certified partner capability with access to platform credits and specialists'] as [string, string]] : []),
+    ['Knowledge transfer built-in', 'All delivery includes structured KT, not just handover docs'],
+  ]
+
+  const allPoints = winPoints.length > 0
+    ? [...winPoints, ...basePoints.slice(0, 4 - Math.min(winPoints.length, 2))]
+    : basePoints.slice(0, 6)
+
   return `<div class="slide slide-dark-indigo">
     <div class="slide-content" style="padding-top:50px">
       <div class="slide-eyebrow" style="color:#a5b4fc">Why Us</div>
       <h2 class="slide-title" style="color:white;margin-bottom:32px">Why ${e(company)}</h2>
       <div class="why-us-grid">
-        ${[
-          ['Deep domain expertise', `Proven delivery track record in ${meta.industry} engagements`],
-          ['Agile-at-scale delivery', 'Structured sprints, robust governance, transparent reporting'],
-          ['Risk-intelligent presales', 'CADEX-driven qualification — we only bid what we can deliver'],
-          ['Transparent commercial model', 'Fixed scope, scope bank, no hidden cost transfers'],
-          ...(partners.length ? [[`${partners.map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(', ')} partnership`, 'Certified partner capability with access to platform credits and specialists']] : []),
-          ['Knowledge transfer built-in', 'All delivery includes structured KT, not just handover docs'],
-        ].map(([title, desc]) => `<div class="why-card">
-          <div class="why-title">${title}</div>
+        ${allPoints.map(([title, desc]) => `<div class="why-card">
+          <div class="why-title">${e(title)}</div>
           <div class="why-desc">${e(desc)}</div>
         </div>`).join('')}
       </div>
@@ -1112,6 +1215,21 @@ const CSS = `
   .ns-both{background:#f0f9ff;color:#0369a1}
   .ns-action{font-size:13px;color:#334155;flex:1}
 
+  /* Scope Q&A */
+  .scope-qa-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+  .sqa-item{padding:14px 16px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px}
+  .sqa-item.sqa-risk{border-color:#fca5a5;background:#fef9f9}
+  .sqa-label{font-size:11px;color:#94a3b8;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px}
+  .sqa-value{font-size:14px;font-weight:700;color:#0f172a}
+  .sqa-risk-note{font-size:11px;color:#dc2626;margin-top:6px;font-weight:500}
+
+  /* Win themes */
+  .win-themes-stack{display:flex;flex-direction:column;gap:16px;margin-top:16px}
+  .wt-card{padding:18px 22px;border-radius:12px}
+  .wt-angle{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:6px}
+  .wt-headline{font-size:15px;font-weight:800;color:#0f172a;margin-bottom:6px}
+  .wt-body{font-size:13px;color:#475569;line-height:1.55}
+
   /* Thank you */
   .ty-company{font-size:14px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#818cf8;margin-bottom:20px;position:relative;z-index:1}
   .ty-tagline{font-size:40px;font-weight:900;color:white;margin-bottom:12px;position:relative;z-index:1}
@@ -1136,7 +1254,7 @@ export function generateProposalHtml(deal: Deal, companyName: string): string {
   // Re-attach so slide builders can access them safely
   const safeDeal: Deal = { ...deal, assumptions, discoveryGaps }
 
-  const TOTAL = 30
+  const TOTAL = 34
 
   const mkOpts = (num: number, section = ''): SlideOpts => ({ company: companyName, num, total: TOTAL, section })
 
@@ -1158,32 +1276,34 @@ export function generateProposalHtml(deal: Deal, companyName: string): string {
     slideSectionBreak('01', 'Understanding', 'Our interpretation of your requirements', sectionBreakColors.Understanding, mkOpts(4)),
     slideUnderstanding(safeDeal, mkOpts(5, 'Understanding')),
     slideScopeOfWork(safeDeal, mkOpts(6, 'Understanding')),
-    slideTechContext(safeDeal, mkOpts(7, 'Understanding')),
-    slideSectionBreak('02', 'Strategy', 'Recommended engagement model and approach', sectionBreakColors.Strategy, mkOpts(8)),
-    slideStrategy(safeDeal, mkOpts(9, 'Strategy')),
-    slideKeyMoves(safeDeal, mkOpts(10, 'Strategy')),
-    slideWhyStrategy(safeDeal, mkOpts(11, 'Strategy')),
-    slideSectionBreak('03', 'Delivery', 'How we will deliver this engagement', sectionBreakColors.Delivery, mkOpts(12)),
-    slideDeliveryModel(safeDeal, mkOpts(13, 'Delivery')),
-    slideTeamGovernance(safeDeal, mkOpts(14, 'Delivery')),
-    slideSprintCadence(safeDeal, mkOpts(15, 'Delivery')),
-    slideSectionBreak('04', 'Risk', 'Risk assessment, assumptions, and open items', sectionBreakColors.Risk, mkOpts(16)),
-    slideRiskRadar(safeDeal, mkOpts(17, 'Risk')),
-    slideRiskDimensions(safeDeal, mkOpts(18, 'Risk')),
-    slideAssumptions(safeDeal, mkOpts(19, 'Risk')),
-    slideDiscoveryGaps(safeDeal, mkOpts(20, 'Risk')),
-    slideSectionBreak('05', 'Commercial', 'Pricing, contract structure, and deal terms', sectionBreakColors.Commercial, mkOpts(21)),
-    slideCommercial(safeDeal, mkOpts(22, 'Commercial')),
-    slideContractStructure(safeDeal, mkOpts(23, 'Commercial')),
-    slideDealProtections(safeDeal, mkOpts(24, 'Commercial')),
-    slideSectionBreak('06', 'Compliance', 'Regulatory requirements and security posture', sectionBreakColors.Compliance, mkOpts(25)),
-    slideCompliance(safeDeal, mkOpts(26, 'Compliance')),
-    slideSectionBreak('07', `Why ${companyName}`, 'Our capabilities and differentiators', sectionBreakColors.WhyUs, mkOpts(27)),
-    slideWhyUs(companyName, safeDeal, mkOpts(28, 'Why Us')),
-    slideObjectionHandling(safeDeal, mkOpts(29, 'Why Us')),
-    slideVerdict(safeDeal, mkOpts(30, 'Close')),
-    slideNextSteps(safeDeal, mkOpts(31, 'Close')),  // slight over but that's fine
-    slideThankYou(safeDeal, companyName, mkOpts(32)),
+    slideScopeContext(safeDeal, mkOpts(7, 'Understanding')),   // NEW — scope Q&A answers
+    slideTechContext(safeDeal, mkOpts(8, 'Understanding')),
+    slideSectionBreak('02', 'Strategy', 'Recommended engagement model and approach', sectionBreakColors.Strategy, mkOpts(9)),
+    slideStrategy(safeDeal, mkOpts(10, 'Strategy')),
+    slideWinThemes(safeDeal, mkOpts(11, 'Strategy')),          // NEW — deal-specific win themes
+    slideKeyMoves(safeDeal, mkOpts(12, 'Strategy')),
+    slideWhyStrategy(safeDeal, mkOpts(13, 'Strategy')),
+    slideSectionBreak('03', 'Delivery', 'How we will deliver this engagement', sectionBreakColors.Delivery, mkOpts(14)),
+    slideDeliveryModel(safeDeal, mkOpts(15, 'Delivery')),
+    slideTeamGovernance(safeDeal, mkOpts(16, 'Delivery')),
+    slideSprintCadence(safeDeal, mkOpts(17, 'Delivery')),
+    slideSectionBreak('04', 'Risk', 'Risk assessment, assumptions, and open items', sectionBreakColors.Risk, mkOpts(18)),
+    slideRiskRadar(safeDeal, mkOpts(19, 'Risk')),
+    slideRiskDimensions(safeDeal, mkOpts(20, 'Risk')),
+    slideAssumptions(safeDeal, mkOpts(21, 'Risk')),
+    slideDiscoveryGaps(safeDeal, mkOpts(22, 'Risk')),
+    slideSectionBreak('05', 'Commercial', 'Pricing, contract structure, and deal terms', sectionBreakColors.Commercial, mkOpts(23)),
+    slideCommercial(safeDeal, mkOpts(24, 'Commercial')),
+    slideContractStructure(safeDeal, mkOpts(25, 'Commercial')),
+    slideDealProtections(safeDeal, mkOpts(26, 'Commercial')),
+    slideSectionBreak('06', 'Compliance', 'Regulatory requirements and security posture', sectionBreakColors.Compliance, mkOpts(27)),
+    slideCompliance(safeDeal, mkOpts(28, 'Compliance')),
+    slideSectionBreak('07', `Why ${companyName}`, 'Our capabilities and differentiators', sectionBreakColors.WhyUs, mkOpts(29)),
+    slideWhyUs(companyName, safeDeal, mkOpts(30, 'Why Us')),
+    slideObjectionHandling(safeDeal, mkOpts(31, 'Why Us')),
+    slideVerdict(safeDeal, mkOpts(32, 'Close')),
+    slideNextSteps(safeDeal, mkOpts(33, 'Close')),
+    slideThankYou(safeDeal, companyName, mkOpts(34)),
   ]
 
   const doc = `<!DOCTYPE html>

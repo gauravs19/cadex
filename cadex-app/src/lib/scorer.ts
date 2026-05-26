@@ -10,6 +10,7 @@ import {
   PRICING_MODIFIERS,
   WORK_TYPE_MODIFIERS,
   GEOGRAPHY_MODIFIERS,
+  INDUSTRY_MODIFIERS,
 } from '../data/axisWeights'
 
 // ── All axis codes in a stable order ─────────────────────────
@@ -87,6 +88,17 @@ export function buildEffectiveWeights(meta: DealMeta): Record<AxisCode, number> 
     }
   }
 
+  // Step 4.5 — industry modifiers
+  if (meta.industry) {
+    const industryMod = INDUSTRY_MODIFIERS[meta.industry]
+    if (industryMod) {
+      for (const ax of AXIS_CODES) {
+        const mult = (industryMod as Partial<Record<AxisCode, number>>)[ax] ?? 1.0
+        weights[ax] = Math.max(0, weights[ax] * mult)
+      }
+    }
+  }
+
   // Step 5 — normalise
   return normalise(weights)
 }
@@ -159,6 +171,36 @@ export function getScoreBand(weightedTotal: number): ScoreBand {
   if (weightedTotal >= 50) return 'amber'
   if (weightedTotal >= 25) return 'red'
   return 'black'
+}
+
+/**
+ * Apply axis adjustments from work-type scope answers.
+ * High-risk option selections (axisImpact) are applied additively
+ * to computed axis scores, clamped to [1, 5].
+ */
+export function applyScopeAnswerImpacts(
+  axisScores: AxisScores,
+  meta: DealMeta,
+  scopeBlocks: import('../data/workTypeScopeQuestions').WorkTypeScopeBlock[],
+): AxisScores {
+  const answers = meta.workTypeScopeAnswers ?? {}
+  if (Object.keys(answers).length === 0) return axisScores
+
+  const adjusted = { ...axisScores }
+  const block = scopeBlocks.find(b => b.workTypeId === meta.workType)
+  if (!block) return axisScores
+
+  for (const question of block.questions) {
+    const answer = answers[question.id]
+    if (!answer || !question.options) continue
+    const selectedOption = question.options.find(o => o.value === answer)
+    if (!selectedOption?.axisImpact) continue
+    for (const [ax, delta] of Object.entries(selectedOption.axisImpact) as [keyof AxisScores, number][]) {
+      adjusted[ax] = Math.min(5, Math.max(1, (adjusted[ax] ?? 3) + delta))
+    }
+  }
+
+  return adjusted
 }
 
 /**
