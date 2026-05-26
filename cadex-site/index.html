@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CADEX — Deal Intelligence for Consulting Presales</title>
-<meta name="description" content="Score risk. Match strategy. Shape the deal. Run the quality gate. CADEX is the structured deal qualification framework for consulting presales teams.">
+<meta name="description" content="Score risk. Match strategy. Shape the deal. Run the quality gate. CADEX is the structured deal qualification framework for IT consulting presales teams.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;0,800;1,700&display=swap" rel="stylesheet">
@@ -70,6 +70,17 @@ nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.95);backdrop-
 .score-band-label{font-size:.68rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-top:5px}
 .score-band-range{font-size:.72rem;color:rgba(255,255,255,.25);margin-top:2px}
 
+/* ── PAIN STRIP ── */
+.pain-section{padding:60px 0;background:var(--white);border-bottom:1px solid var(--border)}
+.pain-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-top:40px}
+.pain-item{padding:28px 26px;border-right:1px solid var(--border)}
+.pain-item:last-child{border-right:none}
+.pain-stat{font-size:2.2rem;font-weight:900;color:var(--red);font-family:'Playfair Display',serif;line-height:1;margin-bottom:8px}
+.pain-label{font-size:.9rem;font-weight:700;color:var(--ink);margin-bottom:6px}
+.pain-note{font-size:.78rem;color:var(--slate);line-height:1.55}
+.pain-source{display:block;margin-top:8px;font-size:.68rem;color:var(--slate-light)}
+@media(max-width:700px){.pain-grid{grid-template-columns:1fr}.pain-item{border-right:none;border-bottom:1px solid var(--border)}.pain-item:last-child{border-bottom:none}}
+
 /* ── FIVE STEPS ── */
 .steps-section{padding:100px 0;background:var(--bg)}
 .wrap{max-width:1160px;margin:0 auto;padding:0 32px}
@@ -84,6 +95,8 @@ nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.95);backdrop-
 .step-content{padding:20px 28px}
 .step-title{font-size:.95rem;font-weight:700;color:var(--ink);margin-bottom:4px}
 .step-desc{font-size:.82rem;color:var(--slate);line-height:1.55}
+.step-pills{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.step-pill{font-size:.62rem;font-weight:600;letter-spacing:.04em;background:var(--amber-pale);color:#92400E;border:1px solid var(--amber-border);padding:2px 8px;border-radius:20px}
 .step-tag{padding:16px 24px;font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--slate-light);white-space:nowrap}
 @media(max-width:600px){.step-row{grid-template-columns:48px 1fr}.step-tag{display:none}}
 
@@ -160,6 +173,17 @@ nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.95);backdrop-
 @media(max-width:800px){.proof-grid{grid-template-columns:repeat(2,1fr)}.proof-item:nth-child(2){border-right:none}.proof-item:nth-child(n+3){border-top:1px solid rgba(255,255,255,.08)}}
 @media(max-width:480px){.proof-grid{grid-template-columns:1fr}.proof-item{border-right:none;border-bottom:1px solid rgba(255,255,255,.08)}}
 
+/* ── WHO ── */
+.who-section{padding:80px 0;background:var(--bg)}
+.who-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:40px}
+.who-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px 24px}
+.who-role{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin-bottom:10px}
+.who-name{font-size:1rem;font-weight:800;color:var(--ink);margin-bottom:10px}
+.who-pain{font-size:.82rem;color:var(--slate);line-height:1.6;border-left:2px solid var(--border);padding-left:12px;font-style:italic;margin-bottom:12px}
+.who-gets{font-size:.78rem;color:var(--slate);line-height:1.55}
+.who-gets strong{color:var(--ink)}
+@media(max-width:760px){.who-grid{grid-template-columns:1fr}}
+
 /* ── CTA ── */
 .cta-section{padding:120px 0;background:var(--white);text-align:center}
 .cta-eyebrow{font-size:.68rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--amber);margin-bottom:20px}
@@ -193,19 +217,20 @@ footer{padding:40px 0;border-top:1px solid var(--border);background:var(--bg)}
       <a href="#axes">Risk Axes</a>
       <a href="#strategies">Strategies</a>
       <a href="#checker">Deal Checker</a>
+      <a href="#who">Who It's For</a>
     </div>
-    <a href="http://localhost:5173" target="_blank" rel="noopener" class="nav-btn">Open App →</a>
+    <a href="http://localhost:5175" target="_blank" rel="noopener" class="nav-btn">Open App →</a>
   </div>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
   <div class="hero-wrap">
-    <div class="hero-eyebrow">Deal Qualification Framework · v0.4</div>
+    <div class="hero-eyebrow">Deal Intelligence for IT Consulting · v0.5</div>
     <h1 class="hero-title">The deal you accept<br>is as important as<br><em>how you win it.</em></h1>
-    <p class="hero-body">Most fixed-price engagements fail in presales — not delivery. CADEX is a structured qualification framework that surfaces risk, recommends engagement strategy, and runs a 42-point gate before you submit.</p>
+    <p class="hero-body">Most fixed-price engagements fail in presales — not delivery. CADEX is a structured qualification framework that scores risk across 8 axes, recommends engagement strategy, and runs a 42-point gate before you submit.</p>
     <div class="hero-cta">
-      <a href="http://localhost:5173" target="_blank" rel="noopener" class="btn-amber">Launch CADEX — it's free</a>
+      <a href="http://localhost:5175" target="_blank" rel="noopener" class="btn-amber">Launch CADEX — it's free</a>
       <a href="#steps" class="btn-ghost-white">See the framework →</a>
     </div>
 
@@ -234,6 +259,34 @@ footer{padding:40px 0;border-top:1px solid var(--border);background:var(--bg)}
   </div>
 </section>
 
+<!-- PAIN POINTS -->
+<section class="pain-section">
+  <div class="wrap">
+    <div class="overline">Why Teams Use CADEX</div>
+    <h2 class="heading" style="max-width:500px">The numbers behind the problem.</h2>
+    <div class="pain-grid">
+      <div class="pain-item">
+        <div class="pain-stat">39%</div>
+        <div class="pain-label">Average IT services win rate</div>
+        <div class="pain-note">Down from 53% in 2019. 40% of proposal effort goes to deals that will never be won — because qualification is ad hoc or skipped entirely.</div>
+        <span class="pain-source">Loopio 2025 RFP Statistics</span>
+      </div>
+      <div class="pain-item">
+        <div class="pain-stat">59%</div>
+        <div class="pain-label">IT services firms cite scope creep as #1 challenge</div>
+        <div class="pain-note">Scope risk is almost never assessed at the bid stage. By the time it surfaces, the contract is signed and the margin is already gone.</div>
+        <span class="pain-source">Moovila MSP Report 2025</span>
+      </div>
+      <div class="pain-item">
+        <div class="pain-stat">32 hrs</div>
+        <div class="pain-label">Average time per proposal response</div>
+        <div class="pain-note">With no structured go/no-go gate, presales teams spend 32 hours on proposals for deals that should have been declined at intake. 20% never get submitted.</div>
+        <span class="pain-source">OpenAsset / Loopio 2025</span>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- FIVE STEPS -->
 <section class="steps-section" id="steps">
   <div class="wrap">
@@ -246,7 +299,12 @@ footer{padding:40px 0;border-top:1px solid var(--border);background:var(--bg)}
         <div class="step-num">01</div>
         <div class="step-content">
           <div class="step-title">Deal Intake</div>
-          <div class="step-desc">Capture deal basics, work type (L1 → L2 → L3), competitive situation, compliance requirements, partner ecosystem, and delivery geography. Auto-signals fire when risk patterns are detected.</div>
+          <div class="step-desc">Capture deal basics, work type (L1 → L2 → L3), competitive situation, compliance requirements, partner ecosystem, and delivery geography. Scope questions load per work type. Indicative team composition and daily rate range auto-calculated. Auto-signals fire when risk patterns are detected.</div>
+          <div class="step-pills">
+            <span class="step-pill">Work-type scope questions</span>
+            <span class="step-pill">Effort estimator</span>
+            <span class="step-pill">Auto-risk signals</span>
+          </div>
         </div>
         <div class="step-tag">~5 min</div>
       </div>
@@ -254,7 +312,11 @@ footer{padding:40px 0;border-top:1px solid var(--border);background:var(--bg)}
         <div class="step-num">02</div>
         <div class="step-content">
           <div class="step-title">Risk Assessment</div>
-          <div class="step-desc">55+ calibrated questions across 9 sections. Answers score 8 risk axes weighted by your engagement type, pricing model, and work type. Live radar chart updates as you go.</div>
+          <div class="step-desc">60+ calibrated questions across 9 sections including work-type-specific questions for AI, security, ERP, migration, and cloud engagements. Answers score 8 risk axes weighted by your engagement type, pricing model, and work type. Live radar chart updates as you go.</div>
+          <div class="step-pills">
+            <span class="step-pill">Work-type-specific questions</span>
+            <span class="step-pill">Dynamic axis weighting</span>
+          </div>
         </div>
         <div class="step-tag">~15 min</div>
       </div>
@@ -262,7 +324,12 @@ footer{padding:40px 0;border-top:1px solid var(--border);background:var(--bg)}
         <div class="step-num">03</div>
         <div class="step-content">
           <div class="step-title">Strategy Recommendation</div>
-          <div class="step-desc">One of six engagement models is matched algorithmically to your risk profile. You get the full card: pitch language, key moves, contract non-negotiables, objection handlers, and a close script.</div>
+          <div class="step-desc">One of six engagement models matched algorithmically to your risk profile. Full card: pitch language, key moves, contract non-negotiables, win themes, objection handlers, and a close script. Use the What-If Scenario Modeler to preview how changing scope, pricing model, or engagement type shifts your strategy before you commit.</div>
+          <div class="step-pills">
+            <span class="step-pill">What-if scenario modeler</span>
+            <span class="step-pill">Win themes</span>
+            <span class="step-pill">Objection bank</span>
+          </div>
         </div>
         <div class="step-tag">~2 min</div>
       </div>
@@ -277,8 +344,13 @@ footer{padding:40px 0;border-top:1px solid var(--border);background:var(--bg)}
       <div class="step-row">
         <div class="step-num">05</div>
         <div class="step-content">
-          <div class="step-title">Deal Checker</div>
-          <div class="step-desc">42-point quality gate across 9 sections. Hard blockers halt the deal. Each section scores independently. Verdict: Go, Conditional Go, or No-Go. Export to JSON for the delivery handoff.</div>
+          <div class="step-title">Deal Checker &amp; Export</div>
+          <div class="step-desc">42-point quality gate across 9 sections. Hard blockers halt the deal. Verdict: Go, Conditional Go, or No-Go. Export a full proposal deck, share a link with your team, or download the deal as JSON for the delivery handoff.</div>
+          <div class="step-pills">
+            <span class="step-pill">Shareable link</span>
+            <span class="step-pill">JSON export</span>
+            <span class="step-pill">Proposal deck</span>
+          </div>
         </div>
         <div class="step-tag">~10 min</div>
       </div>
@@ -293,7 +365,7 @@ footer{padding:40px 0;border-top:1px solid var(--border);background:var(--bg)}
       <div>
         <div class="overline" style="color:var(--amber-light)">8 Risk Axes</div>
         <h2 class="heading" style="color:#fff">Every angle of a deal, scored.</h2>
-        <p class="subtext">Axis weights shift automatically based on your engagement type, pricing model, and work type. A fixed-price deal weights scope heavily. A T&M deal weights commercial risk less.</p>
+        <p class="subtext">Axis weights shift automatically based on your engagement type, pricing model, and work type. A fixed-price deal weights scope heavily. A T&amp;M deal weights commercial risk less.</p>
       </div>
       <div class="axes-note">
         Scores run 1–5. The weighted total produces the band colour. Critical flags fire when any axis drops below a configurable threshold — they surface in the strategy card and block the checker verdict.
@@ -408,10 +480,10 @@ footer{padding:40px 0;border-top:1px solid var(--border);background:var(--bg)}
 <section class="checker-section" id="checker">
   <div class="wrap">
     <div class="checker-wrap">
-      <div>
+      <div class="checker-copy">
         <div class="overline">42-Point Quality Gate</div>
         <h2 class="heading">The last line of defence before you submit.</h2>
-        <p class="subtext" style="margin-bottom:32px">Nine sections. Hard blockers that stop the deal. Section-level scores that expose your weakest area. A final verdict you can defend in the review room.</p>
+        <p class="subtext">Nine sections. Hard blockers that stop the deal. Section-level scores that expose your weakest area. A final verdict you can defend in the review room.</p>
 
         <div class="feature-row">
           <div class="feature-icon">🛑</div>
@@ -428,17 +500,17 @@ footer{padding:40px 0;border-top:1px solid var(--border);background:var(--bg)}
           </div>
         </div>
         <div class="feature-row">
-          <div class="feature-icon">🔒</div>
+          <div class="feature-icon">🔗</div>
           <div>
-            <div class="feature-title">Internal-Only Section</div>
-            <div class="feature-body">The Vendor Capability section is hidden by default. Toggle it on for internal reviews. It's excluded from any JSON export you share with the client side.</div>
+            <div class="feature-title">Share &amp; Export</div>
+            <div class="feature-body">Copy a shareable link to send the deal to a colleague. Export as JSON for the delivery handoff, or generate a full proposal deck from your qualified deal data.</div>
           </div>
         </div>
         <div class="feature-row">
-          <div class="feature-icon">📤</div>
+          <div class="feature-icon">🔒</div>
           <div>
-            <div class="feature-title">JSON Export for Handoff</div>
-            <div class="feature-body">Export the entire deal — intake, scores, strategy, levers, and checker results — as a single JSON file. The memory of the deal travels with the delivery team.</div>
+            <div class="feature-title">Internal-Only Section</div>
+            <div class="feature-body">The Vendor Capability section is hidden by default. Toggle it on for internal reviews. It's excluded from any export you share with the client side.</div>
           </div>
         </div>
       </div>
@@ -517,9 +589,9 @@ footer{padding:40px 0;border-top:1px solid var(--border);background:var(--bg)}
         <div class="proof-note">Weighted by engagement type, pricing model, and work type. Scores shift when context changes.</div>
       </div>
       <div class="proof-item">
-        <div class="proof-num">55+</div>
+        <div class="proof-num">60+</div>
         <div class="proof-label">Calibrated Questions</div>
-        <div class="proof-note">Across 9 sections. Work-type-specific extras load automatically for AI, AMS, migration, and other specialised engagements.</div>
+        <div class="proof-note">Across 9 sections plus work-type-specific extras for AI, security, ERP, migration, cloud, and AMS engagements.</div>
       </div>
       <div class="proof-item">
         <div class="proof-num">42</div>
@@ -527,9 +599,37 @@ footer{padding:40px 0;border-top:1px solid var(--border);background:var(--bg)}
         <div class="proof-note">Across 9 sections with 5 hard blockers, per-section scoring, notes, and a three-level verdict.</div>
       </div>
       <div class="proof-item">
-        <div class="proof-num">25+</div>
+        <div class="proof-num">40+</div>
         <div class="proof-label">Work Type Profiles</div>
-        <div class="proof-note">L1 → L2 → L3 taxonomy. Each profile carries its own risk weighting and surfaces relevant checker guidance.</div>
+        <div class="proof-note">L1 → L2 → L3 taxonomy. Each profile loads targeted scope questions, risk weights, effort benchmarks, and objection handlers.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHO IT'S FOR -->
+<section class="who-section" id="who">
+  <div class="wrap">
+    <div class="overline">Who It's For</div>
+    <h2 class="heading">Built for the people who own the bid.</h2>
+    <div class="who-grid">
+      <div class="who-card">
+        <div class="who-role">Primary User</div>
+        <div class="who-name">Presales / Solution Consultant</div>
+        <div class="who-pain">"I get pulled into every RFP regardless of fit. By the time I push back, 30 hours are already spent."</div>
+        <div class="who-gets">Gets: <strong>Risk scoring</strong> to defend a no-bid, <strong>work-type scope questions</strong> to run a sharper discovery call, and <strong>objection handlers</strong> specific to the engagement type.</div>
+      </div>
+      <div class="who-card">
+        <div class="who-role">Primary User</div>
+        <div class="who-name">Bid Manager / Pursuit Lead</div>
+        <div class="who-pain">"Go/No-Go meetings don't actually change anything. We've already invested and no one wants to say no."</div>
+        <div class="who-gets">Gets: an <strong>auditable go/no-go recommendation</strong> backed by scored evidence, a <strong>42-point quality gate</strong>, and a shareable deal brief to take into the review room.</div>
+      </div>
+      <div class="who-card">
+        <div class="who-role">Secondary User</div>
+        <div class="who-name">Practice / Capability Lead</div>
+        <div class="who-pain">"I'm asked to sign off on deals I've never seen until two days before submission."</div>
+        <div class="who-gets">Gets: a structured <strong>risk axis view</strong> of the deal, the <strong>scope assumptions register</strong>, and a <strong>shareable link</strong> to review async before the sign-off meeting.</div>
       </div>
     </div>
   </div>
@@ -540,11 +640,11 @@ footer{padding:40px 0;border-top:1px solid var(--border);background:var(--bg)}
   <div class="wrap">
     <div class="cta-eyebrow">No login. No database. Free.</div>
     <h2 class="cta-title">Qualify your next deal in <em>25 minutes.</em></h2>
-    <p class="cta-sub">State lives in your browser. Export as JSON. Load it back any time. Share with the delivery lead before kickoff.</p>
-    <a href="http://localhost:5173" target="_blank" rel="noopener" class="btn-amber" style="font-size:1rem;padding:15px 36px;border-radius:var(--radius-lg)">Launch CADEX →</a>
+    <p class="cta-sub">State lives in your browser. Share a link with your team. Export as JSON for the delivery handoff. No data leaves your device.</p>
+    <a href="http://localhost:5175" target="_blank" rel="noopener" class="btn-amber" style="font-size:1rem;padding:15px 36px;border-radius:var(--radius-lg)">Launch CADEX →</a>
     <div class="cta-meta">
       <span>Browser-only</span>
-      <span>localStorage persistence</span>
+      <span>Shareable link</span>
       <span>JSON export / import</span>
       <span>No data leaves your device</span>
     </div>
@@ -554,13 +654,14 @@ footer{padding:40px 0;border-top:1px solid var(--border);background:var(--bg)}
 <!-- FOOTER -->
 <footer>
   <div class="foot-wrap">
-    <div class="foot-brand">CADEX <span>Consulting Advisor &amp; Deal EXecution Framework · v0.4</span></div>
+    <div class="foot-brand">CADEX <span>Consulting Advisor &amp; Deal EXecution Framework · v0.5</span></div>
     <div class="foot-links">
       <a href="#steps">Framework</a>
       <a href="#axes">Risk Axes</a>
       <a href="#strategies">Strategies</a>
       <a href="#checker">Deal Checker</a>
-      <a href="http://localhost:5173" target="_blank">Open App</a>
+      <a href="#who">Who It's For</a>
+      <a href="http://localhost:5175" target="_blank">Open App</a>
     </div>
     <div class="foot-note">No data leaves your device.</div>
   </div>
