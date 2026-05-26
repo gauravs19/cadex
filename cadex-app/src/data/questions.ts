@@ -550,6 +550,16 @@ export const QUICK_SCORE_QUESTION_IDS: string[] = QUESTIONS
   .filter((q) => q.quickScore)
   .map((q) => q.id)
 
+// ── Merged questions (base + work-type-specific) ────────────
+import { WORK_TYPE_QUESTIONS } from './workTypeQuestions'
+
+export function getAllQuestionsForDeal(workType?: string): Question[] {
+  const extras = workType
+    ? WORK_TYPE_QUESTIONS.filter(q => !q.triggerWorkTypes || q.triggerWorkTypes.includes(workType))
+    : []
+  return [...QUESTIONS, ...extras]
+}
+
 // ── Sections index ─────────────────────────────────────────
 export const SECTIONS: { id: string; title: string; axis: string; internalOnly?: boolean }[] = [
   { id: 'A', title: 'Client & Delivery Readiness', axis: 'CM' },

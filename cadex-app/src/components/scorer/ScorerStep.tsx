@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useDealStore } from '../../store/dealStore'
-import { QUESTIONS } from '../../data/questions'
+import { getAllQuestionsForDeal } from '../../data/questions'
 import QuestionCard from './QuestionCard'
 import RadarChart from '../shared/RadarChart'
 import ScoreBadge from '../shared/ScoreBadge'
@@ -13,13 +13,10 @@ export default function ScorerStep() {
   const responses = activeDeal?.assessment?.responses ?? {}
   const assessment = activeDeal?.assessment
 
-  // Filter questions relevant to this deal
   const questions = useMemo(() => {
-    if (!meta) return QUESTIONS
-    return QUESTIONS.filter((q) => {
-      if (q.triggerWorkTypes && !q.triggerWorkTypes.includes(meta.workType)) return false
-      return true
-    })
+    const all = getAllQuestionsForDeal(meta?.workType)
+    if (!meta) return all
+    return all.filter(q => !q.triggerWorkTypes || q.triggerWorkTypes.includes(meta.workType))
   }, [meta])
 
   // Group by section

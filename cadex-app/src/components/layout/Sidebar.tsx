@@ -1,6 +1,6 @@
 import { CheckCircle, Circle, Loader, AlertCircle } from 'lucide-react'
 import { useDealStore } from '../../store/dealStore'
-import { QUESTIONS } from '../../data/questions'
+import { getAllQuestionsForDeal } from '../../data/questions'
 
 const STEPS = [
   { id: 1, label: 'Intake',    sub: 'Deal context' },
@@ -27,7 +27,7 @@ export default function Sidebar({ onNewDeal, onLoadDeal, onExport }: Props) {
   const answeredQ = activeDeal
     ? Object.keys(activeDeal.assessment?.responses ?? {}).length : 0
   const totalQ = activeDeal
-    ? QUESTIONS.filter(q => !q.triggerWorkTypes || q.triggerWorkTypes.includes(activeDeal.meta.workType)).length
+    ? getAllQuestionsForDeal(activeDeal.meta.workType).filter(q => !q.triggerWorkTypes || q.triggerWorkTypes.includes(activeDeal.meta.workType)).length
     : 0
   const scorerPartial = answeredQ > 0 && maxReached < 3
 

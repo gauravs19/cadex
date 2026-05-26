@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useDealStore } from '../store/dealStore'
 import Sidebar from '../components/layout/Sidebar'
 import IntakeForm from '../components/intake/IntakeForm'
@@ -6,6 +7,8 @@ import StrategyStep from '../components/strategy/StrategyStep'
 import ShaperStep from '../components/shaper/ShaperStep'
 import CheckerStep from '../components/checker/CheckerStep'
 import ProposalStep from '../components/proposal/ProposalStep'
+import { exportDealJson, parseDealJson, copyShareLinkToClipboard } from '../lib/dealIO'
+import { Share2, Check } from 'lucide-react'
 
 const STEP_TITLES = [
   '', // 0 unused
@@ -30,21 +33,13 @@ const STEP_SUBTITLES = [
 export default function Assessment() {
   const { createDeal, importDeal, getActiveDeal, displayStep } = useDealStore()
   const activeDeal = getActiveDeal()
+  const [copied, setCopied] = useState(false)
 
   if (!activeDeal) return null
 
   const step = displayStep
 
-  const handleExport = () => {
-    const json = JSON.stringify(activeDeal, null, 2)
-    const blob = new Blob([json], { type: 'application/json' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `cadex-${activeDeal.meta.name || 'deal'}-${new Date().toISOString().slice(0, 10)}.json`
-    a.click()
-    URL.revokeObjectURL(url)
-  }
+  const handleExport = () => exportDealJson(activeDeal)
 
   const handleLoadDeal = () => {
     const input = document.createElement('input')
@@ -56,15 +51,25 @@ export default function Assessment() {
       const reader = new FileReader()
       reader.onload = (ev) => {
         try {
-          const deal = JSON.parse(ev.target?.result as string)
+          const deal = parseDealJson(ev.target?.result as string)
           importDeal(deal)
-        } catch {
-          alert('Invalid CADEX deal file.')
+        } catch (err) {
+          alert(err instanceof Error ? err.message : 'Invalid CADEX deal file.')
         }
       }
       reader.readAsText(file)
     }
     input.click()
+  }
+
+  const handleCopyLink = async () => {
+    try {
+      await copyShareLinkToClipboard(activeDeal)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch {
+      alert('Could not copy link — your browser may not support clipboard access.')
+    }
   }
 
   return (
@@ -77,12 +82,22 @@ export default function Assessment() {
 
       <main className="flex-1 overflow-y-auto bg-slate-50">
         {/* Step header */}
-        <div className="bg-white border-b border-slate-200 px-8 py-5">
-          <div className="text-xs font-semibold text-indigo-600 uppercase tracking-wider mb-0.5">
-            Step {step} of 6
+        <div className="bg-white border-b border-slate-200 px-8 py-5 flex items-start justify-between">
+          <div>
+            <div className="text-xs font-semibold text-indigo-600 uppercase tracking-wider mb-0.5">
+              Step {step} of 6
+            </div>
+            <div className="text-xl font-bold text-slate-900">{STEP_TITLES[step]}</div>
+            <div className="text-sm text-slate-500 mt-0.5">{STEP_SUBTITLES[step]}</div>
           </div>
-          <div className="text-xl font-bold text-slate-900">{STEP_TITLES[step]}</div>
-          <div className="text-sm text-slate-500 mt-0.5">{STEP_SUBTITLES[step]}</div>
+          <button
+            onClick={handleCopyLink}
+            title="Copy shareable link to clipboard"
+            className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-indigo-600 px-3 py-1.5 rounded-lg border border-slate-200 hover:border-indigo-300 transition-colors mt-1"
+          >
+            {copied ? <Check size={13} className="text-green-600" /> : <Share2 size={13} />}
+            {copied ? 'Copied!' : 'Share deal'}
+          </button>
         </div>
 
         {/* Step content */}
