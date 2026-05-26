@@ -8,7 +8,8 @@ import ShaperStep from '../components/shaper/ShaperStep'
 import CheckerStep from '../components/checker/CheckerStep'
 import ProposalStep from '../components/proposal/ProposalStep'
 import { exportDealJson, parseDealJson, copyShareLinkToClipboard } from '../lib/dealIO'
-import { Share2, Check } from 'lucide-react'
+import { generateBriefHtml } from '../lib/briefExport'
+import { Share2, Check, FileText } from 'lucide-react'
 
 const STEP_TITLES = [
   '', // 0 unused
@@ -90,14 +91,24 @@ export default function Assessment() {
             <div className="text-xl font-bold text-slate-900">{STEP_TITLES[step]}</div>
             <div className="text-sm text-slate-500 mt-0.5">{STEP_SUBTITLES[step]}</div>
           </div>
-          <button
-            onClick={handleCopyLink}
-            title="Copy shareable link to clipboard"
-            className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-indigo-600 px-3 py-1.5 rounded-lg border border-slate-200 hover:border-indigo-300 transition-colors mt-1"
-          >
-            {copied ? <Check size={13} className="text-green-600" /> : <Share2 size={13} />}
-            {copied ? 'Copied!' : 'Share deal'}
-          </button>
+          <div className="flex items-center gap-2 mt-1">
+            <button
+              onClick={() => generateBriefHtml(activeDeal)}
+              title="Export 1-page deal brief (print-ready)"
+              className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-indigo-600 px-3 py-1.5 rounded-lg border border-slate-200 hover:border-indigo-300 transition-colors"
+            >
+              <FileText size={13} />
+              Export Brief
+            </button>
+            <button
+              onClick={handleCopyLink}
+              title="Copy shareable link to clipboard"
+              className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-indigo-600 px-3 py-1.5 rounded-lg border border-slate-200 hover:border-indigo-300 transition-colors"
+            >
+              {copied ? <Check size={13} className="text-green-600" /> : <Share2 size={13} />}
+              {copied ? 'Copied!' : 'Share deal'}
+            </button>
+          </div>
         </div>
 
         {/* Step content */}
