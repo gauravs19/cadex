@@ -9,6 +9,7 @@ import { WORK_TYPES } from '../data/workTypes'
 import { DISCOVERY_GAPS, DISCOVERY_GAP_CATEGORIES } from '../data/discoveryGaps'
 import { generateWinThemes } from './winThemeEngine'
 import { WORK_TYPE_SCOPE_BLOCKS } from '../data/workTypeScopeQuestions'
+import { OBJECTION_BANK } from '../data/objectionBank'
 
 // ── Label maps ────────────────────────────────────────────────
 
@@ -859,10 +860,16 @@ function slideWhyUs(company: string, deal: Deal, o: SlideOpts): string {
 function slideObjectionHandling(deal: Deal, o: SlideOpts): string {
   const { strategy } = deal
   const card = strategy?.primary ? STRATEGIES[strategy.primary] : null
-  const objections = card?.objections?.slice(0, 2) ?? [
-    { q: "Your price is higher than the competitor's.", a: "We price for delivery, not for the bid. A lower price that misses scope or runs over is more expensive than a realistic price that delivers. We're happy to walk through our estimate line by line." },
-    { q: "We need a fixed price commitment across the full programme.", a: "We can commit firmly to Phase 1. Pricing Phase 2 before Phase 1 outputs are known introduces risk that will show up as padding or disputes. A phased commitment protects your budget and our delivery quality." },
-  ]
+  const categoryObjns = deal.meta.workCategory ? (OBJECTION_BANK[deal.meta.workCategory] ?? []) : []
+  const objections = [
+    ...(card?.objections ?? []),
+    ...categoryObjns,
+  ].slice(0, 3).length > 0
+    ? [...(card?.objections ?? []), ...categoryObjns].slice(0, 3)
+    : [
+        { q: "Your price is higher than the competitor's.", a: "We price for delivery, not for the bid. A lower price that misses scope or runs over is more expensive than a realistic price that delivers. We're happy to walk through our estimate line by line." },
+        { q: "We need a fixed price commitment across the full programme.", a: "We can commit firmly to Phase 1. Pricing Phase 2 before Phase 1 outputs are known introduces risk that will show up as padding or disputes. A phased commitment protects your budget and our delivery quality." },
+      ]
   return `<div class="slide slide-white">
     <div class="slide-header-bar indigo-bar"></div>
     <div class="slide-content" style="padding-top:40px">

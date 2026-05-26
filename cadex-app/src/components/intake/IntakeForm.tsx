@@ -3,6 +3,7 @@ import { useDealStore } from '../../store/dealStore'
 import { WORK_TYPES } from '../../data/workTypes'
 import { DISCOVERY_GAPS, DISCOVERY_GAP_CATEGORIES } from '../../data/discoveryGaps'
 import { getScopeBlock } from '../../data/workTypeScopeQuestions'
+import EffortEstimator from './EffortEstimator'
 import AutoSignalBanner from '../shared/AutoSignalBanner'
 import { computeAutoSignals } from '../../lib/autoSignals'
 import { Plus, X, ChevronDown, ChevronRight, CheckCircle2, AlertTriangle, Info } from 'lucide-react'
@@ -560,6 +561,15 @@ export default function IntakeForm() {
               })}
             </div>
           </div>
+        )}
+
+        {/* Effort estimator benchmark */}
+        {meta.workCategory && (
+          <EffortEstimator
+            workCategory={meta.workCategory}
+            duration={meta.duration}
+            dealSize={meta.dealSize}
+          />
         )}
       </div>
     )

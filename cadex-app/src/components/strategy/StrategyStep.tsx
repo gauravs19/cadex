@@ -1,8 +1,10 @@
 import { useDealStore } from '../../store/dealStore'
 import { STRATEGIES } from '../../data/strategies'
+import { OBJECTION_BANK } from '../../data/objectionBank'
 import ScoreBadge from '../shared/ScoreBadge'
 import RadarChart from '../shared/RadarChart'
 import CoachingPanel from '../coaching/CoachingPanel'
+import ScenarioModeler from './ScenarioModeler'
 import { ChevronRight, AlertCircle } from 'lucide-react'
 import { generatePursuitTimeline } from '../../lib/pursuitTimeline'
 import type { TimelineActivityStatus, TimelineOwner } from '../../lib/pursuitTimeline'
@@ -174,6 +176,9 @@ export default function StrategyStep() {
         )}
       </div>
 
+      {/* What-if scenario modeler */}
+      {activeDeal && <ScenarioModeler deal={activeDeal} />}
+
       {/* Primary strategy card */}
       <div className="bg-white rounded-xl border-2 border-indigo-400 p-6 space-y-5">
         <div className="flex items-start justify-between">
@@ -241,11 +246,14 @@ export default function StrategyStep() {
           </ul>
         </div>
 
-        {/* Objections */}
+        {/* Objections (strategy + work-category bank) */}
         <div>
           <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Objection Handlers</div>
           <div className="space-y-3">
-            {primary.objections.map((obj, i) => (
+            {[
+              ...primary.objections,
+              ...(activeDeal?.meta.workCategory ? (OBJECTION_BANK[activeDeal.meta.workCategory] ?? []) : []),
+            ].slice(0, 5).map((obj, i) => (
               <div key={i} className="rounded-lg bg-slate-50 border border-slate-200 p-3">
                 <div className="text-xs font-semibold text-slate-700 mb-1">"{obj.q}"</div>
                 <div className="text-xs text-slate-600 leading-relaxed">{obj.a}</div>

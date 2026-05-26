@@ -13,7 +13,7 @@ import type {
   DealMeta,
   DiscoveryGapStatus,
 } from '../types'
-import { QUESTIONS } from '../data/questions'
+import { getAllQuestionsForDeal } from '../data/questions'
 import {
   computeAxisScores,
   applyScopeAnswerImpacts,
@@ -29,7 +29,7 @@ import { computeCheckerResult } from '../lib/checkerEngine'
 
 // ── Constants ─────────────────────────────────────────────────
 
-const CADEX_VERSION = '0.4'
+const CADEX_VERSION = '0.5'
 const STORAGE_KEY = 'cadex-v1'
 
 // ── Default meta values ───────────────────────────────────────
@@ -128,7 +128,7 @@ function recomputeAssessment(deal: Deal): Deal {
   const { assessment, meta } = deal
   if (!assessment) return deal
 
-  const rawAxisScores = computeAxisScores(assessment.responses, QUESTIONS, meta)
+  const rawAxisScores = computeAxisScores(assessment.responses, getAllQuestionsForDeal(meta.workType), meta)
   const axisScores = applyScopeAnswerImpacts(rawAxisScores, meta, WORK_TYPE_SCOPE_BLOCKS)
   const weightedTotal = computeWeightedTotal(axisScores, meta)
   const scoreBand = getScoreBand(weightedTotal)
