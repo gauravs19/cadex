@@ -10,6 +10,7 @@ import ProposalStep from '../components/proposal/ProposalStep'
 import { exportDealJson, parseDealJson, copyShareLinkToClipboard } from '../lib/dealIO'
 import { generateBriefHtml } from '../lib/briefExport'
 import { Share2, Check, FileText } from 'lucide-react'
+import HelpModal from '../components/layout/HelpModal'
 
 const STEP_TITLES = [
   '', // 0 unused
@@ -35,6 +36,7 @@ export default function Assessment() {
   const { createDeal, importDeal, getActiveDeal, displayStep } = useDealStore()
   const activeDeal = getActiveDeal()
   const [copied, setCopied] = useState(false)
+  const [helpOpen, setHelpOpen] = useState(false)
 
   if (!activeDeal) return null
 
@@ -79,7 +81,9 @@ export default function Assessment() {
         onNewDeal={() => createDeal()}
         onLoadDeal={handleLoadDeal}
         onExport={handleExport}
+        onHelp={() => setHelpOpen(true)}
       />
+      {helpOpen && <HelpModal onClose={() => setHelpOpen(false)} />}
 
       <main className="flex-1 overflow-y-auto bg-slate-50">
         {/* Step header */}
