@@ -398,7 +398,7 @@ body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:#fff;-
   </div>
 
   <div class="brief-footer">
-    <div class="brief-footer-brand">CADEX · Deal Brief v0.5</div>
+    <div class="brief-footer-brand">CADEX · Deal Brief v0.6</div>
     <div class="brief-footer-note">Internal use only — VF axis visible. Remove before sharing externally.</div>
     <div class="brief-footer-date">Generated ${today}</div>
   </div>
