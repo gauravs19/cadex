@@ -49,7 +49,7 @@ export default function Sidebar({ onNewDeal, onLoadDeal, onExport }: Props) {
       {/* Logo */}
       <div className="px-5 py-5 border-b border-slate-700">
         <div className="text-lg font-bold tracking-wide text-white">CADEX</div>
-        <div className="text-xs text-slate-400 mt-0.5">Deal Advisor v0.4</div>
+        <div className="text-xs text-slate-400 mt-0.5">Deal Advisor v0.6</div>
       </div>
 
       {/* Deal name */}
