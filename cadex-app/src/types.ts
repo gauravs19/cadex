@@ -400,3 +400,24 @@ export interface WorkTypeNode {
 // ── Weight Tables ─────────────────────────────────────────────
 
 export type WeightTable = Record<AxisCode, number>
+
+// ── Work Type Profile (single source of truth per L3) ─────────
+// Each L3 work type owns its axis modifiers and domain questions
+// in one place. axisWeights.ts and workTypeQuestions.ts derive
+// from these — making future JSON extraction trivial.
+
+export interface WorkTypeProfile {
+  /** Must exactly match a level-3 id in workTypes.ts */
+  workTypeId: string
+  /**
+   * Multiplicative weight modifiers applied to base axis weights.
+   * 1.0 = no change · 1.3 = 30% higher · 0.8 = 20% lower.
+   * Omitted axes default to 1.0.
+   */
+  axisModifiers: Partial<Record<AxisCode, number>>
+  /**
+   * 2–4 domain-specific questions that augment the base questionnaire.
+   * triggerWorkTypes on each question must include this workTypeId.
+   */
+  questions: Question[]
+}
