@@ -32,7 +32,7 @@ const BAND_LABELS: Record<string, string> = {
 export default function ProposalStep() {
   const { getActiveDeal } = useDealStore()
   const activeDeal = getActiveDeal()
-  const [companyName, setCompanyName] = useState('GlobalLogic')
+  const [companyName, setCompanyName] = useState('')
 
   if (!activeDeal) return null
 

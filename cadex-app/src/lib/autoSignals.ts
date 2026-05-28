@@ -117,7 +117,7 @@ export function computeAutoSignals(meta: Partial<DealMeta>): AutoSignal[] {
     signals.push({
       id: 'AS-07',
       severity: 'warning',
-      message: 'GlobalLogic is in a sub-contractor role.',
+      message: 'You are in a sub-contractor role on this deal.',
       action:
         'Ensure prime contractor governance, communication channels, and escalation paths are contractually defined. Protect delivery accountability.',
     })
