@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDealStore } from '../store/dealStore'
-import { Zap, ClipboardList, BarChart3, FolderOpen, ArrowRight, PlayCircle } from 'lucide-react'
+import { Zap, ClipboardList, BarChart3, FolderOpen, ArrowRight, PlayCircle, RotateCcw } from 'lucide-react'
 import type { Deal } from '../types'
 import Tour, { type TourStep } from '../components/layout/Tour'
 
@@ -100,12 +100,15 @@ const PROCESS_STEPS = [
 ]
 
 export default function Home() {
-  const { deals, createDeal, importDeal } = useDealStore()
+  const { deals, createDeal, importDeal, getActiveDeal } = useDealStore()
   const [tourOpen, setTourOpen] = useState(false)
   const navigate = useNavigate()
 
+  const activeDeal = getActiveDeal()
+
   function startDeal() { createDeal(); navigate('/deal') }
   function loadDeal(deal: Deal) { importDeal(deal); navigate('/deal') }
+  function resumeDeal() { navigate('/deal') }
 
   const savedDeals: Deal[] = [...deals].sort(
     (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
@@ -116,6 +119,25 @@ export default function Home() {
       {tourOpen && <Tour steps={TOUR_STEPS} onDone={() => setTourOpen(false)} />}
 
       <div className="w-full max-w-4xl space-y-8">
+        {/* Resume banner */}
+        {activeDeal && (
+          <div className="flex items-center justify-between bg-indigo-50 border border-indigo-200 rounded-xl px-5 py-3">
+            <div>
+              <span className="text-xs font-semibold text-indigo-500 uppercase tracking-wide">Active deal</span>
+              <div className="text-sm font-semibold text-slate-800 mt-0.5">
+                {activeDeal.meta.name || 'Unnamed deal'}
+                <span className="text-xs font-normal text-slate-400 ml-2">{activeDeal.meta.clientName} · Step {activeDeal.currentStep}/5</span>
+              </div>
+            </div>
+            <button
+              onClick={resumeDeal}
+              className="flex items-center gap-1.5 text-sm font-semibold text-indigo-600 hover:text-indigo-800 bg-white border border-indigo-200 hover:border-indigo-400 px-3 py-1.5 rounded-lg transition-colors"
+            >
+              <RotateCcw size={13} /> Resume
+            </button>
+          </div>
+        )}
+
         {/* Header */}
         <div className="text-center">
           <div className="text-4xl font-black text-slate-900 tracking-tight">CADEX</div>

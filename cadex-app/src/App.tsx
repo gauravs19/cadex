@@ -24,13 +24,6 @@ function DealRoute() {
 }
 
 function HomeRoute() {
-  const { getActiveDeal } = useDealStore()
-  const navigate = useNavigate()
-
-  useEffect(() => {
-    if (getActiveDeal()) navigate('/deal', { replace: true })
-  }, [getActiveDeal, navigate])
-
   return <Home />
 }
 
