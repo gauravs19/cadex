@@ -428,15 +428,151 @@ function slideDeliveryModel(deal: Deal, o: SlideOpts): string {
   </div>`
 }
 
-function slideTeamGovernance(_deal: Deal, o: SlideOpts): string {
-  const roles = [
-    ['Engagement Lead', 'Accountable for commercial delivery and client relationship'],
-    ['Delivery Manager', 'Sprint planning, progress tracking, risk management'],
-    ['Technical Lead / Architect', 'Solution design, code quality, technical decisions'],
-    ['Scrum Master', 'Agile ceremony facilitation, impediment removal'],
-    ['Business Analyst', 'Requirement refinement, acceptance criteria, UAT'],
-    ['QA Lead', 'Test strategy, automation framework, quality gates'],
-  ]
+// ── Team roles by work category ───────────────────────────────
+// Each entry is [role title, responsibility description].
+// Falls back to 'default' when no category match.
+
+const TEAM_ROLES: Record<string, [string, string][]> = {
+  'gf-dx': [
+    ['Engagement Lead',          'Accountable for commercial delivery and client relationship'],
+    ['Delivery Manager',         'Sprint planning, backlog health, stakeholder reporting'],
+    ['UX / Product Designer',    'User research, wireframes, design system ownership'],
+    ['Full-Stack Engineer (×n)', 'Feature development, API design, frontend implementation'],
+    ['QA Engineer',              'Test strategy, automation framework, quality gates'],
+    ['Business Analyst',         'Requirement refinement, acceptance criteria, UAT coordination'],
+  ],
+  'gf-pe': [
+    ['Engagement Lead',          'Accountable for commercial delivery and product vision alignment'],
+    ['Product Manager / PO',     'Backlog ownership, roadmap governance, trade-off decisions'],
+    ['Technical Lead / Architect','Solution design, architectural decisions, code quality'],
+    ['Full-Stack / Product Dev (×n)', 'Feature development, API contracts, platform engineering'],
+    ['DevOps / Platform Engineer','CI/CD, infrastructure, deployment automation, observability'],
+    ['QA Engineer',              'Quality gates, test automation, release sign-off'],
+  ],
+  'gf-data': [
+    ['Engagement Lead',          'Accountable for delivery and data strategy outcomes'],
+    ['Data Architect',           'Platform design, data model, governance framework'],
+    ['Data Engineer (×n)',       'Pipeline development, ingestion, transformation, testing'],
+    ['BI Developer',             'Report and dashboard development, metric definitions'],
+    ['Project Manager',          'Delivery tracking, dependency management, stakeholder alignment'],
+    ['Data Steward Liaison',     'Bridges client data owners to project; governance sign-off'],
+  ],
+  'gf-ai': [
+    ['Engagement Lead',          'Accountable for delivery and AI outcome definition'],
+    ['ML / AI Engineer (×n)',    'Model development, training pipelines, inference implementation'],
+    ['Data Engineer',            'Feature engineering, data pipeline, data quality'],
+    ['MLOps Engineer',           'Model versioning, monitoring, retraining pipeline, CI/CD'],
+    ['Project Manager',          'Delivery tracking, experiment governance, milestone reporting'],
+    ['Data Science SME',         'Domain validation, model evaluation, accuracy benchmarking'],
+  ],
+  'gf-erp': [
+    ['Programme Lead',           'Accountable for commercial delivery and executive alignment'],
+    ['Functional Consultant (×n)','Process design, system configuration, UAT facilitation'],
+    ['Technical Consultant',     'Integration, customisation, data migration, technical design'],
+    ['Project Manager',          'Delivery tracking, dependency management, risk escalation'],
+    ['Business Analyst',         'Process documentation, gap analysis, requirements sign-off'],
+    ['Change Management Lead',   'Stakeholder engagement, training programme, adoption metrics'],
+  ],
+  'gf-platform': [
+    ['Engagement Lead',          'Accountable for commercial delivery and architecture outcomes'],
+    ['Cloud / Platform Architect','Solution design, technology choices, architecture governance'],
+    ['Platform / Cloud Engineer (×n)', 'Infrastructure as code, platform implementation, automation'],
+    ['DevOps / DevSecOps Engineer','CI/CD pipelines, security integration, observability tooling'],
+    ['Project Manager',          'Delivery tracking, milestone reporting, risk management'],
+    ['Operations Liaison',       'Client ops team embed for KT, runbook co-development'],
+  ],
+  'bf-migration': [
+    ['Engagement Lead',          'Accountable for commercial delivery and cutover governance'],
+    ['Migration Architect',      'Source estate assessment, target design, cutover strategy'],
+    ['Migration Engineer (×n)',  'Data extraction, transformation, loading, reconciliation'],
+    ['Project Manager',          'Cutover planning, dependency management, risk tracking'],
+    ['QA / Test Engineer',       'Migration validation, reconciliation testing, rollback testing'],
+    ['Change Management Lead',   'Business communication, cutover rehearsal coordination'],
+  ],
+  'bf-modernisation': [
+    ['Engagement Lead',          'Accountable for commercial delivery and modernisation strategy'],
+    ['Solution Architect',       'Architecture design, strangler-fig strategy, API contract design'],
+    ['Senior Backend Engineer (×n)', 'Re-architecture implementation, legacy system decomposition'],
+    ['DevOps / Platform Engineer','CI/CD uplift, containerisation, cloud-native tooling'],
+    ['QA Engineer',              'Regression safety net, refactor validation, integration testing'],
+    ['Project Manager',          'Phase planning, legacy dependency tracking, risk management'],
+  ],
+  'bf-integration': [
+    ['Engagement Lead',          'Accountable for commercial delivery and integration governance'],
+    ['Integration Architect',    'Integration topology, API contract standards, error handling design'],
+    ['Integration Developer (×n)','Flow implementation, connector development, transformation logic'],
+    ['Business Analyst',         'Interface requirements, data mapping, consuming team coordination'],
+    ['QA Engineer',              'Contract testing, end-to-end flow validation, SLA testing'],
+    ['Project Manager',          'System owner coordination, dependency management, delivery tracking'],
+  ],
+  'bf-ai': [
+    ['Engagement Lead',          'Accountable for AI outcomes and commercial delivery'],
+    ['ML / AI Engineer (×n)',    'Model development, inference layer, AI feature integration'],
+    ['Data Engineer',            'Feature store, pipeline, data quality for model inputs'],
+    ['MLOps Engineer',           'Model monitoring, retraining triggers, deployment automation'],
+    ['Project Manager',          'Experiment governance, milestone reporting, stakeholder alignment'],
+    ['Human-in-Loop Designer',   'Review workflow design, confidence threshold governance, escalation UX'],
+  ],
+  'bf-ams': [
+    ['Service Delivery Manager', 'SLA accountability, client relationship, escalation authority'],
+    ['Technical Lead',           'L3 escalation, architecture decisions, team technical guidance'],
+    ['L2 Support Engineer (×n)', 'Incident resolution, problem management, change delivery'],
+    ['L1 Support Analyst',       'First-line triage, ticket classification, SLA clock management'],
+    ['QA / Release Engineer',    'Release gate, regression validation, test environment management'],
+    ['Operations Analyst',       'SLA reporting, capacity planning, continual improvement tracking'],
+  ],
+  'bf-security': [
+    ['Engagement Lead',          'Accountable for commercial delivery and risk acceptance governance'],
+    ['Security Architect',       'Threat modelling, security design, control framework'],
+    ['Security Engineer (×n)',   'Technical implementation, penetration testing, tool deployment'],
+    ['GRC Analyst',              'Compliance mapping, audit coordination, policy documentation'],
+    ['Project Manager',          'Scope governance, finding tracking, remediation milestone management'],
+    ['Executive Risk Liaison',   'Bridges client CISO/CIO to engagement for risk acceptance decisions'],
+  ],
+  'bf-testing': [
+    ['QA Architect / Lead',      'Test strategy, framework design, quality gate definition'],
+    ['Automation Engineer (×n)', 'Test automation implementation, CI/CD integration, suite maintenance'],
+    ['Performance Engineer',     'Load test design, environment sizing validation, NFR verification'],
+    ['Project Manager',          'Coverage tracking, defect SLA governance, environment coordination'],
+    ['Client QA Liaison',        'Bridges internal dev teams to quality process for shift-left adoption'],
+  ],
+  'cross-staffaug': [
+    ['Engagement Manager',       'Resource fulfilment, team health, commercial accountability'],
+    ['Senior Engineers / Specialists (×n)', 'Primary delivery resource — role-specific technical work'],
+    ['Mid-level Engineers (×n)', 'Supporting delivery under senior technical direction'],
+    ['Knowledge Transfer Lead',  'Ensures IP and context transfers to client team on exit'],
+  ],
+  'cross-advisory': [
+    ['Principal Consultant / Architect', 'Engagement lead, primary analytical and advisory output'],
+    ['Senior Consultant',        'Research, analysis, workshop facilitation, documentation'],
+    ['Business Analyst',         'Requirements capture, stakeholder mapping, gap analysis'],
+    ['Project Manager',          'Engagement coordination, deliverable scheduling, client liaison'],
+  ],
+  'cross-programme': [
+    ['Programme Director',       'Overall accountability, executive relationship, escalation authority'],
+    ['Project Manager (×n)',     'Stream-level delivery tracking, risk, dependency management'],
+    ['PMO Lead / Analyst',       'Governance framework, reporting, tooling, change control'],
+    ['Risk & Governance Lead',   'Risk register, RAID log, governance board facilitation'],
+    ['Change Management Lead',   'Stakeholder engagement, communication, adoption metrics'],
+  ],
+  'cross-training': [
+    ['Senior Trainer / Consultant', 'Curriculum design, delivery, coaching, outcome assessment'],
+    ['Content Developer',        'Learning material creation, exercises, assessment design'],
+    ['Project Manager',          'Schedule management, participant coordination, stakeholder reporting'],
+  ],
+  'default': [
+    ['Engagement Lead',          'Accountable for commercial delivery and client relationship'],
+    ['Delivery Manager',         'Sprint planning, progress tracking, risk management'],
+    ['Technical Lead / Architect','Solution design, code quality, technical decisions'],
+    ['Scrum Master',             'Agile ceremony facilitation, impediment removal'],
+    ['Business Analyst',         'Requirement refinement, acceptance criteria, UAT'],
+    ['QA Lead',                  'Test strategy, automation framework, quality gates'],
+  ],
+}
+
+function slideTeamGovernance(deal: Deal, o: SlideOpts): string {
+  const category = deal.meta.workCategory || 'default'
+  const roles = TEAM_ROLES[category] ?? TEAM_ROLES['default']
   return `<div class="slide slide-white">
     <div class="slide-header-bar green-bar"></div>
     <div class="slide-content" style="padding-top:40px">
@@ -453,13 +589,66 @@ function slideTeamGovernance(_deal: Deal, o: SlideOpts): string {
   </div>`
 }
 
-function slideSprintCadence(_deal: Deal, o: SlideOpts): string {
-  const phases = [
-    ['Kick-off & Setup', 'Wk 1–2', 'Environment, access, team onboarding, backlog grooming'],
-    ['Sprint Delivery', 'Wk 3+', '2-week sprints, sprint review, demo with client PO'],
-    ['UAT & Hardening', 'Last 2 sprints', 'User acceptance testing, bug fixing, performance tuning'],
-    ['Handover & KT', 'Final week', 'Documentation, knowledge transfer, BAU handoff'],
-  ]
+// ── Sprint cadence / delivery phases by work category ─────────
+// Each entry is [phase name, timing, description].
+
+const DELIVERY_PHASES: Record<string, [string, string, string][]> = {
+  'gf-erp': [
+    ['Blueprint & Design',   'Wk 1–6',         'TO-BE process design, system configuration design, data mapping'],
+    ['Build & Configure',    'Wk 7–(n-6)',      'Module configuration, custom development, integration build'],
+    ['Integration & SIT',    'Last 4–6 sprints','System integration testing, defect resolution, performance testing'],
+    ['UAT & Cutover Prep',   'Last 3 sprints',  'User acceptance testing, cutover rehearsal, go/no-go gate'],
+    ['Go-Live & Hypercare',  'Wk 1–4 post-launch', 'Production cutover, hypercare SLA, stabilisation'],
+  ],
+  'bf-migration': [
+    ['Discovery & Inventory','Wk 1–4',          'Legacy estate audit, dependency mapping, data profiling'],
+    ['Build & Dry Run 1',    'Wk 5–(n-8)',      'Migration tooling build, transformation logic, first dry run'],
+    ['Dry Run 2 & Validation','Wk (n-7)–(n-4)', 'Second dry run, reconciliation sign-off, rollback rehearsal'],
+    ['Cutover Window',       'Weekend or agreed window', 'Production migration, reconciliation, go/no-go decision'],
+    ['Hypercare & Decommission', 'Wk 1–6 post-launch', 'Stabilisation, parallel run if required, legacy decommission'],
+  ],
+  'bf-modernisation': [
+    ['Discovery Sprint',     'Wk 1–4',          'Legacy dependency mapping, coupling inventory, risk register'],
+    ['Foundation Build',     'Wk 5–(n-8)',      'Strangler-fig seams, anti-corruption layers, first slice live'],
+    ['Incremental Migration','Wk (n-7)+',       'Iterative decomposition sprints — slice, test, cut, retire'],
+    ['Final Cutover',        'Last 2 sprints',  'Legacy system retirement, feature parity sign-off, KT'],
+    ['Handover & Stabilise', 'Final 2 weeks',   'Operations handover, runbooks, post-go-live monitoring'],
+  ],
+  'bf-ams': [
+    ['Transition & Shadow',  'Wk 1–4',          'Knowledge transfer from previous team, shadow support, tooling setup'],
+    ['Controlled Cutover',   'Wk 5–6',          'Live support under close supervision, SLA clock starts'],
+    ['Steady-State Ops',     'Ongoing',         'Full SLA accountability, incident management, change delivery'],
+    ['Optimise & Improve',   'Monthly cadence', 'Continual improvement, capacity review, SLA reporting'],
+  ],
+  'bf-security': [
+    ['Scoping & Rules of Engagement', 'Wk 1–2', 'Scope sign-off, test targets agreed, emergency contacts confirmed'],
+    ['Assessment & Testing', 'Wk 3–(n-2)',      'Penetration testing, vulnerability assessment, evidence collection'],
+    ['Reporting & Debrief',  'Last 2 weeks',    'Findings report, severity classification, executive debrief'],
+    ['Remediation Review',   'Post-report',     'Re-test of critical findings, closure verification, compliance sign-off'],
+  ],
+  'cross-advisory': [
+    ['Discovery & Framing',  'Wk 1–2',          'Stakeholder interviews, current state review, problem definition'],
+    ['Analysis & PoC',       'Wk 3–(n-2)',      'Options analysis, proof-of-concept, scenario modelling'],
+    ['Recommendations',      'Last 2 weeks',    'Decision-grade output, roadmap, business case, risk assessment'],
+    ['Handover & Next Steps','Final week',       'Briefing session, documentation handover, implementation planning'],
+  ],
+  'cross-training': [
+    ['Needs Assessment',     'Wk 1',            'Audience assessment, learning objectives, gap analysis'],
+    ['Content Development',  'Wk 2–(n-2)',      'Curriculum design, material creation, exercise development'],
+    ['Delivery',             'Scheduled sessions', 'Instructor-led or blended delivery, Q&A, practise exercises'],
+    ['Assessment & Handover','Final week',       'Post-training assessment, certification, content ownership transfer'],
+  ],
+  'default': [
+    ['Kick-off & Setup',     'Wk 1–2',          'Environment, access, team onboarding, backlog grooming'],
+    ['Sprint Delivery',      'Wk 3+',           '2-week sprints, sprint review, live demo with client PO'],
+    ['UAT & Hardening',      'Last 2 sprints',  'User acceptance testing, bug fixing, performance tuning'],
+    ['Handover & KT',        'Final week',      'Documentation, knowledge transfer, BAU handoff'],
+  ],
+}
+
+function slideSprintCadence(deal: Deal, o: SlideOpts): string {
+  const category = deal.meta.workCategory || 'default'
+  const phases = DELIVERY_PHASES[category] ?? DELIVERY_PHASES['default']
   return `<div class="slide slide-white">
     <div class="slide-header-bar green-bar"></div>
     <div class="slide-content" style="padding-top:40px">
