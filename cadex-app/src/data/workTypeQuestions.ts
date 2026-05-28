@@ -1,11 +1,17 @@
 // ============================================================
 // CADEX — Work-Type Supplemental Risk Questions
-// Domain-specific questions that augment the base questionnaire
+// Domain-specific questions that augment the base questionnaire.
+//
+// Questions here are the "legacy" set covering the original 10
+// work type groups. New work type questions live in
+// src/data/profiles/ as WorkTypeProfile.questions and are
+// merged in at the bottom of this file via PROFILE_QUESTIONS.
 // ============================================================
 
 import type { Question } from '../types'
+import { PROFILE_QUESTIONS } from './profiles/index'
 
-export const WORK_TYPE_QUESTIONS: Question[] = [
+const LEGACY_WORK_TYPE_QUESTIONS: Question[] = [
 
   // ── gf-data: Data & Analytics ───────────────────────────────
 
@@ -23,7 +29,7 @@ export const WORK_TYPE_QUESTIONS: Question[] = [
       'Full specs confirmed, sandbox access granted, owners engaged'
     ],
     coachingTip: 'Source system access is the #1 hidden schedule risk in data projects. Push for a data source inventory with confirmed owners before sprint 1.',
-    triggerWorkTypes: ['data-warehouse', 'data-bi-reporting', 'data-lake', 'data-ml-platform', 'data-streaming', 'data-master']
+    triggerWorkTypes: ['data-warehouse', 'data-bi-reporting', 'data-master', 'data-governance-platform', 'gf-data-other']
   },
   {
     id: 'WT-D2',
@@ -39,7 +45,7 @@ export const WORK_TYPE_QUESTIONS: Question[] = [
       'Source data meets target quality thresholds; DQ rules owned by client'
     ],
     coachingTip: 'Unscoped data cleansing is a margin killer. Always include a data profiling sprint and attach a data quality risk register as a scope boundary.',
-    triggerWorkTypes: ['data-warehouse', 'data-bi-reporting', 'data-lake', 'data-ml-platform', 'data-streaming', 'data-master']
+    triggerWorkTypes: ['data-warehouse', 'data-bi-reporting', 'data-master', 'data-governance-platform', 'gf-data-other']
   },
   {
     id: 'WT-D3',
@@ -55,7 +61,7 @@ export const WORK_TYPE_QUESTIONS: Question[] = [
       'Mature governance with certified data owners, MDM platform in place'
     ],
     coachingTip: 'Without named data owners who can approve business rules, your analytics deliverable will stall in UAT. Identify this as a hard dependency in the SOW.',
-    triggerWorkTypes: ['data-warehouse', 'data-bi-reporting', 'data-lake', 'data-ml-platform', 'data-streaming', 'data-master']
+    triggerWorkTypes: ['data-warehouse', 'data-bi-reporting', 'data-master', 'data-governance-platform', 'gf-data-other']
   },
 
   // ── gf-ai: AI / ML ──────────────────────────────────────────
@@ -74,7 +80,7 @@ export const WORK_TYPE_QUESTIONS: Question[] = [
       'High-quality labelled dataset ready; coverage validated for use case'
     ],
     coachingTip: 'Data labelling is often 40–60% of ML project effort and is rarely scoped. Include a data readiness assessment milestone before model development begins.',
-    triggerWorkTypes: ['ai-gen-ai-app', 'ai-ml-build', 'ai-data-ops', 'ai-agent']
+    triggerWorkTypes: ['ai-genai-app', 'ai-ml-pipeline', 'ai-feature-new', 'ai-analytics-new', 'gf-ai-other']
   },
   {
     id: 'WT-A2',
@@ -90,7 +96,7 @@ export const WORK_TYPE_QUESTIONS: Question[] = [
       'Full AI governance framework in place; compliance sign-off obtained'
     ],
     coachingTip: 'EU AI Act and sector-specific AI governance rules can require model cards, bias audits, and human-in-the-loop controls. Price and scope these explicitly — they are not free.',
-    triggerWorkTypes: ['ai-gen-ai-app', 'ai-ml-build', 'ai-data-ops', 'ai-agent']
+    triggerWorkTypes: ['ai-genai-app', 'ai-ml-pipeline', 'ai-feature-new', 'ai-analytics-new', 'gf-ai-other']
   },
   {
     id: 'WT-A3',
@@ -106,7 +112,7 @@ export const WORK_TYPE_QUESTIONS: Question[] = [
       'MLOps team trained, tooling live, retraining pipeline agreed and documented'
     ],
     coachingTip: 'A model with no owner degrades silently. Make MLOps ownership and a retraining cadence a contractual acceptance criterion, not a post-project nice-to-have.',
-    triggerWorkTypes: ['ai-gen-ai-app', 'ai-ml-build', 'ai-data-ops', 'ai-agent']
+    triggerWorkTypes: ['ai-genai-app', 'ai-ml-pipeline', 'ai-feature-new', 'ai-analytics-new', 'gf-ai-other']
   },
 
   // ── gf-dx: Digital Experience ────────────────────────────────
@@ -125,7 +131,7 @@ export const WORK_TYPE_QUESTIONS: Question[] = [
       'Formal design governance in place; stage-gate approvals in project plan'
     ],
     coachingTip: 'Uncontrolled design churn is the top cause of DX project overrun. Contractually limit design revision rounds and name the single design approver in the SOW.',
-    triggerWorkTypes: ['dx-portal', 'dx-mobile', 'dx-ecomm', 'dx-cms']
+    triggerWorkTypes: ['dx-portal', 'dx-mobile', 'dx-ecommerce', 'dx-cms', 'dx-spa', 'dx-omnichannel', 'dx-intranet', 'dx-booking', 'dx-loyalty', 'dx-search', 'gf-dx-other']
   },
   {
     id: 'WT-DX2',
@@ -141,7 +147,7 @@ export const WORK_TYPE_QUESTIONS: Question[] = [
       'WCAG AA/AAA contractually required; third-party audit and remediation scoped'
     ],
     coachingTip: 'Retrofitting accessibility is 3–5x more expensive than building it in. Get the WCAG target level and testing approach agreed in the SOW, with remediation iterations budgeted.',
-    triggerWorkTypes: ['dx-portal', 'dx-mobile', 'dx-ecomm', 'dx-cms']
+    triggerWorkTypes: ['dx-portal', 'dx-mobile', 'dx-ecommerce', 'dx-cms', 'dx-spa', 'dx-omnichannel', 'dx-intranet', 'dx-booking', 'dx-loyalty', 'dx-search', 'gf-dx-other']
   },
   {
     id: 'WT-DX3',
@@ -157,7 +163,7 @@ export const WORK_TYPE_QUESTIONS: Question[] = [
       'All vendor APIs documented, sandbox available, contracts in place'
     ],
     coachingTip: 'Third-party API readiness is rarely in your control. Build integration dependency milestones into the project plan with a clear client-owned risk for delays.',
-    triggerWorkTypes: ['dx-portal', 'dx-mobile', 'dx-ecomm', 'dx-cms']
+    triggerWorkTypes: ['dx-portal', 'dx-mobile', 'dx-ecommerce', 'dx-cms', 'dx-spa', 'dx-omnichannel', 'dx-intranet', 'dx-booking', 'dx-loyalty', 'dx-search', 'gf-dx-other']
   },
 
   // ── gf-erp: ERP Greenfield ───────────────────────────────────
@@ -176,7 +182,7 @@ export const WORK_TYPE_QUESTIONS: Question[] = [
       'Full TO-BE documented, signed off, with named owners per module'
     ],
     coachingTip: 'ERP implementations where TO-BE design is incomplete at kick-off routinely run 30–50% over budget. Make process design sign-off a project pre-condition or a paid phase gate.',
-    triggerWorkTypes: ['erp-sap-new', 'erp-sfdc-new', 'erp-servicenow-new', 'gf-erp-other']
+    triggerWorkTypes: ['erp-sap-new', 'erp-sfdc-new', 'erp-servicenow-new', 'erp-d365-new', 'erp-oracle-new', 'erp-workday-new', 'gf-erp-other']
   },
   {
     id: 'WT-E2',
@@ -192,7 +198,7 @@ export const WORK_TYPE_QUESTIONS: Question[] = [
       'Dry run completed; cleansing done; reconciliation sign-off obtained'
     ],
     coachingTip: 'Data migration is consistently underestimated in ERP projects. Budget for at least two mock migration runs and tie go-live approval to reconciliation sign-off, not calendar date.',
-    triggerWorkTypes: ['erp-sap-new', 'erp-sfdc-new', 'erp-servicenow-new', 'gf-erp-other']
+    triggerWorkTypes: ['erp-sap-new', 'erp-sfdc-new', 'erp-servicenow-new', 'erp-d365-new', 'erp-oracle-new', 'erp-workday-new', 'gf-erp-other']
   },
   {
     id: 'WT-E3',
@@ -208,7 +214,7 @@ export const WORK_TYPE_QUESTIONS: Question[] = [
       'Cutover plan rehearsed; BCP tested; go/no-go criteria signed off'
     ],
     coachingTip: 'Cutover failure is an existential risk for ERP projects. Contractually require a cutover rehearsal and a signed go/no-go checklist before any production migration begins.',
-    triggerWorkTypes: ['erp-sap-new', 'erp-sfdc-new', 'erp-servicenow-new', 'gf-erp-other']
+    triggerWorkTypes: ['erp-sap-new', 'erp-sfdc-new', 'erp-servicenow-new', 'erp-d365-new', 'erp-oracle-new', 'erp-workday-new', 'gf-erp-other']
   },
 
   // ── gf-cloud-native: Cloud Native / Infra ────────────────────
@@ -227,7 +233,7 @@ export const WORK_TYPE_QUESTIONS: Question[] = [
       'Mature FinOps with dedicated role, showback/chargeback, and optimisation cycle'
     ],
     coachingTip: 'Cloud cost overruns become a client relationship problem in months 6–18. Include a cloud cost governance design as a deliverable and clearly exclude ongoing FinOps from scope unless retained.',
-    triggerWorkTypes: ['gf-cloud-native', 'infra-cloud-migration', 'infra-devops']
+    triggerWorkTypes: ['plat-cloud-native', 'mig-cloud-lift', 'plat-devsecops', 'plat-finops', 'gf-platform-other']
   },
   {
     id: 'WT-CN2',
@@ -243,7 +249,7 @@ export const WORK_TYPE_QUESTIONS: Question[] = [
       'Internal platform engineer co-developing IaC throughout; full ownership at day 1 of ops'
     ],
     coachingTip: 'IaC with no owner becomes legacy infrastructure within 12 months. Require the post-delivery owner to be involved from sprint 1 and make knowledge transfer a contractual deliverable.',
-    triggerWorkTypes: ['gf-cloud-native', 'infra-cloud-migration', 'infra-devops']
+    triggerWorkTypes: ['plat-cloud-native', 'mig-cloud-lift', 'plat-devsecops', 'plat-finops', 'gf-platform-other']
   },
   {
     id: 'WT-CN3',
@@ -259,7 +265,7 @@ export const WORK_TYPE_QUESTIONS: Question[] = [
       'No constraining commitments; technology choices fully open and agreed'
     ],
     coachingTip: 'Undisclosed EDP or committed-use commitments can invalidate your recommended architecture. Run a cloud commitment audit before finalising the technical approach.',
-    triggerWorkTypes: ['gf-cloud-native', 'infra-cloud-migration', 'infra-devops']
+    triggerWorkTypes: ['plat-cloud-native', 'mig-cloud-lift', 'plat-devsecops', 'plat-finops', 'gf-platform-other']
   },
 
   // ── bf-migration ─────────────────────────────────────────────
@@ -278,7 +284,7 @@ export const WORK_TYPE_QUESTIONS: Question[] = [
       'Multiple dry-runs done; full reconciliation sign-off; rollback rehearsed'
     ],
     coachingTip: 'A single dry-run is the absolute minimum. Price two dry-runs into every migration engagement — the first one always surfaces issues that invalidate the timeline.',
-    triggerWorkTypes: ['mig-erp-crm', 'mig-replatform', 'mig-cloud-lift-shift']
+    triggerWorkTypes: ['mig-erp-crm', 'mig-replatform', 'mig-cloud-lift', 'mig-data', 'mig-infra', 'bf-migration-other']
   },
   {
     id: 'WT-M2',
@@ -294,7 +300,7 @@ export const WORK_TYPE_QUESTIONS: Question[] = [
       'Cutover plan approved by steering; BCP tested; rehearsal completed'
     ],
     coachingTip: 'Vague cutover windows extend into weekends and holidays by default. Get a contractually agreed window with an explicit downtime SLA and a named decision-maker before you start.',
-    triggerWorkTypes: ['mig-erp-crm', 'mig-replatform', 'mig-cloud-lift-shift']
+    triggerWorkTypes: ['mig-erp-crm', 'mig-replatform', 'mig-cloud-lift', 'mig-data', 'mig-infra', 'bf-migration-other']
   },
   {
     id: 'WT-M3',
@@ -310,7 +316,7 @@ export const WORK_TYPE_QUESTIONS: Question[] = [
       'Full decommission plan approved with owner, timeline, and budget signed off'
     ],
     coachingTip: 'Legacy systems kept running post-migration erode the business case and keep support costs on your invoice. Make decommission planning a contractual workstream with a client-owned milestone.',
-    triggerWorkTypes: ['mig-erp-crm', 'mig-replatform', 'mig-cloud-lift-shift']
+    triggerWorkTypes: ['mig-erp-crm', 'mig-replatform', 'mig-cloud-lift', 'mig-data', 'mig-infra', 'bf-migration-other']
   },
 
   // ── bf-modernisation ─────────────────────────────────────────
@@ -380,7 +386,7 @@ export const WORK_TYPE_QUESTIONS: Question[] = [
       'All SLAs contractually defined; load tested; idempotency verified in staging'
     ],
     coachingTip: 'Integration projects without formally agreed SLAs get measured against the client\'s most optimistic expectation. Define event volumes, latency SLAs, and ordering requirements before sprint 1.',
-    triggerWorkTypes: ['int-esb', 'int-api-mgt', 'int-data-pipeline', 'int-event-stream']
+    triggerWorkTypes: ['int-esb', 'int-api-gateway', 'int-etl', 'int-event', 'int-saas', 'int-b2b', 'bf-integration-other']
   },
   {
     id: 'WT-I2',
@@ -396,7 +402,7 @@ export const WORK_TYPE_QUESTIONS: Question[] = [
       'Full error handling with DLQ, replay capability, alerts, and tested runbooks'
     ],
     coachingTip: 'Integration platforms without a dead-letter strategy become black boxes in production. Include DLQ design, replay tooling, and operational runbooks as contractual deliverables.',
-    triggerWorkTypes: ['int-esb', 'int-api-mgt', 'int-data-pipeline', 'int-event-stream']
+    triggerWorkTypes: ['int-esb', 'int-api-gateway', 'int-etl', 'int-event', 'int-saas', 'int-b2b', 'bf-integration-other']
   },
   {
     id: 'WT-I3',
@@ -412,7 +418,7 @@ export const WORK_TYPE_QUESTIONS: Question[] = [
       'API contract testing in CI/CD; schema registry in place; change board active'
     ],
     coachingTip: 'Consuming teams that can change schemas mid-project are an uncontrolled scope risk. Establish API contract governance and require consumer sign-off on schema changes as a project dependency.',
-    triggerWorkTypes: ['int-esb', 'int-api-mgt', 'int-data-pipeline', 'int-event-stream']
+    triggerWorkTypes: ['int-esb', 'int-api-gateway', 'int-etl', 'int-event', 'int-saas', 'int-b2b', 'bf-integration-other']
   },
 
   // ── bf-security ──────────────────────────────────────────────
@@ -516,4 +522,14 @@ export const WORK_TYPE_QUESTIONS: Question[] = [
     coachingTip: 'Without agreed quality gates, acceptance becomes a negotiation at go-live. Define measurable thresholds (coverage %, defect escape rate, p95 response time) in the SOW before delivery starts.',
     triggerWorkTypes: ['tq-automation-uplift', 'tq-shift-left', 'tq-test-factory', 'tq-performance', 'tq-accessibility']
   }
+]
+
+// ── Merged export: legacy questions + profile-derived questions ─
+// PROFILE_QUESTIONS are deduplicated by id — profiles win on conflict.
+
+const profileIds = new Set(PROFILE_QUESTIONS.map(q => q.id))
+
+export const WORK_TYPE_QUESTIONS: Question[] = [
+  ...LEGACY_WORK_TYPE_QUESTIONS.filter(q => !profileIds.has(q.id)),
+  ...PROFILE_QUESTIONS,
 ]

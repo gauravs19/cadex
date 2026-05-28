@@ -38,14 +38,14 @@ export function parseDealJson(jsonString: string): Deal {
 
 export function encodeDealToUrl(deal: Deal): string {
   const compressed = LZString.compressToEncodedURIComponent(JSON.stringify(deal))
-  const url = new URL(window.location.href)
-  url.hash = `deal=${compressed}`
-  return url.toString()
+  const base = window.location.href.split('#')[0]
+  return `${base}#/deal?share=${compressed}`
 }
 
 export function decodeDealFromUrl(): Deal | null {
   const hash = window.location.hash
-  const match = hash.match(/deal=([^&]*)/)
+  // New format: #/deal?share=... — old format: #deal=... (backwards compat)
+  const match = hash.match(/[?&]share=([^&]*)/) ?? hash.match(/^#deal=([^&]*)/)
   if (!match) return null
   try {
     const json = LZString.decompressFromEncodedURIComponent(match[1])
@@ -59,7 +59,9 @@ export function decodeDealFromUrl(): Deal | null {
 }
 
 export function clearDealFromUrl(): void {
-  window.history.replaceState(null, '', window.location.pathname + window.location.search)
+  // Keep the #/deal path but strip the share param
+  const pathOnly = window.location.hash.split('?')[0]
+  window.history.replaceState(null, '', window.location.pathname + window.location.search + pathOnly)
 }
 
 // ── Clipboard copy ────────────────────────────────────────────

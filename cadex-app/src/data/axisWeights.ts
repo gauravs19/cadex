@@ -3,9 +3,14 @@
 // Weights by engagement type, pricing model modifiers,
 // work type modifiers, and geography modifiers.
 // All weights as decimals summing to 1.0 per engagement type.
+//
+// WORK_TYPE_MODIFIERS merges the static table below with
+// PROFILE_AXIS_MODIFIERS from src/data/profiles/index.ts.
+// Profile-defined modifiers take precedence on conflict.
 // ============================================================
 
 import type { AxisCode, EngagementType, Industry, PricingModel, WeightTable } from '../types'
+import { PROFILE_AXIS_MODIFIERS } from './profiles/index'
 
 // ── Base Weights by Engagement Type ──────────────────────────
 // From spec §5.2 — converted to decimals (e.g. 22% → 0.22)
@@ -307,6 +312,11 @@ export const WORK_TYPE_MODIFIERS: Record<string, Partial<Record<AxisCode, number
     TC: 1.1,
     CR: 1.1,
   },
+
+  // ── Profile-derived modifiers (from profiles/index.ts) ───
+  // Spread here so the static table above remains readable.
+  // Profile modifiers override static ones on key collision.
+  ...PROFILE_AXIS_MODIFIERS,
 } as const
 
 // ── Geography / Timezone Modifiers ───────────────────────────

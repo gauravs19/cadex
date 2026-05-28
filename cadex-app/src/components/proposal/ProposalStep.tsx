@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { useDealStore } from '../../store/dealStore'
 import { generateProposalHtml } from '../../lib/proposalExport'
+import { generateBriefHtml } from '../../lib/briefExport'
 import { STRATEGIES } from '../../data/strategies'
 import { WORK_TYPES } from '../../data/workTypes'
-import { Download, ExternalLink, FileText, AlertTriangle, CheckCircle, Info } from 'lucide-react'
+import { Download, ExternalLink, FileText, AlertTriangle, CheckCircle, Info, ClipboardList } from 'lucide-react'
 import type { WorkTypeNode } from '../../types'
 
 const SECTION = 'bg-white rounded-xl border border-slate-200 p-5'
@@ -32,7 +33,7 @@ const BAND_LABELS: Record<string, string> = {
 export default function ProposalStep() {
   const { getActiveDeal } = useDealStore()
   const activeDeal = getActiveDeal()
-  const [companyName, setCompanyName] = useState('GlobalLogic')
+  const [companyName, setCompanyName] = useState('')
 
   if (!activeDeal) return null
 
@@ -88,13 +89,19 @@ export default function ProposalStep() {
             onClick={handleOpenPreview}
             className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white text-sm font-semibold rounded-lg hover:bg-indigo-700 transition-colors"
           >
-            <ExternalLink size={15} /> Open Preview
+            <ExternalLink size={15} /> Proposal Deck
           </button>
           <button
             onClick={handleDownload}
             className="flex items-center gap-2 px-4 py-2 bg-slate-900 text-white text-sm font-semibold rounded-lg hover:bg-slate-800 transition-colors"
           >
             <Download size={15} /> Download HTML
+          </button>
+          <button
+            onClick={() => generateBriefHtml(activeDeal)}
+            className="flex items-center gap-2 px-4 py-2 bg-teal-600 text-white text-sm font-semibold rounded-lg hover:bg-teal-700 transition-colors"
+          >
+            <ClipboardList size={15} /> Export Brief
           </button>
         </div>
         <p className="text-xs text-slate-400 mt-3 flex items-center gap-1.5">
@@ -310,7 +317,13 @@ export default function ProposalStep() {
           onClick={handleOpenPreview}
           className="flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition-colors"
         >
-          <FileText size={16} /> Open Proposal Preview
+          <FileText size={16} /> Open Proposal Deck
+        </button>
+        <button
+          onClick={() => generateBriefHtml(activeDeal)}
+          className="flex items-center gap-2 px-6 py-3 bg-teal-600 text-white font-semibold rounded-lg hover:bg-teal-700 transition-colors"
+        >
+          <ClipboardList size={16} /> Export Deal Brief
         </button>
         <button
           onClick={handleDownload}
