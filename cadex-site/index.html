@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CADEX — Deal Intelligence for IT Consulting Presales</title>
+<meta name="description" content="Stop losing deals in email threads. CADEX scores risk across 8 axes, matches your engagement strategy, and runs a 42-point quality gate — in 25 minutes, in your browser, free.">
+
+<!-- Open Graph / Twitter card for social sharing -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="CADEX — Deal Intelligence for IT Consulting Presales">
+<meta property="og:description" content="Score risk. Match strategy. Shape the deal. 42-point quality gate. Free, browser-only, no login.">
+<meta property="og:url" content="https://gauravs19.github.io/cadex/">
+<meta property="og:image" content="https://gauravs19.github.io/cadex/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="CADEX — Deal Intelligence for IT Consulting Presales">
+<meta name="twitter:description" content="Score risk. Match strategy. 42-point quality gate. Free, browser-only, no login.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;0,800;1,700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#0C0A09;
+  --ink-2:#1C1917;
+  --amber:#D97706;
+  --amber-light:#F59E0B;
+  --amber-pale:#FFFBEB;
+  --amber-border:#FDE68A;
+  --green:#15803D;
+  --green-pale:#F0FDF4;
+  --red:#B91C1C;
+  --red-pale:#FEF2F2;
+  --slate:#57534E;
+  --slate-light:#A8A29E;
+  --border:#E7E5E4;
+  --bg:#FAFAF9;
+  --white:#FFFFFF;
+  --radius:6px;
+  --radius-lg:14px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:var(--white);-webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:inherit;text-decoration:none}
+
+/* ── ANNOUNCEMENT BAR ── */
+.announce-bar{background:var(--ink-2);color:rgba(255,255,255,.85);text-align:center;padding:10px 20px;font-size:.78rem;line-height:1.4;position:relative;z-index:200}
+.announce-bar a{color:var(--amber-light);font-weight:700;border-bottom:1px solid rgba(245,158,11,.35);transition:opacity .12s}
+.announce-bar a:hover{opacity:.8}
+.announce-tag{display:inline-block;background:var(--amber);color:#fff;font-size:.62rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:3px;margin-right:8px;vertical-align:middle}
+
+/* ── NAV ── */
+nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.nav-wrap{max-width:1160px;margin:0 auto;padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+.logo{font-size:1.05rem;font-weight:900;letter-spacing:.04em;color:var(--ink)}
+.logo span{color:var(--amber)}
+.nav-links{display:flex;align-items:center;gap:28px}
+.nav-links a{font-size:.82rem;font-weight:500;color:var(--slate);transition:color .12s;letter-spacing:.02em}
+.nav-links a:hover{color:var(--ink)}
+.nav-right{display:flex;align-items:center;gap:12px}
+.nav-gh{font-size:.78rem;font-weight:600;color:var(--slate);padding:6px 14px;border-radius:var(--radius);border:1px solid var(--border);display:flex;align-items:center;gap:6px;transition:border-color .12s,color .12s}
+.nav-gh:hover{color:var(--ink);border-color:var(--slate-light)}
+.nav-btn{background:var(--ink);color:#fff;font-size:.82rem;font-weight:700;padding:8px 20px;border-radius:var(--radius);letter-spacing:.02em;transition:opacity .15s}
+.nav-btn:hover{opacity:.85}
+@media(max-width:760px){.nav-links{display:none}.nav-gh{display:none}}
+
+/* ── HERO ── */
+.hero{background:var(--ink-2);color:#fff;padding:96px 0 80px;overflow:hidden;position:relative}
+.hero::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 70% 50%,rgba(217,119,6,.14),transparent 70%);pointer-events:none}
+.hero-wrap{max-width:1160px;margin:0 auto;padding:0 32px;position:relative;z-index:1}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.7rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--amber-light);margin-bottom:28px}
+.hero-eyebrow::before{content:'';width:24px;height:1px;background:var(--amber-light)}
+.hero-title{font-family:'Playfair Display',Georgia,serif;font-size:clamp(2.8rem,6vw,5rem);font-weight:800;line-height:1.07;color:#fff;max-width:820px;margin-bottom:24px}
+.hero-title em{font-style:italic;color:var(--amber-light)}
+.hero-body{font-size:1.05rem;color:rgba(255,255,255,.55);max-width:560px;line-height:1.75;margin-bottom:40px}
+.hero-cta{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:44px}
+.btn-amber{background:var(--amber);color:#fff;font-size:.9rem;font-weight:700;padding:13px 30px;border-radius:var(--radius);transition:background .15s;letter-spacing:.01em}
+.btn-amber:hover{background:var(--amber-light)}
+.btn-ghost-white{font-size:.9rem;font-weight:600;color:rgba(255,255,255,.55);padding:13px 0;border-bottom:1px solid rgba(255,255,255,.2);transition:color .15s}
+.btn-ghost-white:hover{color:#fff}
+.hero-trust{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.trust-item{font-size:.72rem;color:rgba(255,255,255,.3);display:flex;align-items:center;gap:5px}
+.trust-item::before{content:'✓';color:var(--amber-light);font-weight:800;font-size:.7rem}
+.hero-scorestrip{margin-top:60px;display:flex;align-items:stretch;gap:0;border:1px solid rgba(255,255,255,.1);border-radius:var(--radius-lg);overflow:hidden;max-width:760px}
+.score-band{flex:1;padding:18px 20px;border-right:1px solid rgba(255,255,255,.1);text-align:center}
+.score-band:last-child{border-right:none}
+.score-band-val{font-size:1.8rem;font-weight:900;line-height:1}
+.score-band-val.g{color:#4ADE80}
+.score-band-val.a{color:var(--amber-light)}
+.score-band-val.r{color:#F87171}
+.score-band-val.k{color:rgba(255,255,255,.25)}
+.score-band-label{font-size:.68rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-top:5px}
+.score-band-range{font-size:.72rem;color:rgba(255,255,255,.25);margin-top:2px}
+
+/* ── PAIN STRIP ── */
+.pain-section{padding:60px 0;background:var(--white);border-bottom:1px solid var(--border)}
+.pain-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-top:40px}
+.pain-item{padding:28px 26px;border-right:1px solid var(--border)}
+.pain-item:last-child{border-right:none}
+.pain-stat{font-size:2.2rem;font-weight:900;color:var(--red);font-family:'Playfair Display',serif;line-height:1;margin-bottom:8px}
+.pain-label{font-size:.9rem;font-weight:700;color:var(--ink);margin-bottom:6px}
+.pain-note{font-size:.78rem;color:var(--slate);line-height:1.55}
+.pain-source{display:block;margin-top:8px;font-size:.68rem;color:var(--slate-light)}
+@media(max-width:700px){.pain-grid{grid-template-columns:1fr}.pain-item{border-right:none;border-bottom:1px solid var(--border)}.pain-item:last-child{border-bottom:none}}
+
+/* ── COMPARISON ── */
+.compare-section{padding:100px 0;background:var(--bg)}
+.compare-table{margin-top:56px;border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;background:var(--white)}
+.compare-head{display:grid;grid-template-columns:2fr 2fr 1fr;background:var(--ink);color:#fff}
+.compare-head-cell{padding:14px 24px;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.compare-head-cell:first-child{color:rgba(255,255,255,.4)}
+.compare-head-cell:nth-child(2){color:var(--amber-light)}
+.compare-head-cell:last-child{color:rgba(255,255,255,.35);text-align:center}
+.compare-row{display:grid;grid-template-columns:2fr 2fr 1fr;border-bottom:1px solid var(--border);transition:background .12s}
+.compare-row:last-child{border-bottom:none}
+.compare-row:hover{background:var(--bg)}
+.compare-cell{padding:14px 24px;font-size:.82rem;line-height:1.45;display:flex;align-items:center;gap:8px}
+.compare-cell:first-child{color:var(--slate);border-right:1px solid var(--border)}
+.compare-cell:first-child::before{content:'✗';color:var(--red);font-weight:700;font-size:.78rem;flex-shrink:0}
+.compare-cell:nth-child(2){color:var(--ink);font-weight:500;border-right:1px solid var(--border)}
+.compare-cell:nth-child(2)::before{content:'✓';color:var(--green);font-weight:700;font-size:.78rem;flex-shrink:0}
+.compare-cell:last-child{justify-content:center;font-size:.72rem;font-weight:700;color:var(--green)}
+@media(max-width:700px){.compare-head{grid-template-columns:1fr 1fr}.compare-head-cell:last-child{display:none}.compare-row{grid-template-columns:1fr 1fr}.compare-cell:last-child{display:none}}
+
+/* ── QUOTES ── */
+.quotes-section{padding:80px 0;background:var(--white)}
+.quotes-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px}
+.quote-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px 24px;position:relative}
+.quote-mark{font-size:3rem;font-family:'Playfair Display',serif;color:var(--border);line-height:1;position:absolute;top:16px;left:22px}
+.quote-text{font-size:.88rem;color:var(--slate);line-height:1.7;font-style:italic;margin-top:24px;margin-bottom:20px}
+.quote-text strong{color:var(--ink);font-style:normal}
+.quote-author{font-size:.72rem;font-weight:700;color:var(--ink)}
+.quote-role{font-size:.7rem;color:var(--slate-light);margin-top:2px}
+@media(max-width:760px){.quotes-grid{grid-template-columns:1fr}}
+
+/* ── FIVE STEPS ── */
+.steps-section{padding:100px 0;background:var(--bg)}
+.wrap{max-width:1160px;margin:0 auto;padding:0 32px}
+.overline{font-size:.68rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--amber);margin-bottom:14px}
+.heading{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:800;color:var(--ink);line-height:1.2;margin-bottom:16px}
+.subtext{font-size:1rem;color:var(--slate);line-height:1.75;max-width:540px}
+.steps-list{margin-top:64px;display:flex;flex-direction:column;gap:0;border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;background:var(--white)}
+.step-row{display:grid;grid-template-columns:64px 1fr auto;align-items:center;gap:0;border-bottom:1px solid var(--border);transition:background .15s}
+.step-row:last-child{border-bottom:none}
+.step-row:hover{background:#FAFAF9}
+.step-num{width:64px;height:64px;display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);border-right:1px solid var(--border);font-family:'Inter',monospace}
+.step-content{padding:20px 28px}
+.step-title{font-size:.95rem;font-weight:700;color:var(--ink);margin-bottom:4px}
+.step-desc{font-size:.82rem;color:var(--slate);line-height:1.55}
+.step-pills{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.step-pill{font-size:.62rem;font-weight:600;letter-spacing:.04em;background:var(--amber-pale);color:#92400E;border:1px solid var(--amber-border);padding:2px 8px;border-radius:20px}
+.step-tag{padding:16px 24px;font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--slate-light);white-space:nowrap}
+@media(max-width:600px){.step-row{grid-template-columns:48px 1fr}.step-tag{display:none}}
+
+/* ── AXES ── */
+.axes-section{padding:100px 0;background:var(--ink);color:#fff}
+.axes-header{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:end;margin-bottom:56px}
+.axes-header .subtext{color:rgba(255,255,255,.45)}
+.axes-note{font-size:.8rem;color:rgba(255,255,255,.3);line-height:1.6;border-left:2px solid rgba(255,255,255,.1);padding-left:16px}
+.axes-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.08);border-radius:var(--radius-lg);overflow:hidden}
+.axis-tile{background:var(--ink-2);padding:24px 22px;position:relative;transition:background .15s}
+.axis-tile:hover{background:#292524}
+.axis-tile.internal{opacity:.55}
+.axis-code{font-size:1.4rem;font-weight:900;color:var(--amber-light);margin-bottom:10px;font-family:'Inter',monospace;letter-spacing:-.01em}
+.axis-name{font-size:.88rem;font-weight:700;color:#fff;margin-bottom:8px}
+.axis-desc{font-size:.75rem;color:rgba(255,255,255,.4);line-height:1.5}
+.axis-note{margin-top:10px;font-size:.7rem;font-weight:600;color:var(--amber);opacity:.8}
+.internal-badge{position:absolute;top:14px;right:14px;font-size:.58rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.07);color:rgba(255,255,255,.3);padding:2px 7px;border-radius:3px}
+@media(max-width:900px){.axes-grid{grid-template-columns:repeat(2,1fr)}.axes-header{grid-template-columns:1fr}}
+@media(max-width:500px){.axes-grid{grid-template-columns:1fr}}
+
+/* ── STRATEGIES ── */
+.strat-section{padding:100px 0;background:var(--white)}
+.strat-intro{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:end;margin-bottom:56px}
+@media(max-width:800px){.strat-intro{grid-template-columns:1fr}}
+.strat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
+.strat-card{padding:28px 26px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);position:relative;background:var(--white);transition:background .15s}
+.strat-card:hover{background:var(--bg)}
+.strat-card:nth-child(3n){border-right:none}
+.strat-card:nth-last-child(-n+3){border-bottom:none}
+.strat-letter{font-size:2.5rem;font-weight:900;color:var(--border);position:absolute;top:18px;right:22px;line-height:1}
+.strat-id{font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);margin-bottom:10px}
+.strat-name{font-size:1rem;font-weight:800;color:var(--ink);margin-bottom:8px;line-height:1.25}
+.strat-tagline{font-size:.8rem;color:var(--slate);line-height:1.55}
+.strat-when{margin-top:14px;font-size:.72rem;font-weight:600;color:var(--slate-light)}
+@media(max-width:800px){.strat-grid{grid-template-columns:1fr 1fr}.strat-card:nth-child(2n){border-right:none}.strat-card:nth-last-child(-n+2){border-bottom:none}}
+@media(max-width:500px){.strat-grid{grid-template-columns:1fr}.strat-card{border-right:none}.strat-card:not(:last-child){border-bottom:1px solid var(--border)}}
+
+/* ── CHECKER ── */
+.checker-section{padding:100px 0;background:var(--bg)}
+.checker-wrap{display:grid;grid-template-columns:5fr 4fr;gap:64px;align-items:start}
+.checker-doc{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.06)}
+.checker-doc-header{padding:14px 20px;background:var(--ink);display:flex;align-items:center;justify-content:space-between}
+.checker-doc-title{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.5)}
+.verdict-chip{font-size:.68rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:4px}
+.verdict-chip.cond{background:var(--amber-border);color:#78350F}
+.checker-section-head{padding:10px 20px 6px;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--slate-light);border-bottom:1px solid var(--border);background:var(--bg)}
+.check-row{display:flex;align-items:center;gap:12px;padding:10px 20px;border-bottom:1px solid var(--border)}
+.check-row:last-child{border-bottom:none}
+.state-dot{width:22px;height:22px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:800}
+.sd-pass{background:var(--green-pale);color:var(--green)}
+.sd-fail{background:var(--red-pale);color:var(--red)}
+.sd-warn{background:var(--amber-pale);color:#92400E}
+.sd-na{background:#F5F5F4;color:var(--slate-light)}
+.check-label{font-size:.8rem;color:var(--ink);flex:1;line-height:1.35}
+.blocker-pill{font-size:.58rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;background:var(--red-pale);color:var(--red);padding:2px 7px;border-radius:3px;white-space:nowrap}
+.score-footer{padding:14px 20px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--white)}
+.overall-score{font-size:1.6rem;font-weight:900;color:var(--amber);font-family:'Inter',monospace}
+.score-desc{font-size:.72rem;color:var(--slate-light);line-height:1.4}
+.checker-copy .subtext{margin-bottom:24px}
+.feature-row{display:flex;gap:14px;margin-bottom:18px;align-items:flex-start}
+.feature-icon{width:32px;height:32px;border-radius:var(--radius);background:var(--amber-pale);border:1px solid var(--amber-border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.85rem}
+.feature-title{font-size:.88rem;font-weight:700;color:var(--ink);margin-bottom:2px}
+.feature-body{font-size:.78rem;color:var(--slate);line-height:1.5}
+@media(max-width:880px){.checker-wrap{grid-template-columns:1fr}}
+
+/* ── PROOF ── */
+.proof-section{padding:80px 0;background:var(--ink-2);color:#fff}
+.proof-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid rgba(255,255,255,.08);border-radius:var(--radius-lg);overflow:hidden;margin-top:48px}
+.proof-item{padding:32px 28px;border-right:1px solid rgba(255,255,255,.08)}
+.proof-item:last-child{border-right:none}
+.proof-num{font-size:2.5rem;font-weight:900;color:var(--amber-light);line-height:1;margin-bottom:8px;font-family:'Playfair Display',serif}
+.proof-label{font-size:.82rem;font-weight:600;color:#fff;margin-bottom:6px}
+.proof-note{font-size:.75rem;color:rgba(255,255,255,.35);line-height:1.5}
+@media(max-width:800px){.proof-grid{grid-template-columns:repeat(2,1fr)}.proof-item:nth-child(2){border-right:none}.proof-item:nth-child(n+3){border-top:1px solid rgba(255,255,255,.08)}}
+@media(max-width:480px){.proof-grid{grid-template-columns:1fr}.proof-item{border-right:none;border-bottom:1px solid rgba(255,255,255,.08)}}
+
+/* ── WHO ── */
+.who-section{padding:80px 0;background:var(--bg)}
+.who-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:40px}
+.who-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px 24px}
+.who-role{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin-bottom:10px}
+.who-name{font-size:1rem;font-weight:800;color:var(--ink);margin-bottom:10px}
+.who-pain{font-size:.82rem;color:var(--slate);line-height:1.6;border-left:2px solid var(--border);padding-left:12px;font-style:italic;margin-bottom:12px}
+.who-gets{font-size:.78rem;color:var(--slate);line-height:1.55}
+.who-gets strong{color:var(--ink)}
+@media(max-width:760px){.who-grid{grid-template-columns:1fr}}
+
+/* ── CTA ── */
+.cta-section{padding:120px 0;background:var(--white);text-align:center}
+.cta-eyebrow{font-size:.68rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--amber);margin-bottom:20px}
+.cta-title{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,5vw,3.8rem);font-weight:800;color:var(--ink);line-height:1.1;max-width:680px;margin:0 auto 20px}
+.cta-title em{font-style:italic;color:var(--amber)}
+.cta-sub{font-size:.95rem;color:var(--slate);max-width:440px;margin:0 auto 40px;line-height:1.7}
+.cta-buttons{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap}
+.btn-gh{font-size:.88rem;font-weight:600;color:var(--ink);padding:12px 24px;border-radius:var(--radius);border:1px solid var(--border);display:inline-flex;align-items:center;gap:7px;transition:border-color .12s,background .12s}
+.btn-gh:hover{background:var(--bg);border-color:var(--slate-light)}
+.cta-meta{margin-top:28px;font-size:.75rem;color:var(--slate-light);display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap}
+.cta-meta span{display:flex;align-items:center;gap:5px}
+.cta-meta span::before{content:'·';color:var(--border);display:none}
+.cta-meta span+span::before{display:inline}
+
+/* ── SHARE STRIP ── */
+.share-strip{background:var(--amber-pale);border-top:1px solid var(--amber-border);border-bottom:1px solid var(--amber-border);padding:20px 0}
+.share-inner{max-width:1160px;margin:0 auto;padding:0 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.share-text{font-size:.85rem;color:#78350F;font-weight:500}
+.share-text strong{font-weight:800}
+.share-links{display:flex;gap:10px;flex-wrap:wrap}
+.share-btn{font-size:.78rem;font-weight:700;padding:7px 16px;border-radius:var(--radius);border:1px solid var(--amber-border);color:#78350F;background:var(--white);transition:background .12s;display:flex;align-items:center;gap:5px;cursor:pointer}
+.share-btn:hover{background:var(--amber-border)}
+
+/* ── FOOTER ── */
+footer{padding:40px 0;border-top:1px solid var(--border);background:var(--bg)}
+.foot-wrap{max-width:1160px;margin:0 auto;padding:0 32px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.foot-brand{font-size:.82rem;font-weight:800;color:var(--ink);letter-spacing:.04em}
+.foot-brand span{font-weight:400;color:var(--slate-light);margin-left:8px;font-size:.75rem}
+.foot-links{display:flex;gap:24px;flex-wrap:wrap}
+.foot-links a{font-size:.78rem;color:var(--slate-light);transition:color .12s}
+.foot-links a:hover{color:var(--ink)}
+.foot-note{font-size:.72rem;color:var(--slate-light)}
+</style>
+</head>
+<body>
+
+<!-- ANNOUNCEMENT BAR -->
+<div class="announce-bar">
+  <span class="announce-tag">New</span>
+  v0.5 ships <strong>Export Brief</strong> — generate a print-ready A4 deal summary from any qualified deal in one click.
+  <a href="https://gauravs19.github.io/cadex/app/" target="_blank" rel="noopener">Try it now →</a>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-wrap">
+    <div class="logo">CA<span>DEX</span></div>
+    <div class="nav-links">
+      <a href="#steps">The Framework</a>
+      <a href="#axes">Risk Axes</a>
+      <a href="#strategies">Strategies</a>
+      <a href="#checker">Deal Checker</a>
+      <a href="#who">Who It's For</a>
+    </div>
+    <div class="nav-right">
+      <a href="https://github.com/gauravs19/cadex" target="_blank" rel="noopener" class="nav-gh">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        GitHub
+      </a>
+      <a href="https://gauravs19.github.io/cadex/app/" target="_blank" rel="noopener" class="nav-btn">Open App →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-wrap">
+    <div class="hero-eyebrow">Deal Intelligence for IT Consulting · v0.6</div>
+    <h1 class="hero-title">Stop losing deals<br>in <em>email threads</em><br>and gut feel.</h1>
+    <p class="hero-body">CADEX is a structured deal qualification framework for IT consulting presales. Score risk across 8 axes, get matched to an engagement strategy, and run a 42-point quality gate — before you put pen to paper.</p>
+    <div class="hero-cta">
+      <a href="https://gauravs19.github.io/cadex/app/" target="_blank" rel="noopener" class="btn-amber">Qualify a deal free — 25 minutes →</a>
+      <a href="#steps" class="btn-ghost-white">See the framework</a>
+    </div>
+    <div class="hero-trust">
+      <div class="trust-item">No login required</div>
+      <div class="trust-item">No data leaves your device</div>
+      <div class="trust-item">Free, open source</div>
+      <div class="trust-item">Works in any browser</div>
+    </div>
+
+    <div class="hero-scorestrip">
+      <div class="score-band">
+        <div class="score-band-val g">Green</div>
+        <div class="score-band-label">Proceed</div>
+        <div class="score-band-range">≥ 75%</div>
+      </div>
+      <div class="score-band">
+        <div class="score-band-val a">Amber</div>
+        <div class="score-band-label">Shape First</div>
+        <div class="score-band-range">50 – 74%</div>
+      </div>
+      <div class="score-band">
+        <div class="score-band-val r">Red</div>
+        <div class="score-band-label">High Risk</div>
+        <div class="score-band-range">25 – 49%</div>
+      </div>
+      <div class="score-band">
+        <div class="score-band-val k">Black</div>
+        <div class="score-band-label">No-Bid</div>
+        <div class="score-band-range">&lt; 25%</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAIN POINTS -->
+<section class="pain-section">
+  <div class="wrap">
+    <div class="overline">The Problem</div>
+    <h2 class="heading" style="max-width:520px">Most presales problems are won or lost before the proposal is written.</h2>
+    <div class="pain-grid">
+      <div class="pain-item">
+        <div class="pain-stat">39%</div>
+        <div class="pain-label">Average IT services win rate</div>
+        <div class="pain-note">Down from 53% in 2019. Nearly half of all proposal effort goes to deals that should have been declined or reshaped at qualification.</div>
+        <span class="pain-source">Loopio RFP Industry Report 2025</span>
+      </div>
+      <div class="pain-item">
+        <div class="pain-stat">59%</div>
+        <div class="pain-label">of IT firms cite scope creep as their #1 delivery challenge</div>
+        <div class="pain-note">Scope risk is almost never formally assessed at the bid stage. By the time it surfaces, the contract is signed and the margin is gone.</div>
+        <span class="pain-source">Moovila MSP Industry Report 2025</span>
+      </div>
+      <div class="pain-item">
+        <div class="pain-stat">32 hrs</div>
+        <div class="pain-label">Average presales time per proposal</div>
+        <div class="pain-note">With no structured go/no-go gate, teams spend 32 hours on proposals that should have been declined. 1 in 5 never gets submitted.</div>
+        <span class="pain-source">OpenAsset / Loopio 2025</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section class="compare-section" id="compare">
+  <div class="wrap">
+    <div class="overline">How It Changes the Work</div>
+    <h2 class="heading">Before CADEX. After CADEX.</h2>
+    <p class="subtext">The same decisions — go/no-go, engagement model, contract risk — made with evidence instead of instinct.</p>
+    <div class="compare-table">
+      <div class="compare-head">
+        <div class="compare-head-cell">Without CADEX</div>
+        <div class="compare-head-cell">With CADEX</div>
+        <div class="compare-head-cell">Impact</div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-cell">Go/no-go decided by seniority and momentum, not evidence</div>
+        <div class="compare-cell">Scored risk profile with axis breakdown and hard blockers</div>
+        <div class="compare-cell">Defensible</div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-cell">Engagement model picked from habit or what the client asked for</div>
+        <div class="compare-cell">Algorithmic strategy match from 6 models based on deal context</div>
+        <div class="compare-cell">Consistent</div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-cell">Scope risks live in the delivery lead's head, not the contract</div>
+        <div class="compare-cell">Ranked shaper levers with specific contract language suggested</div>
+        <div class="compare-cell">Actionable</div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-cell">Quality review happens the day before submission with 40 hours invested</div>
+        <div class="compare-cell">42-point gate at any stage, hard blockers surface early</div>
+        <div class="compare-cell">Earlier</div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-cell">Deal context locked in the presales lead's laptop or email</div>
+        <div class="compare-cell">Shareable link, JSON export, and A4 deal brief in one click</div>
+        <div class="compare-cell">Portable</div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-cell">Win themes invented on the day of proposal writing</div>
+        <div class="compare-cell">3 tailored win themes generated from strategy + work type + axes</div>
+        <div class="compare-cell">Sharper pitch</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRACTITIONER QUOTES -->
+<section class="quotes-section">
+  <div class="wrap">
+    <div class="overline">Practitioner Voices</div>
+    <h2 class="heading">The problems CADEX was built to fix.</h2>
+    <div class="quotes-grid">
+      <div class="quote-card">
+        <div class="quote-mark">"</div>
+        <div class="quote-text">I get pulled into every RFP regardless of fit. By the time I push back, <strong>thirty hours are already spent</strong> and nobody wants to hear it's not winnable.</div>
+        <div class="quote-author">Solution Consultant</div>
+        <div class="quote-role">Large IT Services Firm, EMEA</div>
+      </div>
+      <div class="quote-card">
+        <div class="quote-mark">"</div>
+        <div class="quote-text">Go/No-Go meetings don't actually change anything. <strong>We've already invested and no one wants to say no.</strong> We need the question answered at intake, not at submission.</div>
+        <div class="quote-author">Bid Manager</div>
+        <div class="quote-role">Global Systems Integrator</div>
+      </div>
+      <div class="quote-card">
+        <div class="quote-mark">"</div>
+        <div class="quote-text">I'm asked to sign off on deals <strong>I've never seen until two days before submission.</strong> The risk surface is already set and I'm just putting my name on it.</div>
+        <div class="quote-author">Practice Lead</div>
+        <div class="quote-role">Technology Consulting, APAC</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FIVE STEPS -->
+<section class="steps-section" id="steps">
+  <div class="wrap">
+    <div class="overline">Five Steps</div>
+    <h2 class="heading">From first signal to submission-ready.</h2>
+    <p class="subtext">Each step builds on the last. Complete all five and you have a fully qualified deal with documented risks, a matched strategy, a quality verdict, and a shareable brief.</p>
+
+    <div class="steps-list">
+      <div class="step-row">
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <div class="step-title">Deal Intake</div>
+          <div class="step-desc">Capture deal basics, work type (L1 → L2 → L3), competitive situation, compliance requirements, partner ecosystem, and delivery geography. Scope questions load per work type. Auto-signals fire when risk patterns are detected.</div>
+          <div class="step-pills">
+            <span class="step-pill">Work-type scope questions</span>
+            <span class="step-pill">Effort estimator</span>
+            <span class="step-pill">Auto-risk signals</span>
+          </div>
+        </div>
+        <div class="step-tag">~5 min</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <div class="step-title">Risk Assessment</div>
+          <div class="step-desc">60+ calibrated questions across 9 sections including work-type-specific questions for AI, security, ERP, migration, and cloud. Answers score 8 risk axes weighted by engagement type, pricing model, and work type. Live radar chart updates as you answer.</div>
+          <div class="step-pills">
+            <span class="step-pill">Work-type-specific questions</span>
+            <span class="step-pill">Dynamic axis weighting</span>
+            <span class="step-pill">Live radar chart</span>
+          </div>
+        </div>
+        <div class="step-tag">~15 min</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <div class="step-title">Strategy Recommendation</div>
+          <div class="step-desc">One of six engagement models matched algorithmically to your risk profile. Full card: pitch language, key moves, contract non-negotiables, win themes, and objection handlers. Use the What-If Scenario Modeler to see how changes shift strategy before you commit.</div>
+          <div class="step-pills">
+            <span class="step-pill">What-if scenario modeler</span>
+            <span class="step-pill">Win themes</span>
+            <span class="step-pill">Objection bank</span>
+          </div>
+        </div>
+        <div class="step-tag">~2 min</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">04</div>
+        <div class="step-content">
+          <div class="step-title">Deal Shaper</div>
+          <div class="step-desc">Ranked levers to reshape the deal before you bid. Scope, commercial, governance, risk, and relationship levers — each with a specific action and suggested contract language to protect delivery.</div>
+          <div class="step-pills">
+            <span class="step-pill">Contract language</span>
+            <span class="step-pill">Ranked by impact</span>
+          </div>
+        </div>
+        <div class="step-tag">~5 min</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">05</div>
+        <div class="step-content">
+          <div class="step-title">Deal Checker &amp; Export</div>
+          <div class="step-desc">42-point quality gate across 9 sections. Hard blockers halt the deal. Verdict: Go, Conditional Go, or No-Go. Export a proposal deck, a print-ready A4 deal brief, share a link, or download JSON for delivery handoff.</div>
+          <div class="step-pills">
+            <span class="step-pill">Shareable link</span>
+            <span class="step-pill">JSON export</span>
+            <span class="step-pill">Proposal deck</span>
+            <span class="step-pill">A4 deal brief</span>
+          </div>
+        </div>
+        <div class="step-tag">~10 min</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RISK AXES -->
+<section class="axes-section" id="axes">
+  <div class="wrap">
+    <div class="axes-header">
+      <div>
+        <div class="overline" style="color:var(--amber-light)">8 Risk Axes</div>
+        <h2 class="heading" style="color:#fff">Every angle of a deal, scored.</h2>
+        <p class="subtext">Axis weights shift automatically based on engagement type, pricing model, and work type. A fixed-price deal weights scope heavily. A T&amp;M deal weights commercial risk differently.</p>
+      </div>
+      <div class="axes-note">
+        Scores run 1–5. The weighted total produces the band colour. Critical flags fire when any axis drops below threshold — surfacing in the strategy card and blocking the checker verdict.
+      </div>
+    </div>
+    <div class="axes-grid">
+      <div class="axis-tile">
+        <div class="axis-code">SC</div>
+        <div class="axis-name">Scope Clarity</div>
+        <div class="axis-desc">How well-defined and stable is the scope? Is there an agreed MVP boundary? Has the client aligned on what's in and what's out?</div>
+        <div class="axis-note">Heaviest weight on fixed-price</div>
+      </div>
+      <div class="axis-tile">
+        <div class="axis-code">CM</div>
+        <div class="axis-name">Client Maturity</div>
+        <div class="axis-desc">How agile-ready is the client? Stakeholder alignment, prior vendor experience, decision-making speed, and change appetite.</div>
+      </div>
+      <div class="axis-tile">
+        <div class="axis-code">CR</div>
+        <div class="axis-name">Commercial Risk</div>
+        <div class="axis-desc">Margin health, contingency documentation, payment structure, and whether a Phase 2 path is visible in the commercial narrative.</div>
+      </div>
+      <div class="axis-tile">
+        <div class="axis-code">TC</div>
+        <div class="axis-name">Technical Complexity</div>
+        <div class="axis-desc">Integration depth, legacy system exposure, data quality risk, third-party dependencies, and cloud/infrastructure unknowns.</div>
+      </div>
+      <div class="axis-tile">
+        <div class="axis-code">GR</div>
+        <div class="axis-name">Governance Readiness</div>
+        <div class="axis-desc">Named PO availability, decision cycle speed, sprint review commitment, and change request process with SLA.</div>
+        <div class="axis-note">No named PO = hard blocker</div>
+      </div>
+      <div class="axis-tile">
+        <div class="axis-code">SV</div>
+        <div class="axis-name">Strategic Value</div>
+        <div class="axis-desc">Logo value, renewal potential, platform expansion story, and whether this deal fits the capability and portfolio strategy.</div>
+      </div>
+      <div class="axis-tile">
+        <div class="axis-code">CP</div>
+        <div class="axis-name">Competitive Position</div>
+        <div class="axis-desc">Win probability, differentiation quality, competitive posture, and availability of a comparable reference in this domain.</div>
+      </div>
+      <div class="axis-tile internal">
+        <div class="internal-badge">Internal only</div>
+        <div class="axis-code">VF</div>
+        <div class="axis-name">Vendor Capability Fit</div>
+        <div class="axis-desc">Our delivery readiness, comparable project history, staffing confidence, and subcontractor reliability. Hidden from all client-facing exports.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STRATEGIES -->
+<section class="strat-section" id="strategies">
+  <div class="wrap">
+    <div class="strat-intro">
+      <div>
+        <div class="overline">Six Engagement Models</div>
+        <h2 class="heading">One is matched to your risk profile.</h2>
+      </div>
+      <p class="subtext">The algorithm weighs axis scores, pricing model, competitive situation, and work type to select the primary strategy — with an alternative if you disagree. Each card includes the full pitch, moves, contract non-negotiables, and close script.</p>
+    </div>
+    <div class="strat-grid">
+      <div class="strat-card">
+        <div class="strat-letter">A</div>
+        <div class="strat-id">Strategy A</div>
+        <div class="strat-name">Foundation First</div>
+        <div class="strat-tagline">Paid discovery phase before any fixed-price commitment. Validates scope, surfaces assumptions, and de-risks the main engagement.</div>
+        <div class="strat-when">When: scope clarity is low or scope is unvalidated</div>
+      </div>
+      <div class="strat-card">
+        <div class="strat-letter">B</div>
+        <div class="strat-id">Strategy B</div>
+        <div class="strat-name">Phased Commitment</div>
+        <div class="strat-tagline">Multi-phase structure with explicit go/no-go gates. Commits budget phase by phase, not end-to-end. Phase 2 price based on Phase 1 velocity data.</div>
+        <div class="strat-when">When: large programme, high complexity, uncertain timeline</div>
+      </div>
+      <div class="strat-card">
+        <div class="strat-letter">C</div>
+        <div class="strat-id">Strategy C</div>
+        <div class="strat-name">Outcome Contract</div>
+        <div class="strat-tagline">Price anchored on a measurable business outcome, not a feature list. Long-term relationship play with strong renewal language.</div>
+        <div class="strat-when">When: strategic logo, high SV, strong partnership signal</div>
+      </div>
+      <div class="strat-card">
+        <div class="strat-letter">D</div>
+        <div class="strat-id">Strategy D</div>
+        <div class="strat-name">Scope-Locked MVP</div>
+        <div class="strat-tagline">Hard MVP boundary with a scope bank for swaps. Fixes the price on what matters; everything else is Phase 2. Classic fixed-agile model.</div>
+        <div class="strat-when">When: client is agile-ready, scope is reasonably defined</div>
+      </div>
+      <div class="strat-card">
+        <div class="strat-letter">E</div>
+        <div class="strat-id">Strategy E</div>
+        <div class="strat-name">Hybrid T&amp;M Cap</div>
+        <div class="strat-tagline">Time &amp; Materials with a hard spend cap and regular checkpoint reviews. Flexibility without open-ended financial exposure.</div>
+        <div class="strat-when">When: scope is evolving, budget is fixed but requirements aren't</div>
+      </div>
+      <div class="strat-card">
+        <div class="strat-letter">F</div>
+        <div class="strat-id">Strategy F</div>
+        <div class="strat-name">No-Bid / Counter</div>
+        <div class="strat-tagline">Walk away with a counter-proposal, or decline cleanly. Triggered when hard blockers remain, risk is unacceptable, or win probability can't justify pursuit cost.</div>
+        <div class="strat-when">When: Black band, unresolved hard blockers, or &lt;20% win probability</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHECKER -->
+<section class="checker-section" id="checker">
+  <div class="wrap">
+    <div class="checker-wrap">
+      <div class="checker-copy">
+        <div class="overline">42-Point Quality Gate</div>
+        <h2 class="heading">The last line of defence before you submit.</h2>
+        <p class="subtext">Nine sections. Hard blockers that stop the deal. Section-level scores that expose your weakest area. A final verdict you can defend in the review room.</p>
+
+        <div class="feature-row">
+          <div class="feature-icon">🛑</div>
+          <div>
+            <div class="feature-title">5 Hard Blockers</div>
+            <div class="feature-body">Margin health, named PO confirmed, discovery included or scope validated, delivery lead sign-off, comparable delivery history. Any fail = no-go until resolved.</div>
+          </div>
+        </div>
+        <div class="feature-row">
+          <div class="feature-icon">📐</div>
+          <div>
+            <div class="feature-title">Section-Level Scoring</div>
+            <div class="feature-body">Each of the 9 sections scores independently. A 92% overall with a 41% Governance section tells a very different story than a flat 75%.</div>
+          </div>
+        </div>
+        <div class="feature-row">
+          <div class="feature-icon">📄</div>
+          <div>
+            <div class="feature-title">Export Deal Brief</div>
+            <div class="feature-body">Generate a print-ready A4 deal summary from your qualified deal in one click — axes, strategy, win themes, risks, checker verdict, and key assumptions on one page.</div>
+          </div>
+        </div>
+        <div class="feature-row">
+          <div class="feature-icon">🔗</div>
+          <div>
+            <div class="feature-title">Share &amp; Handoff</div>
+            <div class="feature-body">Copy a shareable link for async team review. Export as JSON for the delivery handoff. Generate a full proposal deck — all from the same qualified deal.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="checker-doc">
+        <div class="checker-doc-header">
+          <div class="checker-doc-title">Deal Checker · Live Preview</div>
+          <div class="verdict-chip cond">Conditional Go</div>
+        </div>
+        <div class="checker-section-head">Commercial Health</div>
+        <div class="check-row">
+          <div class="state-dot sd-pass">✓</div>
+          <div class="check-label">Margin is healthy at the quoted price</div>
+          <span class="blocker-pill">Blocker</span>
+        </div>
+        <div class="check-row">
+          <div class="state-dot sd-pass">✓</div>
+          <div class="check-label">Contingency is built in and documented</div>
+        </div>
+        <div class="check-row">
+          <div class="state-dot sd-warn">!</div>
+          <div class="check-label">Payment is milestone/phase-based, not feature-based</div>
+        </div>
+        <div class="checker-section-head">Governance Health</div>
+        <div class="check-row">
+          <div class="state-dot sd-fail">✗</div>
+          <div class="check-label">A named, empowered Product Owner is confirmed</div>
+          <span class="blocker-pill">Blocker</span>
+        </div>
+        <div class="check-row">
+          <div class="state-dot sd-warn">!</div>
+          <div class="check-label">Decision-making cycle is acceptable for sprint cadence</div>
+        </div>
+        <div class="check-row">
+          <div class="state-dot sd-na">–</div>
+          <div class="check-label">Client sprint review attendance committed in writing</div>
+        </div>
+        <div class="checker-section-head">Risk Health</div>
+        <div class="check-row">
+          <div class="state-dot sd-pass">✓</div>
+          <div class="check-label">Discovery phase included or scope independently validated</div>
+          <span class="blocker-pill">Blocker</span>
+        </div>
+        <div class="check-row">
+          <div class="state-dot sd-pass">✓</div>
+          <div class="check-label">Timeline stress-tested with the delivery lead</div>
+        </div>
+        <div class="score-footer">
+          <div>
+            <div class="score-desc">Overall score</div>
+            <div class="overall-score">74%</div>
+          </div>
+          <div style="text-align:right">
+            <div class="score-desc">Governance</div>
+            <div style="font-size:1.1rem;font-weight:800;color:var(--red);font-family:'Inter',monospace">48%</div>
+          </div>
+          <div style="text-align:right">
+            <div class="score-desc">Commercial</div>
+            <div style="font-size:1.1rem;font-weight:800;color:var(--green);font-family:'Inter',monospace">87%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF NUMBERS -->
+<section class="proof-section">
+  <div class="wrap">
+    <div class="overline" style="color:var(--amber-light)">By the Numbers</div>
+    <h2 class="heading" style="color:#fff;max-width:500px">Everything that goes into a qualified deal.</h2>
+    <div class="proof-grid">
+      <div class="proof-item">
+        <div class="proof-num">8</div>
+        <div class="proof-label">Risk Axes</div>
+        <div class="proof-note">Weighted by engagement type, pricing model, and work type. Scores shift when context changes.</div>
+      </div>
+      <div class="proof-item">
+        <div class="proof-num">60+</div>
+        <div class="proof-label">Calibrated Questions</div>
+        <div class="proof-note">Across 9 sections plus work-type-specific extras for AI, security, ERP, migration, cloud, and AMS.</div>
+      </div>
+      <div class="proof-item">
+        <div class="proof-num">42</div>
+        <div class="proof-label">Checker Points</div>
+        <div class="proof-note">9 sections, 5 hard blockers, per-section scoring, notes, and a three-level Go/No-Go verdict.</div>
+      </div>
+      <div class="proof-item">
+        <div class="proof-num">40+</div>
+        <div class="proof-label">Work Type Profiles</div>
+        <div class="proof-note">L1 → L2 → L3 taxonomy. Each loads scope questions, risk weights, effort benchmarks, and objection handlers.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHO IT'S FOR -->
+<section class="who-section" id="who">
+  <div class="wrap">
+    <div class="overline">Who It's For</div>
+    <h2 class="heading">Built for the people who own the bid.</h2>
+    <div class="who-grid">
+      <div class="who-card">
+        <div class="who-role">Primary User</div>
+        <div class="who-name">Presales / Solution Consultant</div>
+        <div class="who-pain">"I get pulled into every RFP regardless of fit. By the time I push back, 30 hours are already spent."</div>
+        <div class="who-gets">Gets: <strong>Risk scoring</strong> to defend a no-bid, <strong>work-type scope questions</strong> to run a sharper discovery call, and <strong>objection handlers</strong> specific to the engagement type.</div>
+      </div>
+      <div class="who-card">
+        <div class="who-role">Primary User</div>
+        <div class="who-name">Bid Manager / Pursuit Lead</div>
+        <div class="who-pain">"Go/No-Go meetings don't actually change anything. We've already invested and no one wants to say no."</div>
+        <div class="who-gets">Gets: an <strong>auditable go/no-go recommendation</strong> backed by scored evidence, a <strong>42-point quality gate</strong>, and a deal brief to take into the review room.</div>
+      </div>
+      <div class="who-card">
+        <div class="who-role">Secondary User</div>
+        <div class="who-name">Practice / Capability Lead</div>
+        <div class="who-pain">"I'm asked to sign off on deals I've never seen until two days before submission."</div>
+        <div class="who-gets">Gets: a structured <strong>risk axis view</strong>, the <strong>scope assumptions register</strong>, and a <strong>shareable link</strong> to review async before the sign-off meeting.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SHARE STRIP -->
+<div class="share-strip">
+  <div class="share-inner">
+    <div class="share-text"><strong>Find this useful?</strong> Share it with your presales team or anyone who's tired of qualifying deals in spreadsheets.</div>
+    <div class="share-links">
+      <button class="share-btn" onclick="shareLinkedIn()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        Share on LinkedIn
+      </button>
+      <button class="share-btn" onclick="copyPageUrl()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        <span id="copy-label">Copy link</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="wrap">
+    <div class="cta-eyebrow">No login. No database. Free forever.</div>
+    <h2 class="cta-title">Qualify your next deal in <em>25 minutes.</em></h2>
+    <p class="cta-sub">State lives in your browser. Share a link with your team. Export as JSON for the delivery handoff. No data leaves your device.</p>
+    <div class="cta-buttons">
+      <a href="https://gauravs19.github.io/cadex/app/" target="_blank" rel="noopener" class="btn-amber" style="font-size:1rem;padding:15px 36px;border-radius:var(--radius-lg)">Launch CADEX — it's free →</a>
+      <a href="https://github.com/gauravs19/cadex" target="_blank" rel="noopener" class="btn-gh">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        Star on GitHub
+      </a>
+    </div>
+    <div class="cta-meta">
+      <span>Browser-only</span>
+      <span>Shareable deal link</span>
+      <span>JSON export</span>
+      <span>A4 deal brief</span>
+      <span>No data leaves your device</span>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-wrap">
+    <div class="foot-brand">CADEX <span>Consulting Advisor &amp; Deal EXecution Framework · v0.6</span></div>
+    <div class="foot-links">
+      <a href="#steps">Framework</a>
+      <a href="#axes">Risk Axes</a>
+      <a href="#strategies">Strategies</a>
+      <a href="#checker">Deal Checker</a>
+      <a href="#who">Who It's For</a>
+      <a href="https://gauravs19.github.io/cadex/app/" target="_blank">Open App</a>
+      <a href="https://github.com/gauravs19/cadex" target="_blank">GitHub</a>
+    </div>
+    <div class="foot-note">No data leaves your device.</div>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const el = document.getElementById(a.getAttribute('href').slice(1))
+    if (el) { e.preventDefault(); el.scrollIntoView({ behavior: 'smooth', block: 'start' }) }
+  })
+})
+
+function shareLinkedIn() {
+  const url = encodeURIComponent(window.location.href)
+  const text = encodeURIComponent('CADEX — free, browser-only deal qualification framework for IT consulting presales. Score risk across 8 axes, get matched to an engagement strategy, 42-point quality gate. No login needed.')
+  window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}&summary=${text}`, '_blank', 'width=600,height=500')
+}
+
+function copyPageUrl() {
+  navigator.clipboard.writeText(window.location.href).then(() => {
+    const label = document.getElementById('copy-label')
+    label.textContent = 'Copied!'
+    setTimeout(() => label.textContent = 'Copy link', 2000)
+  })
+}
+</script>
+</body>
+</html>

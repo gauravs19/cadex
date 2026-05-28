@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CADEX Deal Brief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ── Reset ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#0C0A09;
+  --amber:#D97706;
+  --amber-light:#F59E0B;
+  --amber-pale:#FFFBEB;
+  --amber-border:#FDE68A;
+  --green:#15803D;
+  --green-pale:#F0FDF4;
+  --red:#B91C1C;
+  --red-pale:#FEF2F2;
+  --amber-band:#92400E;
+  --slate:#57534E;
+  --slate-light:#A8A29E;
+  --border:#E7E5E4;
+  --bg:#FAFAF9;
+}
+
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  color:var(--ink);
+  background:#fff;
+  -webkit-font-smoothing:antialiased;
+  font-size:10px; /* base for rem scaling */
+  line-height:1.5;
+}
+
+/* ── Page shell — A4 proportions, centered on screen ── */
+.page{
+  width:210mm;
+  min-height:297mm;
+  margin:24px auto;
+  background:#fff;
+  border:1px solid var(--border);
+  box-shadow:0 4px 24px rgba(0,0,0,.08);
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+
+/* ── Header bar ── */
+.header{
+  background:var(--ink);
+  color:#fff;
+  padding:18px 24px 16px;
+  display:grid;
+  grid-template-columns:1fr auto;
+  align-items:start;
+  gap:16px;
+}
+.header-left{}
+.brand{font-size:.68rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:6px}
+.deal-name{font-size:1.4rem;font-weight:800;color:#fff;line-height:1.2;margin-bottom:4px}
+.deal-meta{font-size:.72rem;color:rgba(255,255,255,.45);display:flex;gap:12px;flex-wrap:wrap}
+.deal-meta span{display:flex;align-items:center;gap:4px}
+.deal-meta .sep{color:rgba(255,255,255,.2)}
+
+.header-right{text-align:right}
+.band-badge{
+  display:inline-block;
+  font-size:.65rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  padding:4px 12px;border-radius:4px;margin-bottom:6px;
+}
+.band-green{background:#166534;color:#4ADE80}
+.band-amber{background:#78350F;color:var(--amber-light)}
+.band-red{background:#7F1D1D;color:#F87171}
+.band-black{background:rgba(255,255,255,.1);color:rgba(255,255,255,.4)}
+.score-big{font-size:2rem;font-weight:900;color:#fff;line-height:1;font-variant-numeric:tabular-nums}
+.score-label{font-size:.62rem;color:rgba(255,255,255,.35);margin-top:2px}
+
+/* ── Body ── */
+.body{
+  flex:1;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  grid-template-rows:auto auto auto;
+  gap:0;
+}
+
+/* ── Section shared ── */
+.section{padding:16px 20px;border-right:1px solid var(--border);border-bottom:1px solid var(--border)}
+.section:nth-child(even){border-right:none}
+.section-title{font-size:.58rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--slate-light);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+
+/* ── Axis grid ── */
+.axes{grid-column:1/3;padding:16px 20px;border-bottom:1px solid var(--border)}
+.axis-bars{display:grid;grid-template-columns:repeat(4,1fr);gap:10px 16px;margin-top:2px}
+.axis-row{display:flex;flex-direction:column;gap:4px}
+.axis-header{display:flex;justify-content:space-between;align-items:baseline}
+.axis-code{font-size:.62rem;font-weight:800;color:var(--slate);font-variant-numeric:tabular-nums}
+.axis-score{font-size:.72rem;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
+.axis-name-small{font-size:.6rem;color:var(--slate-light);margin-bottom:2px}
+.bar-track{height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+.bar-fill{height:100%;border-radius:3px;transition:width .3s}
+.bar-green{background:var(--green)}
+.bar-amber{background:var(--amber)}
+.bar-red{background:var(--red)}
+
+/* ── Strategy ── */
+.strategy-id{font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin-bottom:4px}
+.strategy-name{font-size:.92rem;font-weight:800;color:var(--ink);margin-bottom:6px}
+.strategy-pitch{font-size:.75rem;color:var(--slate);line-height:1.55}
+.strategy-moves{margin-top:10px}
+.move-item{display:flex;gap:7px;margin-bottom:5px;align-items:flex-start;font-size:.72rem;color:var(--slate);line-height:1.4}
+.move-dot{width:14px;height:14px;border-radius:50%;background:var(--amber-pale);border:1px solid var(--amber-border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.5rem;color:var(--amber-band);font-weight:800;margin-top:1px}
+
+/* ── Deal info ── */
+.info-rows{display:flex;flex-direction:column;gap:7px}
+.info-row{display:flex;gap:8px;align-items:flex-start}
+.info-key{font-size:.65rem;font-weight:600;color:var(--slate-light);min-width:88px;flex-shrink:0;line-height:1.4}
+.info-val{font-size:.72rem;color:var(--ink);line-height:1.4;font-weight:500}
+
+/* ── Risks ── */
+.risk-list{display:flex;flex-direction:column;gap:7px}
+.risk-item{display:flex;gap:8px;align-items:flex-start}
+.risk-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.risk-dot.high{background:var(--red)}
+.risk-dot.med{background:var(--amber)}
+.risk-dot.low{background:var(--green)}
+.risk-text{font-size:.72rem;color:var(--ink);line-height:1.45}
+.risk-axis{font-size:.6rem;font-weight:600;color:var(--slate-light);margin-top:1px}
+
+/* ── Win themes ── */
+.theme-list{display:flex;flex-direction:column;gap:7px}
+.theme-item{}
+.theme-angle{font-size:.6rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--amber);margin-bottom:2px}
+.theme-headline{font-size:.75rem;font-weight:700;color:var(--ink);line-height:1.35}
+.theme-body{font-size:.68rem;color:var(--slate);line-height:1.45;margin-top:2px}
+
+/* ── Checker verdict ── */
+.verdict-row{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.verdict-badge{font-size:.65rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:4px 12px;border-radius:4px}
+.vb-go{background:var(--green-pale);color:var(--green)}
+.vb-cond{background:var(--amber-pale);color:var(--amber-band)}
+.vb-nogo{background:var(--red-pale);color:var(--red)}
+.checker-sections{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.cs-item{display:flex;align-items:center;justify-content:space-between;gap:6px}
+.cs-name{font-size:.65rem;color:var(--slate)}
+.cs-score{font-size:.65rem;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+.cs-bar{flex:1;height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.cs-fill{height:100%;border-radius:2px}
+
+/* ── Assumptions ── */
+.assumption-list{display:flex;flex-direction:column;gap:6px}
+.assumption-item{display:flex;gap:7px;align-items:flex-start}
+.impact-dot{font-size:.58rem;font-weight:700;letter-spacing:.04em;padding:1px 5px;border-radius:3px;flex-shrink:0;margin-top:2px}
+.imp-high{background:var(--red-pale);color:var(--red)}
+.imp-med{background:var(--amber-pale);color:var(--amber-band)}
+.assumption-text{font-size:.7rem;color:var(--ink);line-height:1.4}
+
+/* ── Footer ── */
+.brief-footer{
+  padding:10px 20px;
+  border-top:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:var(--bg);
+}
+.brief-footer-brand{font-size:.6rem;font-weight:800;letter-spacing:.06em;color:var(--slate-light)}
+.brief-footer-note{font-size:.6rem;color:var(--slate-light)}
+.brief-footer-date{font-size:.6rem;color:var(--slate-light)}
+
+/* ── Print styles ── */
+@media print{
+  body{background:#fff;font-size:10px}
+  .page{
+    width:100%;min-height:unset;
+    margin:0;border:none;box-shadow:none;
+    page-break-after:avoid;
+  }
+  .no-print{display:none!important}
+  @page{size:A4;margin:0}
+}
+
+/* ── Screen toolbar ── */
+.toolbar{
+  width:210mm;
+  margin:0 auto 12px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+.toolbar-title{font-family:'Inter',sans-serif;font-size:.8rem;font-weight:600;color:#57534E}
+.toolbar-btn{
+  font-family:'Inter',sans-serif;
+  font-size:.78rem;font-weight:700;
+  background:#0C0A09;color:#fff;
+  border:none;cursor:pointer;
+  padding:8px 18px;border-radius:6px;
+  transition:opacity .15s;
+}
+.toolbar-btn:hover{opacity:.8}
+@media print{.toolbar{display:none}}
+</style>
+</head>
+<body>
+
+<!-- Screen toolbar (hidden on print) -->
+<div class="toolbar no-print">
+  <span class="toolbar-title">CADEX Deal Brief — sample data</span>
+  <button class="toolbar-btn" onclick="window.print()">Print / Save PDF</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     ONE-PAGE DEAL BRIEF
+     Replace the data-* attributes or wire up JS to populate
+     dynamically from the CADEX deal JSON.
+══════════════════════════════════════════════════════════ -->
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-left">
+      <div class="brand">CADEX · Deal Brief</div>
+      <div class="deal-name">BFSI Data Warehouse &amp; Analytics Platform</div>
+      <div class="deal-meta">
+        <span>Barclays Corporate Banking</span>
+        <span class="sep">·</span>
+        <span>Data Warehouse / Data Mart</span>
+        <span class="sep">·</span>
+        <span>Greenfield · Fixed-Price</span>
+        <span class="sep">·</span>
+        <span>6–12 months · $500K–$2M</span>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="band-badge band-amber">Amber — Shape First</div>
+      <div class="score-big">61%</div>
+      <div class="score-label">Weighted risk score</div>
+    </div>
+  </div>
+
+  <!-- BODY GRID -->
+  <div class="body">
+
+    <!-- ROW 1: AXIS BARS (full width) -->
+    <div class="section axes">
+      <div class="section-title">Risk Axes — Weighted Scores (1–5 scale)</div>
+      <div class="axis-bars">
+        <!-- SC -->
+        <div class="axis-row">
+          <div class="axis-name-small">Scope Clarity</div>
+          <div class="axis-header">
+            <span class="axis-code">SC</span>
+            <span class="axis-score">3.2 / 5</span>
+          </div>
+          <div class="bar-track"><div class="bar-fill bar-amber" style="width:64%"></div></div>
+        </div>
+        <!-- CM -->
+        <div class="axis-row">
+          <div class="axis-name-small">Client Maturity</div>
+          <div class="axis-header">
+            <span class="axis-code">CM</span>
+            <span class="axis-score">4.0 / 5</span>
+          </div>
+          <div class="bar-track"><div class="bar-fill bar-green" style="width:80%"></div></div>
+        </div>
+        <!-- CR -->
+        <div class="axis-row">
+          <div class="axis-name-small">Commercial Risk</div>
+          <div class="axis-header">
+            <span class="axis-code">CR</span>
+            <span class="axis-score">3.8 / 5</span>
+          </div>
+          <div class="bar-track"><div class="bar-fill bar-green" style="width:76%"></div></div>
+        </div>
+        <!-- TC -->
+        <div class="axis-row">
+          <div class="axis-name-small">Technical Complexity</div>
+          <div class="axis-header">
+            <span class="axis-code">TC</span>
+            <span class="axis-score">2.4 / 5</span>
+          </div>
+          <div class="bar-track"><div class="bar-fill bar-red" style="width:48%"></div></div>
+        </div>
+        <!-- GR -->
+        <div class="axis-row">
+          <div class="axis-name-small">Governance Readiness</div>
+          <div class="axis-header">
+            <span class="axis-code">GR</span>
+            <span class="axis-score">2.6 / 5</span>
+          </div>
+          <div class="bar-track"><div class="bar-fill bar-amber" style="width:52%"></div></div>
+        </div>
+        <!-- SV -->
+        <div class="axis-row">
+          <div class="axis-name-small">Strategic Value</div>
+          <div class="axis-header">
+            <span class="axis-code">SV</span>
+            <span class="axis-score">4.4 / 5</span>
+          </div>
+          <div class="bar-track"><div class="bar-fill bar-green" style="width:88%"></div></div>
+        </div>
+        <!-- CP -->
+        <div class="axis-row">
+          <div class="axis-name-small">Competitive Position</div>
+          <div class="axis-header">
+            <span class="axis-code">CP</span>
+            <span class="axis-score">3.4 / 5</span>
+          </div>
+          <div class="bar-track"><div class="bar-fill bar-amber" style="width:68%"></div></div>
+        </div>
+        <!-- VF -->
+        <div class="axis-row">
+          <div class="axis-name-small">Vendor Capability Fit</div>
+          <div class="axis-header">
+            <span class="axis-code">VF</span>
+            <span class="axis-score">4.2 / 5</span>
+          </div>
+          <div class="bar-track"><div class="bar-fill bar-green" style="width:84%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROW 2: STRATEGY (left) + DEAL INFO (right) -->
+    <div class="section">
+      <div class="section-title">Recommended Strategy</div>
+      <div class="strategy-id">Strategy A</div>
+      <div class="strategy-name">Foundation First</div>
+      <div class="strategy-pitch">Scope risk is elevated. Lead with a paid discovery phase to validate data sources, agree on warehouse architecture, and lock down the MVP boundary before any fixed-price commitment.</div>
+      <div class="strategy-moves">
+        <div class="move-item">
+          <div class="move-dot">1</div>
+          <div>Propose a 6-week data discovery sprint at T&amp;M; cap at $40K with clear deliverables.</div>
+        </div>
+        <div class="move-item">
+          <div class="move-dot">2</div>
+          <div>Require source system access and data dictionary before sprint 1 — make it a contract condition.</div>
+        </div>
+        <div class="move-item">
+          <div class="move-dot">3</div>
+          <div>Name a data steward counterpart from Barclays in the governance clause with 50% availability commitment.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Deal Information</div>
+      <div class="info-rows">
+        <div class="info-row">
+          <div class="info-key">Client</div>
+          <div class="info-val">Barclays Corporate Banking</div>
+        </div>
+        <div class="info-row">
+          <div class="info-key">Work type</div>
+          <div class="info-val">Greenfield · Data Warehouse / Data Mart</div>
+        </div>
+        <div class="info-row">
+          <div class="info-key">Pricing model</div>
+          <div class="info-val">Fixed-price</div>
+        </div>
+        <div class="info-row">
+          <div class="info-key">Deal size</div>
+          <div class="info-val">$500K – $2M</div>
+        </div>
+        <div class="info-row">
+          <div class="info-key">Duration</div>
+          <div class="info-val">6–12 months</div>
+        </div>
+        <div class="info-row">
+          <div class="info-key">Team estimate</div>
+          <div class="info-val">7.5 FTE · 14–22 sprints · $1.2M–$3M person-days</div>
+        </div>
+        <div class="info-row">
+          <div class="info-key">Blended rate</div>
+          <div class="info-val">$420–$680 / day (offshore/nearshore hybrid)</div>
+        </div>
+        <div class="info-row">
+          <div class="info-key">Incumbent</div>
+          <div class="info-val">None / Unknown</div>
+        </div>
+        <div class="info-row">
+          <div class="info-key">Qualified by</div>
+          <div class="info-val">Presales Lead · 26 May 2026</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROW 3: RISKS (left) + WIN THEMES (right) -->
+    <div class="section">
+      <div class="section-title">Top Risks</div>
+      <div class="risk-list">
+        <div class="risk-item">
+          <div class="risk-dot high"></div>
+          <div>
+            <div class="risk-text">Source system documentation is incomplete. Data profiling not done. Risk of significant rework post-contract.</div>
+            <div class="risk-axis">Axis: TC · SC</div>
+          </div>
+        </div>
+        <div class="risk-item">
+          <div class="risk-dot high"></div>
+          <div>
+            <div class="risk-text">No named data steward confirmed. Business rule sign-off without a named owner is a governance blocker.</div>
+            <div class="risk-axis">Axis: GR — Hard Blocker</div>
+          </div>
+        </div>
+        <div class="risk-item">
+          <div class="risk-dot med"></div>
+          <div>
+            <div class="risk-text">Multi-source ingestion (legacy core banking + CRM + payments) adds integration complexity beyond baseline estimate.</div>
+            <div class="risk-axis">Axis: TC</div>
+          </div>
+        </div>
+        <div class="risk-item">
+          <div class="risk-dot med"></div>
+          <div>
+            <div class="risk-text">BI licence costs (Power BI / Tableau) not yet factored into client budget. Could create scope dispute at delivery.</div>
+            <div class="risk-axis">Axis: CR · SC</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Win Themes</div>
+      <div class="theme-list">
+        <div class="theme-item">
+          <div class="theme-angle">Domain depth</div>
+          <div class="theme-headline">BFSI data engineering at scale — we've done this before</div>
+          <div class="theme-body">Reference the comparable delivery in BFSI data platform work. Barclays' risk team will ask for it. Have the case study ready.</div>
+        </div>
+        <div class="theme-item">
+          <div class="theme-angle">Risk mitigation</div>
+          <div class="theme-headline">We surface the risks others bury in the SoW</div>
+          <div class="theme-body">Framing the discovery sprint as risk mitigation (not a delay) differentiates from competitors who will just quote and hope.</div>
+        </div>
+        <div class="theme-item">
+          <div class="theme-angle">Speed to value</div>
+          <div class="theme-headline">First dashboard in sprint 4 — not at go-live</div>
+          <div class="theme-body">Commit to an interim BI deliverable during the discovery phase. Gives Barclays a visible ROI signal before the main contract.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROW 4: CHECKER VERDICT (left) + ASSUMPTIONS (right) -->
+    <div class="section">
+      <div class="section-title">Quality Gate — Checker Verdict</div>
+      <div class="verdict-row">
+        <div class="verdict-badge vb-cond">Conditional Go</div>
+        <div style="font-size:.7rem;color:var(--slate);line-height:1.4">1 hard blocker open. Resolve named data steward before submission.</div>
+      </div>
+      <div class="checker-sections">
+        <div class="cs-item">
+          <span class="cs-name">Commercial</span>
+          <div class="cs-bar"><div class="cs-fill bar-green" style="width:87%"></div></div>
+          <span class="cs-score">87%</span>
+        </div>
+        <div class="cs-item">
+          <span class="cs-name">Governance</span>
+          <div class="cs-bar"><div class="cs-fill bar-red" style="width:48%"></div></div>
+          <span class="cs-score">48%</span>
+        </div>
+        <div class="cs-item">
+          <span class="cs-name">Scope</span>
+          <div class="cs-bar"><div class="cs-fill bar-amber" style="width:66%"></div></div>
+          <span class="cs-score">66%</span>
+        </div>
+        <div class="cs-item">
+          <span class="cs-name">Risk</span>
+          <div class="cs-bar"><div class="cs-fill bar-amber" style="width:72%"></div></div>
+          <span class="cs-score">72%</span>
+        </div>
+        <div class="cs-item">
+          <span class="cs-name">Delivery</span>
+          <div class="cs-bar"><div class="cs-fill bar-green" style="width:91%"></div></div>
+          <span class="cs-score">91%</span>
+        </div>
+        <div class="cs-item">
+          <span class="cs-name">Strategy</span>
+          <div class="cs-bar"><div class="cs-fill bar-green" style="width:83%"></div></div>
+          <span class="cs-score">83%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Key Assumptions — If False, High Impact</div>
+      <div class="assumption-list">
+        <div class="assumption-item">
+          <div class="impact-dot imp-high">HIGH</div>
+          <div class="assumption-text">Source system access and data dictionary will be provided at kickoff. Delay = sprint 1 cannot start.</div>
+        </div>
+        <div class="assumption-item">
+          <div class="impact-dot imp-high">HIGH</div>
+          <div class="assumption-text">Client data steward will be available at 50% FTE throughout. Unavailability = business rule sign-off blocks progress.</div>
+        </div>
+        <div class="assumption-item">
+          <div class="impact-dot imp-med">MED</div>
+          <div class="assumption-text">BI licence costs (Power BI / Tableau) are covered by client budget. If not, scope must be revised to exclude BI layer.</div>
+        </div>
+        <div class="assumption-item">
+          <div class="impact-dot imp-med">MED</div>
+          <div class="assumption-text">Data quality remediation in source systems is out of scope. If source data is materially dirty, an additional workstream is required.</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /body -->
+
+  <!-- FOOTER -->
+  <div class="brief-footer">
+    <div class="brief-footer-brand">CADEX · Deal Brief v0.5</div>
+    <div class="brief-footer-note">Internal use only — Vendor Capability Fit axis visible. Remove VF section before sharing externally.</div>
+    <div class="brief-footer-date">Generated 26 May 2026</div>
+  </div>
+
+</div><!-- /page -->
+
+</body>
+</html>
