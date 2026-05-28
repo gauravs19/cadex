@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { SlidersHorizontal, RotateCcw } from 'lucide-react'
+import { SlidersHorizontal, RotateCcw, ChevronRight } from 'lucide-react'
 import type {
   AxisCode, AxisScores, Deal, DealMeta,
   EngagementType, DeliveryModel, Industry,
@@ -238,6 +238,71 @@ export default function ScenarioModeler({ deal }: Props) {
           </div>
         </div>
       </div>
+
+      {/* Hypothetical strategy card — shown when strategy shifts */}
+      {strategyChanged && hypoStrategy && (() => {
+        const card = STRATEGIES[hypoStrategy.primary]
+        if (!card) return null
+        return (
+          <div className="border-t border-amber-200 pt-4 space-y-4">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold text-amber-700 uppercase tracking-wider">
+                ⚑ If you apply these changes — Strategy {hypoStrategy.primary}: {card.name}
+              </span>
+            </div>
+            <div className="text-xs text-slate-500 italic leading-relaxed border-l-4 border-amber-300 pl-3">
+              {card.tagline}
+            </div>
+
+            {/* Pitch */}
+            <div>
+              <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">The Pitch</div>
+              <blockquote className="text-sm text-slate-700 italic leading-relaxed border-l-4 border-amber-200 pl-4">
+                {card.pitch}
+              </blockquote>
+            </div>
+
+            {/* Key moves */}
+            <div>
+              <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Key Moves</div>
+              <ol className="space-y-2">
+                {card.keyMoves.map((move, i) => (
+                  <li key={i} className="flex items-start gap-3 text-sm text-slate-700">
+                    <span className="shrink-0 w-5 h-5 rounded-full bg-amber-100 text-amber-700 text-xs font-bold flex items-center justify-center mt-0.5">{i + 1}</span>
+                    {move}
+                  </li>
+                ))}
+              </ol>
+            </div>
+
+            {/* Contract non-negotiables */}
+            <div>
+              <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Contract Non-Negotiables</div>
+              <ul className="space-y-1.5">
+                {card.contractNonNegotiables.map((item, i) => (
+                  <li key={i} className="flex items-start gap-2 text-sm text-slate-700">
+                    <span className="shrink-0 text-green-500 mt-0.5">✓</span>{item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Red flags */}
+            {card.redFlags.length > 0 && (
+              <div>
+                <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Red Flags to Watch</div>
+                <ul className="space-y-1">
+                  {card.redFlags.map((flag, i) => (
+                    <li key={i} className="text-xs text-red-700 flex items-start gap-1.5">
+                      <ChevronRight size={11} className="mt-0.5 shrink-0 text-red-400" />{flag}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        )
+      })()}
     </div>
   )
 }
