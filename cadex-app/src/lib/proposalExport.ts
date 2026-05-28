@@ -10,6 +10,7 @@ import { DISCOVERY_GAPS, DISCOVERY_GAP_CATEGORIES } from '../data/discoveryGaps'
 import { generateWinThemes } from './winThemeEngine'
 import { WORK_TYPE_SCOPE_BLOCKS } from '../data/workTypeScopeQuestions'
 import { OBJECTION_BANK } from '../data/objectionBank'
+import { EFFORT_PROFILES } from '../data/effortHeuristics'
 
 // ── Label maps ────────────────────────────────────────────────
 
@@ -49,6 +50,16 @@ const e = (s: string) => String(s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 
 const wtLabel = (id: string) => WORK_TYPES.find(n => n.id === id)?.label ?? id
+
+function findEffortProfile(deal: Deal) {
+  const { workCategory, duration, dealSize } = deal.meta
+  return (
+    EFFORT_PROFILES.find(p => p.workCategory === workCategory && p.duration === duration && p.dealSize === dealSize) ??
+    EFFORT_PROFILES.find(p => p.workCategory === workCategory && p.duration === duration) ??
+    EFFORT_PROFILES.find(p => p.workCategory === workCategory) ??
+    null
+  )
+}
 
 function scoreColor(score: number): string {
   if (score >= 4) return '#16a34a'
@@ -127,6 +138,7 @@ function slideCover(deal: Deal, o: SlideOpts): string {
     <h1 class="cover-title">${e(meta.name || 'Engagement Proposal')}</h1>
     <div class="cover-client">Prepared for <strong>${e(meta.clientName || 'Client')}</strong></div>
     <div class="cover-meta-row">
+      ${meta.workType ? `<span class="cover-badge cover-badge-wt">${e(wtLabel(meta.workType))}</span>` : ''}
       <span class="cover-badge">${e(PRICING_LABELS[meta.pricingModel] ?? meta.pricingModel)}</span>
       <span class="cover-badge">${e(DURATION_LABELS[meta.duration] ?? meta.duration)}</span>
       <span class="cover-badge">${e(DEAL_SIZE_LABELS[meta.dealSize] ?? meta.dealSize)}</span>
@@ -183,12 +195,19 @@ function slideExecSummary(deal: Deal, o: SlideOpts): string {
     ['Pricing model', PRICING_LABELS[meta.pricingModel] ?? meta.pricingModel],
   ]
 
+  const narrativeWorkType = meta.workType ? wtLabel(meta.workType) : meta.workCategory ? wtLabel(meta.workCategory) : 'this engagement'
+  const narrativeDuration = DURATION_LABELS[meta.duration] ?? meta.duration
+  const strategyName = strategyCard ? `${strategyCard.name}` : null
+  const narrative = `We are proposing a ${narrativeDuration} ${e(PRICING_LABELS[meta.pricingModel] ?? meta.pricingModel)} engagement to deliver ${e(narrativeWorkType)} for ${e(meta.clientName || 'your organisation')}.${strategyName ? ` Our recommended engagement model — ${e(strategyName)} — is designed to manage delivery risk while protecting your commercial position.` : ''}`
+
   return `<div class="slide slide-white">
     <div class="slide-header-bar indigo-bar"></div>
-    <div class="slide-content two-col" style="padding-top:40px">
+    <div class="slide-content" style="padding-top:40px">
+      <div class="slide-eyebrow">Executive Summary</div>
+      <h2 class="slide-title">Engagement at a Glance</h2>
+      <p class="exec-narrative">${narrative}</p>
+      <div class="two-col">
       <div class="col-left">
-        <div class="slide-eyebrow">Executive Summary</div>
-        <h2 class="slide-title">Engagement at a Glance</h2>
         ${meta.scopeSummary ? `<p class="exec-summary-text">${e(meta.scopeSummary)}</p>` : ''}
         <div class="fact-table">
           ${facts.map(([k, v]) => `<div class="fact-row"><span class="fact-key">${k}</span><span class="fact-val">${e(v)}</span></div>`).join('')}
@@ -205,6 +224,7 @@ function slideExecSummary(deal: Deal, o: SlideOpts): string {
           <div class="spill-name">${e(strategyCard.name)}</div>
           <div class="spill-tag">${e(strategyCard.tagline)}</div>
         </div>` : ''}
+      </div>
       </div>
     </div>
     ${footer(o.company, o.num, o.total, 'Executive Summary')}
@@ -589,6 +609,75 @@ function slideTeamGovernance(deal: Deal, o: SlideOpts): string {
   </div>`
 }
 
+function slideEffortInvestment(deal: Deal, o: SlideOpts): string {
+  const profile = findEffortProfile(deal)
+  const { meta } = deal
+
+  if (!profile) {
+    return `<div class="slide slide-white">
+      <div class="slide-header-bar green-bar"></div>
+      <div class="slide-content" style="padding-top:40px">
+        <div class="slide-eyebrow">Delivery</div>
+        <h2 class="slide-title">Indicative Investment</h2>
+        <p class="dim-text" style="margin-top:40px">No effort benchmark available for this work type and size combination. Effort estimates will be provided in the detailed proposal.</p>
+      </div>
+      ${footer(o.company, o.num, o.total, 'Delivery')}
+    </div>`
+  }
+
+  const [rateMin, rateMax] = profile.dailyRateRangeUSD
+  const [pdMin, pdMax] = profile.peopleDaysRange
+  const indicativeMin = Math.round((pdMin * rateMin) / 1000)
+  const indicativeMax = Math.round((pdMax * rateMax) / 1000)
+  const [spMin, spMax] = profile.sprintRange
+
+  return `<div class="slide slide-white">
+    <div class="slide-header-bar green-bar"></div>
+    <div class="slide-content" style="padding-top:40px">
+      <div class="slide-eyebrow">Delivery</div>
+      <h2 class="slide-title">Indicative Investment & Team</h2>
+      <p class="effort-disclaimer">Benchmark estimate for ${e(wtLabel(meta.workCategory))} · ${e(DURATION_LABELS[meta.duration] ?? meta.duration)} · ${e(DEAL_SIZE_LABELS[meta.dealSize] ?? meta.dealSize)}. Final pricing subject to detailed scoping.</p>
+      <div class="effort-layout">
+        <div class="effort-metrics-col">
+          <div class="effort-metric-card">
+            <div class="eff-label">Indicative Range</div>
+            <div class="eff-big">\$${indicativeMin}K – \$${indicativeMax}K</div>
+            <div class="eff-sub">at blended ${e(DELIVERY_LABELS[meta.deliveryModel] ?? meta.deliveryModel)} rates</div>
+          </div>
+          <div class="effort-metric-card">
+            <div class="eff-label">Sprint Range</div>
+            <div class="eff-big">${spMin}–${spMax}</div>
+            <div class="eff-sub">2-week sprints</div>
+          </div>
+          <div class="effort-metric-card">
+            <div class="eff-label">People-Days</div>
+            <div class="eff-big">${pdMin.toLocaleString()}–${pdMax.toLocaleString()}</div>
+            <div class="eff-sub">total delivery effort</div>
+          </div>
+          <div class="effort-metric-card">
+            <div class="eff-label">Blended Daily Rate</div>
+            <div class="eff-big">\$${rateMin}–\$${rateMax}</div>
+            <div class="eff-sub">USD per person per day</div>
+          </div>
+        </div>
+        <div class="effort-roles-col">
+          <div class="section-sub-heading">${e(profile.headline)}</div>
+          <div class="effort-roles-list">
+            ${profile.roles.map(r => `<div class="effort-role-row">
+              <div class="err-role">${e(r.role)}</div>
+              <div class="err-fte">${r.fte} FTE${r.notes ? `<span class="err-note"> · ${e(r.notes)}</span>` : ''}</div>
+            </div>`).join('')}
+          </div>
+          ${profile.caveats.length > 0 ? `<div class="effort-caveats">
+            ${profile.caveats.map(c => `<div class="effort-caveat">⚠ ${e(c)}</div>`).join('')}
+          </div>` : ''}
+        </div>
+      </div>
+    </div>
+    ${footer(o.company, o.num, o.total, 'Delivery')}
+  </div>`
+}
+
 // ── Sprint cadence / delivery phases by work category ─────────
 // Each entry is [phase name, timing, description].
 
@@ -649,20 +738,25 @@ const DELIVERY_PHASES: Record<string, [string, string, string][]> = {
 function slideSprintCadence(deal: Deal, o: SlideOpts): string {
   const category = deal.meta.workCategory || 'default'
   const phases = DELIVERY_PHASES[category] ?? DELIVERY_PHASES['default']
+  const phaseColors = ['#4f46e5','#7c3aed','#0891b2','#0369a1','#16a34a','#059669']
+  const phaseWidth = Math.floor(100 / phases.length)
   return `<div class="slide slide-white">
     <div class="slide-header-bar green-bar"></div>
     <div class="slide-content" style="padding-top:40px">
       <div class="slide-eyebrow">Delivery</div>
-      <h2 class="slide-title">Sprint Cadence & Delivery Phases</h2>
-      <div class="timeline-steps">
-        ${phases.map(([phase, timing, desc], i) => `<div class="timeline-step">
-          <div class="ts-dot" style="background:${['#4f46e5','#7c3aed','#0891b2','#16a34a'][i]}"></div>
-          <div class="ts-body">
-            <div class="ts-phase">${phase}</div>
-            <div class="ts-timing">${timing}</div>
-            <div class="ts-desc">${desc}</div>
-          </div>
-        </div>`).join('<div class="ts-connector"></div>')}
+      <h2 class="slide-title">Delivery Phases</h2>
+      <!-- Gantt bar -->
+      <div class="gantt-bar-row" style="margin:24px 0 8px">
+        ${phases.map(([phase, ,], i) => `<div class="gantt-seg" style="width:${phaseWidth}%;background:${phaseColors[i % phaseColors.length]}">${e(phase)}</div>`).join('')}
+      </div>
+      <!-- Phase detail cards below bar -->
+      <div class="gantt-details">
+        ${phases.map(([phase, timing, desc], i) => `<div class="gantt-detail-col">
+          <div class="gantt-dot" style="background:${phaseColors[i % phaseColors.length]}"></div>
+          <div class="gantt-phase-name">${e(phase)}</div>
+          <div class="gantt-timing">${e(timing)}</div>
+          <div class="gantt-desc">${e(desc)}</div>
+        </div>`).join('')}
       </div>
     </div>
     ${footer(o.company, o.num, o.total, 'Delivery')}
@@ -825,7 +919,16 @@ function slideCommercial(deal: Deal, o: SlideOpts): string {
           <div class="comm-label">Gross Profit</div>
         </div>` : ''}
       </div>
-      ${!hasEcon ? '<p style="color:#94a3b8;margin-top:40px">Enter bid economics in the Intake step to populate this slide.</p>' : ''}
+      ${!hasEcon ? (() => {
+        const effortProfile = findEffortProfile(deal)
+        return effortProfile
+          ? `<div class="effort-indicator-block">
+              <div class="eib-label">Indicative investment range (based on delivery benchmark)</div>
+              <div class="eib-range">$${Math.round((effortProfile.peopleDaysRange[0] * effortProfile.dailyRateRangeUSD[0]) / 1000)}K – $${Math.round((effortProfile.peopleDaysRange[1] * effortProfile.dailyRateRangeUSD[1]) / 1000)}K</div>
+              <div class="eib-note">Final pricing subject to detailed scoping and confirmed team model</div>
+            </div>`
+          : '<p style="color:#94a3b8;margin-top:40px">Enter bid economics in the Intake step to populate this slide.</p>'
+      })() : ''}
       <div class="comm-model-row">
         <div class="comm-model-item"><span class="cmi-label">Pricing model</span><span class="cmi-value">${e(PRICING_LABELS[meta.pricingModel] ?? meta.pricingModel)}</span></div>
         <div class="comm-model-item"><span class="cmi-label">Engagement type</span><span class="cmi-value">${e(ENGAGEMENT_LABELS[meta.engagementType] ?? meta.engagementType)}</span></div>
@@ -1020,7 +1123,7 @@ function slideWhyUs(company: string, deal: Deal, o: SlideOpts): string {
   }
 
   const basePoints: [string, string][] = [
-    ['Risk-intelligent presales', 'CADEX-driven qualification — we only bid what we can deliver'],
+    ['Risk-intelligent presales', 'Structured qualification — we only bid engagements we are confident we can deliver'],
     ['Agile-at-scale delivery', 'Structured sprints, robust governance, transparent reporting'],
     ['Transparent commercial model', 'Fixed scope, scope bank, no hidden cost transfers'],
     ...(partners.length ? [[`${partners.map(p => p.charAt(0).toUpperCase() + p.slice(1)).join(', ')} partnership`, 'Certified partner capability with access to platform credits and specialists'] as [string, string]] : []),
@@ -1103,6 +1206,29 @@ function slideVerdict(deal: Deal, o: SlideOpts): string {
           <div class="rss-label">Risk Score</div>
           <div class="rss-band" style="color:${BAND_COLOR[assessment.scoreBand]}">${BAND_LABEL[assessment.scoreBand]}</div>
         </div>` : ''}
+        ${(() => {
+          const sectionScores = checklist?.sectionScores ?? {}
+          const sectionLabels: Record<string, string> = {
+            'C1': 'Commercial', 'S1': 'Scope', 'G1': 'Governance',
+            'R1': 'Risk', 'RE': 'Relationship', 'ST': 'Strategic',
+            'CP': 'Competitive', 'V1': 'Vendor', 'PD': 'Post-Delivery',
+          }
+          const entries = Object.entries(sectionScores)
+          if (entries.length === 0) return ''
+          return `<div class="section-scores-list" style="margin-top:16px;display:flex;flex-direction:column;gap:8px">
+            ${entries.map(([code, score]) => {
+              const pct = Math.round((score as number) * 100)
+              const color = pct >= 70 ? '#16a34a' : pct >= 50 ? '#d97706' : '#dc2626'
+              return `<div class="ss-row" style="display:flex;align-items:center;gap:8px">
+                <div style="font-size:11px;color:#64748b;width:90px;flex-shrink:0">${sectionLabels[code] ?? code}</div>
+                <div style="flex:1;height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden">
+                  <div style="width:${pct}%;height:100%;background:${color};border-radius:3px"></div>
+                </div>
+                <div style="font-size:11px;font-weight:700;color:${color};width:32px;text-align:right">${pct}%</div>
+              </div>`
+            }).join('')}
+          </div>`
+        })()}
       </div>
     </div>
     ${footer(o.company, o.num, o.total, 'Quality Gate')}
@@ -1432,6 +1558,45 @@ const CSS = `
   .ty-deal{font-size:20px;color:#94a3b8;margin-bottom:8px;position:relative;z-index:1}
   .ty-client{font-size:14px;color:#64748b;position:relative;z-index:1}
 
+  /* Exec narrative */
+  .exec-narrative{font-size:14px;color:#334155;line-height:1.65;margin-bottom:20px;padding:14px 18px;background:#f8fafc;border-left:3px solid #4f46e5;border-radius:0 8px 8px 0}
+
+  /* Cover work type badge */
+  .cover-badge-wt{background:rgba(16,163,74,0.2);color:#4ade80;border-color:rgba(74,222,128,0.3)}
+
+  /* Gantt */
+  .gantt-bar-row{display:flex;height:44px;border-radius:10px;overflow:hidden;gap:2px}
+  .gantt-seg{display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:rgba(255,255,255,0.9);padding:0 6px;text-align:center;line-height:1.3;min-width:0;overflow:hidden}
+  .gantt-details{display:flex;gap:2px;margin-top:16px}
+  .gantt-detail-col{flex:1;padding:0 8px}
+  .gantt-dot{width:8px;height:8px;border-radius:50%;margin-bottom:6px}
+  .gantt-phase-name{font-size:12px;font-weight:700;color:#0f172a;margin-bottom:3px}
+  .gantt-timing{font-size:10px;font-weight:600;color:#6366f1;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:4px}
+  .gantt-desc{font-size:11px;color:#64748b;line-height:1.4}
+
+  /* Effort investment slide */
+  .effort-disclaimer{font-size:12px;color:#94a3b8;margin-bottom:20px;font-style:italic}
+  .effort-layout{display:grid;grid-template-columns:320px 1fr;gap:32px}
+  .effort-metrics-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-content:start}
+  .effort-metric-card{padding:16px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px}
+  .eff-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#94a3b8;margin-bottom:6px}
+  .eff-big{font-size:18px;font-weight:900;color:#0f172a;line-height:1.2}
+  .eff-sub{font-size:10px;color:#94a3b8;margin-top:4px}
+  .effort-roles-col{}
+  .effort-roles-list{display:flex;flex-direction:column;gap:8px;margin-top:10px;margin-bottom:16px}
+  .effort-role-row{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px}
+  .err-role{font-size:13px;font-weight:600;color:#1e293b}
+  .err-fte{font-size:12px;font-weight:700;color:#4f46e5}
+  .err-note{font-size:11px;color:#94a3b8;font-weight:400}
+  .effort-caveats{display:flex;flex-direction:column;gap:6px}
+  .effort-caveat{font-size:11px;color:#92400e;background:#fffbeb;padding:6px 10px;border-radius:6px;border:1px solid #fde68a;line-height:1.4}
+
+  /* Effort indicator on commercial slide */
+  .effort-indicator-block{margin-top:24px;padding:24px 28px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:14px}
+  .eib-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.4);margin-bottom:10px}
+  .eib-range{font-size:40px;font-weight:900;color:white;line-height:1}
+  .eib-note{font-size:12px;color:rgba(255,255,255,0.4);margin-top:8px}
+
   /* Print */
   @media print {
     @page { size: A4 landscape; margin: 0 }
@@ -1450,7 +1615,7 @@ export function generateProposalHtml(deal: Deal, companyName: string): string {
   // Re-attach so slide builders can access them safely
   const safeDeal: Deal = { ...deal, assumptions, discoveryGaps }
 
-  const TOTAL = 34
+  const TOTAL = 35
 
   const mkOpts = (num: number, section = ''): SlideOpts => ({ company: companyName, num, total: TOTAL, section })
 
@@ -1482,24 +1647,25 @@ export function generateProposalHtml(deal: Deal, companyName: string): string {
     slideSectionBreak('03', 'Delivery', 'How we will deliver this engagement', sectionBreakColors.Delivery, mkOpts(14)),
     slideDeliveryModel(safeDeal, mkOpts(15, 'Delivery')),
     slideTeamGovernance(safeDeal, mkOpts(16, 'Delivery')),
-    slideSprintCadence(safeDeal, mkOpts(17, 'Delivery')),
-    slideSectionBreak('04', 'Risk', 'Risk assessment, assumptions, and open items', sectionBreakColors.Risk, mkOpts(18)),
-    slideRiskRadar(safeDeal, mkOpts(19, 'Risk')),
-    slideRiskDimensions(safeDeal, mkOpts(20, 'Risk')),
-    slideAssumptions(safeDeal, mkOpts(21, 'Risk')),
-    slideDiscoveryGaps(safeDeal, mkOpts(22, 'Risk')),
-    slideSectionBreak('05', 'Commercial', 'Pricing, contract structure, and deal terms', sectionBreakColors.Commercial, mkOpts(23)),
-    slideCommercial(safeDeal, mkOpts(24, 'Commercial')),
-    slideContractStructure(safeDeal, mkOpts(25, 'Commercial')),
-    slideDealProtections(safeDeal, mkOpts(26, 'Commercial')),
-    slideSectionBreak('06', 'Compliance', 'Regulatory requirements and security posture', sectionBreakColors.Compliance, mkOpts(27)),
-    slideCompliance(safeDeal, mkOpts(28, 'Compliance')),
-    slideSectionBreak('07', `Why ${companyName}`, 'Our capabilities and differentiators', sectionBreakColors.WhyUs, mkOpts(29)),
-    slideWhyUs(companyName, safeDeal, mkOpts(30, 'Why Us')),
-    slideObjectionHandling(safeDeal, mkOpts(31, 'Why Us')),
-    slideVerdict(safeDeal, mkOpts(32, 'Close')),
-    slideNextSteps(safeDeal, mkOpts(33, 'Close')),
-    slideThankYou(safeDeal, companyName, mkOpts(34)),
+    slideEffortInvestment(safeDeal, mkOpts(17, 'Delivery')),
+    slideSprintCadence(safeDeal, mkOpts(18, 'Delivery')),
+    slideSectionBreak('04', 'Risk', 'Risk assessment, assumptions, and open items', sectionBreakColors.Risk, mkOpts(19)),
+    slideRiskRadar(safeDeal, mkOpts(20, 'Risk')),
+    slideRiskDimensions(safeDeal, mkOpts(21, 'Risk')),
+    slideAssumptions(safeDeal, mkOpts(22, 'Risk')),
+    slideDiscoveryGaps(safeDeal, mkOpts(23, 'Risk')),
+    slideSectionBreak('05', 'Commercial', 'Pricing, contract structure, and deal terms', sectionBreakColors.Commercial, mkOpts(24)),
+    slideCommercial(safeDeal, mkOpts(25, 'Commercial')),
+    slideContractStructure(safeDeal, mkOpts(26, 'Commercial')),
+    slideDealProtections(safeDeal, mkOpts(27, 'Commercial')),
+    slideSectionBreak('06', 'Compliance', 'Regulatory requirements and security posture', sectionBreakColors.Compliance, mkOpts(28)),
+    slideCompliance(safeDeal, mkOpts(29, 'Compliance')),
+    slideSectionBreak('07', `Why ${companyName}`, 'Our capabilities and differentiators', sectionBreakColors.WhyUs, mkOpts(30)),
+    slideWhyUs(companyName, safeDeal, mkOpts(31, 'Why Us')),
+    slideObjectionHandling(safeDeal, mkOpts(32, 'Why Us')),
+    slideVerdict(safeDeal, mkOpts(33, 'Close')),
+    slideNextSteps(safeDeal, mkOpts(34, 'Close')),
+    slideThankYou(safeDeal, companyName, mkOpts(35)),
   ]
 
   const doc = `<!DOCTYPE html>
