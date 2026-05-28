@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useDealStore } from '../store/dealStore'
 import { Zap, ClipboardList, BarChart3, FolderOpen, ArrowRight, PlayCircle } from 'lucide-react'
 import type { Deal } from '../types'
@@ -101,6 +102,10 @@ const PROCESS_STEPS = [
 export default function Home() {
   const { deals, createDeal, importDeal } = useDealStore()
   const [tourOpen, setTourOpen] = useState(false)
+  const navigate = useNavigate()
+
+  function startDeal() { createDeal(); navigate('/deal') }
+  function loadDeal(deal: Deal) { importDeal(deal); navigate('/deal') }
 
   const savedDeals: Deal[] = [...deals].sort(
     (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
@@ -155,7 +160,7 @@ export default function Home() {
         <div className="grid grid-cols-3 gap-4">
           <button
             data-tour="full-assessment"
-            onClick={() => createDeal()}
+            onClick={startDeal}
             className="bg-white border border-slate-200 rounded-2xl p-5 text-left hover:border-indigo-300 hover:shadow-sm transition-all group"
           >
             <BarChart3 size={24} className="text-indigo-500 mb-3" />
@@ -165,7 +170,7 @@ export default function Home() {
 
           <button
             data-tour="quick-score"
-            onClick={() => createDeal()}
+            onClick={startDeal}
             className="bg-white border border-slate-200 rounded-2xl p-5 text-left hover:border-indigo-300 hover:shadow-sm transition-all"
           >
             <Zap size={24} className="text-amber-500 mb-3" />
@@ -175,7 +180,7 @@ export default function Home() {
 
           <button
             data-tour="checker-only"
-            onClick={() => createDeal()}
+            onClick={startDeal}
             className="bg-white border border-slate-200 rounded-2xl p-5 text-left hover:border-indigo-300 hover:shadow-sm transition-all"
           >
             <ClipboardList size={24} className="text-green-500 mb-3" />
@@ -200,7 +205,7 @@ export default function Home() {
                 reader.onload = (ev) => {
                   try {
                     const deal = JSON.parse(ev.target?.result as string)
-                    importDeal(deal)
+                    loadDeal(deal)
                   } catch {
                     alert('Invalid CADEX deal file.')
                   }
@@ -221,7 +226,7 @@ export default function Home() {
               {savedDeals.slice(0, 5).map((deal) => (
                 <li key={deal.id}>
                   <button
-                    onClick={() => importDeal(deal)}
+                    onClick={() => loadDeal(deal)}
                     className="w-full flex items-center justify-between px-5 py-3 text-left text-sm hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-0"
                   >
                     <div>

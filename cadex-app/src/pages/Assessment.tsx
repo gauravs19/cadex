@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useDealStore } from '../store/dealStore'
 import Sidebar from '../components/layout/Sidebar'
 import IntakeForm from '../components/intake/IntakeForm'
@@ -35,6 +36,7 @@ const STEP_SUBTITLES = [
 export default function Assessment() {
   const { createDeal, importDeal, getActiveDeal, displayStep } = useDealStore()
   const activeDeal = getActiveDeal()
+  const navigate = useNavigate()
   const [copied, setCopied] = useState(false)
   const [helpOpen, setHelpOpen] = useState(false)
 
@@ -56,6 +58,7 @@ export default function Assessment() {
         try {
           const deal = parseDealJson(ev.target?.result as string)
           importDeal(deal)
+          navigate('/deal')
         } catch (err) {
           alert(err instanceof Error ? err.message : 'Invalid CADEX deal file.')
         }
@@ -78,7 +81,7 @@ export default function Assessment() {
   return (
     <div className="flex min-h-screen">
       <Sidebar
-        onNewDeal={() => createDeal()}
+        onNewDeal={() => { createDeal(); navigate('/deal') }}
         onLoadDeal={handleLoadDeal}
         onExport={handleExport}
         onHelp={() => setHelpOpen(true)}

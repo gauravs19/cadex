@@ -1,15 +1,16 @@
 import { useEffect } from 'react'
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
 import { useDealStore } from './store/dealStore'
 import Home from './pages/Home'
 import Assessment from './pages/Assessment'
 import { decodeDealFromUrl, clearDealFromUrl } from './lib/dealIO'
 
-export default function App() {
+function DealRoute() {
   const { getActiveDeal, importDeal } = useDealStore()
 
-  // On first load, check if URL contains a shared deal
   useEffect(() => {
-    if (window.location.hash.includes('deal=')) {
+    const hash = window.location.hash
+    if (hash.includes('share=') || hash.match(/^#deal=/)) {
       const deal = decodeDealFromUrl()
       if (deal) {
         importDeal(deal)
@@ -18,5 +19,27 @@ export default function App() {
     }
   }, [importDeal])
 
-  return getActiveDeal() ? <Assessment /> : <Home />
+  if (!getActiveDeal()) return <Navigate to="/" replace />
+  return <Assessment />
+}
+
+function HomeRoute() {
+  const { getActiveDeal } = useDealStore()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (getActiveDeal()) navigate('/deal', { replace: true })
+  }, [getActiveDeal, navigate])
+
+  return <Home />
+}
+
+export default function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<HomeRoute />} />
+      <Route path="/deal" element={<DealRoute />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  )
 }
