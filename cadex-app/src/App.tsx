@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import { useDealStore } from './store/dealStore'
 import Home from './pages/Home'
 import Assessment from './pages/Assessment'
